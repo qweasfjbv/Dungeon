@@ -25,7 +25,7 @@ namespace Delaunay
                 if(v.y > maxY) maxY = v.y;
             }
 
-            int dx = (maxX - minX + 1) / 2;
+            int dx = (maxX - minX + 1);
 
             Vertex v1 = new Vertex(minX - dx - 1, minY - 1);
             Vertex v2 = new Vertex(minX + dx, maxY + (maxY - minY) + 1);

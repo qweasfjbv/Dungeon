@@ -2,6 +2,7 @@ using Delaunay;
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
@@ -15,10 +16,13 @@ public class MapManager : MonoBehaviour
 
     const int PIXEL = 1;
     const int ROOMCNT = 60;
-    int minRoomSize = 1;
+    int minRoomSize = 2;
     int maxRoomSize = 8;
 
     int hallwayId = 200;
+
+    int SelectRoomCnt = 7;
+    int overlapOffset = 3;
 
     private List<GameObject> rooms = new List<GameObject>();
 
@@ -78,68 +82,38 @@ public class MapManager : MonoBehaviour
     private IEnumerator TestCoroutine()
     {
 
-        while (true)
+        
+        meanHeight = 0;
+        meanWidth = 0;
+
+        float totalHeight = 0;
+        float totalWidth = 0;
+
+        for (int i = 0; i < ROOMCNT; i++)
         {
-            meanHeight = 0;
-            meanWidth = 0;
+            rooms.Add(Instantiate(GridPrefab, GetRandomPointInCircle(10), new Quaternion(0, 0, 0, 0)));
+            rooms[i].transform.localScale = GetRandomScale(rooms[i].transform.position);
 
-            float totalHeight = 0;
-            float totalWidth = 0;
+            totalHeight += rooms[i].transform.localScale.y;
+            totalWidth += rooms[i].transform.localScale.x;
 
-            for (int i = 0; i < ROOMCNT; i++)
-            {
-                rooms.Add(Instantiate(GridPrefab, GetRandomPointInCircle(10), new Quaternion(0, 0, 0, 0)));
-                rooms[i].transform.localScale = GetRandomScale(rooms[i].transform.position);
-
-                totalHeight += rooms[i].transform.localScale.y;
-                totalWidth += rooms[i].transform.localScale.x;
-
-                yield return new WaitForSeconds(0.03f);
-            }
-
-            meanHeight = totalHeight / ROOMCNT;
-            meanWidth = totalWidth / ROOMCNT;
-
-            for (int i = 0; i < ROOMCNT; i++)
-            {
-                rooms[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-                rooms[i].GetComponent<Rigidbody2D>().gravityScale = 0f;
-            }
-
-            yield return new WaitForSeconds(5f);
-
-            for (int i = 0; i < ROOMCNT; i++)
-            {
-                rooms[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-                rooms[i].transform.position = new Vector3(RoundPos(rooms[i].transform.position.x, PIXEL), RoundPos(rooms[i].transform.position.y, PIXEL), 1);
-                if (rooms[i].transform.localScale.x >= 1.25 * meanWidth && rooms[i].transform.localScale.y >= 1.25 * meanHeight)
-                {
-                    rooms[i].GetComponent<SpriteRenderer>().color = Color.black;
-                    points.Add(new Vertex((int)rooms[i].transform.position.x, (int)rooms[i].transform.position.y));
-                }
-                else
-                {
-                    rooms[i].SetActive(false);
-                }
-
-            }
-            if (points.Count >= 5) break;
-            else
-            {
-                points.Clear();
-
-                meanHeight = 0;
-                meanWidth = 0;
-
-                for (int i = 0; i < ROOMCNT; i++)
-                {
-                    Destroy(rooms[i].gameObject);
-                }
-                rooms.Clear();
-
-            }
-            yield return null;
+            yield return new WaitForSeconds(0.03f);
         }
+
+        meanHeight = totalHeight / ROOMCNT;
+        meanWidth = totalWidth / ROOMCNT;
+
+        for (int i = 0; i < ROOMCNT; i++)
+        {
+            rooms[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+            rooms[i].GetComponent<Rigidbody2D>().gravityScale = 0f;
+        }
+
+        yield return new WaitForSeconds(5f);
+
+        ChangeRoomColorsAndAddPoints();
+        yield return null;
+        
 
         GenerateMapArr();
 
@@ -150,6 +124,48 @@ public class MapManager : MonoBehaviour
         CellularAutomata();
     }
 
+    private void ChangeRoomColorsAndAddPoints()
+    {
+        // 각 방의 크기, 비율, 인덱스를 저장할 리스트 생성
+        List<(float size, float ratio, int index)> roomSizes = new List<(float size, float ratio, int index)>();
+
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            rooms[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+            rooms[i].transform.position = new Vector3(RoundPos(rooms[i].transform.position.x, PIXEL), RoundPos(rooms[i].transform.position.y, PIXEL), 1);
+
+            Vector3 scale = rooms[i].transform.localScale;
+            float size = scale.x * scale.y; // 방의 크기(넓이) 계산
+            float ratio = scale.x / scale.y; // 방의 비율 계산
+            if (ratio > 2f || ratio < 0.5f) continue; // 1:2 또는 2:1 비율을 초과하는 경우 건너뛰기
+            roomSizes.Add((size, ratio, i)); // 크기, 비율, 원래 인덱스 저장
+        }
+
+        // 방의 크기에 따라 내림차순으로 정렬
+        var sortedRooms = roomSizes.OrderByDescending(room => room.size).ToList();
+
+        // 모든 방을 일단 비활성화
+        foreach (var room in rooms)
+        {
+            room.SetActive(false);
+        }
+
+        // 비율 조건을 만족하는 상위 5개 방 선택 및 처리
+        int count = 0;
+        foreach (var roomInfo in sortedRooms)
+        {
+            if (count >= SelectRoomCnt) break; // 상위 5개 방을 선택했으면 종료
+            GameObject room = rooms[roomInfo.index];
+            SpriteRenderer renderer = room.GetComponent<SpriteRenderer>();
+            if (renderer != null)
+            {
+                renderer.color = Color.black; // SpriteRenderer 색 변경
+            }
+            room.SetActive(true); // 방 활성화
+            points.Add(new Vertex((int)room.transform.position.x, (int)room.transform.position.y)); // points 리스트에 추가
+            count++;
+        }
+    }
 
 
     private void RegenerateLines()
@@ -166,14 +182,10 @@ public class MapManager : MonoBehaviour
 
         var tree = Kruskal.MinimumSpanningTree(graph);
 
-
         GenerateCorridors(tree);
     }
 
-    private void GenerateHallways()
-    {
 
-    }
     void GenerateMapArr()
     {
         // 배열 크기 결정을 위한 최소/최대 좌표 초기화
@@ -220,13 +232,28 @@ public class MapManager : MonoBehaviour
 
     void GenerateCorridors(IEnumerable<Delaunay.Edge> tree)
     {
+        Vector2Int size1 = new Vector2Int(2, 2);
+        Vector2Int size2 = new Vector2Int(2, 2);
+
         foreach (Delaunay.Edge edge in tree)
         {
             Vertex start = edge.a;
             Vertex end = edge.b;
 
+            for (int i = 0; i < ROOMCNT; i++)
+            {
+                var pos = rooms[i].transform.position;
+                if (pos.x == start.x && pos.y == start.y)
+                {
+                    size1 = new Vector2Int((int)rooms[i].transform.localScale.x, (int)rooms[i].transform.localScale.y);
+                }
+                else if (pos.x == end.x && pos.y == end.y)
+                {
+                    size2 = new Vector2Int((int)rooms[i].transform.localScale.x, (int)rooms[i].transform.localScale.y);
+                }
+            }
             // 시작점과 끝점 사이의 복도 생성
-            CreateCorridor(start, end);
+            CreateCorridor(start, end, size1, size2);
         }
 
         foreach (Delaunay.Edge edge in tree)
@@ -234,28 +261,51 @@ public class MapManager : MonoBehaviour
             Vertex start = edge.a;
             Vertex end = edge.b;
 
-            // 시작점과 끝점 사이의 복도 생성
-            CreateHallway(start, end);
+            for (int i = 0; i < ROOMCNT; i++)
+            {
+                var pos = rooms[i].transform.position;
+                if (pos.x == start.x && pos.y == start.y)
+                {
+                    size1 = new Vector2Int((int)rooms[i].transform.localScale.x, (int)rooms[i].transform.localScale.y);
+                }
+                else if(pos.x == end.x && pos.y == end.y)
+                {
+                    size2 = new Vector2Int((int)rooms[i].transform.localScale.x, (int)rooms[i].transform.localScale.y);
+                }
+            }
+            CreateHallway(start, end, size1, size2);
         }
 
 
     }
-    void CreateCorridor(Vertex start, Vertex end)
+    void CreateCorridor(Vertex start, Vertex end, Vector2Int startSize, Vector2Int endSize)
     {
-        // 수평 또는 수직 복도 생성
-        if (start.x == end.x || start.y == end.y)
+        bool isHorizontalOverlap = Mathf.Abs(start.x - end.x) < ((startSize.x + endSize.x) / 2f - overlapOffset);
+        bool isVerticalOverlap = Mathf.Abs(start.y - end.y) < ((startSize.y + endSize.y) / 2f - overlapOffset);
+
+        // 수평 복도 생성
+        if (isVerticalOverlap)
         {
-            for (int x = Mathf.Min(start.x, end.x); x <= Mathf.Max(start.x, end.x); x++)
+            int startY = Mathf.Min(start.y + startSize.y / 2, end.y + endSize.y/2) + Mathf.Max(start.y - startSize.y / 2, end.y - endSize.y/2);
+            startY = startY / 2;
+            for (int x = Mathf.Min(start.x + startSize.x/2, end.x + endSize.x/2) ; x <= Mathf.Max(start.x - startSize.x/2, end.x - endSize.x/2); x++)
             {
-                for (int y = Mathf.Min(start.y, end.y); y <= Mathf.Max(start.y, end.y); y++)
-                {
-                    InstantiateGrid(x, y);
-                }
+                InstantiateGrid(x, startY);
+            }
+        }
+        // 수직 복도 생성
+        else if (isHorizontalOverlap)
+        {
+            int startX= Mathf.Min(start.x + startSize.x / 2, end.x + endSize.x / 2) + Mathf.Max(start.x - startSize.x / 2, end.x - endSize.x / 2);
+            startX = startX / 2;
+            for (int y = Mathf.Min(start.y + startSize.y/2, end.y + endSize.y/2); y <= Mathf.Max(start.y - startSize.y/2, end.y - endSize.y/2); y++)
+            {
+                InstantiateGrid(startX, y);
             }
         }
         else // 'ㄴ'자 또는 'ㄱ'자 복도 생성
         {
-            // 전체 Vertex의 중간점 계산 (여기서는 단순화를 위해 맵의 중심을 사용)
+            // 전체 Vertex의 중간점 계산
             int mapCenterX = map.GetLength(0) / 2;
             int mapCenterY = map.GetLength(1) / 2;
 
@@ -266,16 +316,16 @@ public class MapManager : MonoBehaviour
             // 중간점이 전체 맵의 중심점에 비해 어느 사분면에 위치하는지 파악
             int quadrant = DetermineQuadrant(midX - mapCenterX - minX, midY - mapCenterY - minY);
 
-            // 사분면과 start와 end의 상대적 위치에 따라 'ㄴ' 혹은 'ㄱ' 형태 결정
+            // 사분면과 start와 end의 상대적 위치에 따라 'ㄴ' 혹은 'ㄱ' 형태 결정, 항상 start의 x가 작음.
             if (quadrant == 2 || quadrant == 3)
             {
-                // 사분면이 1 또는 3인 경우
+                // 사분면이 2 또는 3인 경우
                 CreateStraightPath(start.x, start.y,end.x, start.y); // 가로로 먼저 이동
                 CreateStraightPath(end.x, start.y, end.x, end.y); // 다음 세로로 이동
             }
             else if (quadrant == 1 || quadrant == 4)
             {
-                // 사분면이 2 또는 4인 경우
+                // 사분면이 1 또는 4인 경우
                 CreateStraightPath(start.x, start.y,start.x, end.y); // 세로로 먼저 이동
                 CreateStraightPath(start.x, end.y, end.x, end.y); // 다음 가로로 이동
             }
@@ -312,16 +362,30 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    void CreateHallway(Vertex start, Vertex end)
-    {// 수평 또는 수직 복도 생성
-        if (start.x == end.x || start.y == end.y)
+    void CreateHallway(Vertex start, Vertex end, Vector2Int startSize, Vector2Int endSize)
+    {
+        bool isHorizontalOverlap = Mathf.Abs(start.x - end.x) < ((startSize.x + endSize.x) / 2f - overlapOffset);
+        bool isVerticalOverlap = Mathf.Abs(start.y - end.y) < ((startSize.y + endSize.y) / 2f - overlapOffset);
+
+        // 수평 복도 생성
+        if (isVerticalOverlap)
         {
-            for (int x = Mathf.Min(start.x, end.x); x <= Mathf.Max(start.x, end.x); x++)
+
+            int startY = Mathf.Min(start.y + startSize.y / 2, end.y + endSize.y / 2) + Mathf.Max(start.y - startSize.y / 2, end.y - endSize.y / 2);
+            startY = startY / 2;
+            for (int x = (int)Mathf.Min(start.x + startSize.x/2, end.x + endSize.x/2); x <= (int)Mathf.Max(start.x - startSize.x/2, end.x - endSize.x/2); x++)
             {
-                for (int y = Mathf.Min(start.y, end.y); y <= Mathf.Max(start.y, end.y); y++)
-                {
-                    AddHallwayWidth(x, y);
-                }
+                AddHallwayWidth(x, startY);
+            }
+        }
+        // 수직 복도 생성
+        else if (isHorizontalOverlap)
+        {
+            int startX = Mathf.Min(start.x + startSize.x / 2, end.x + endSize.x / 2) + Mathf.Max(start.x - startSize.x / 2, end.x - endSize.x / 2);
+            startX = startX / 2;
+            for (int y = (int)Mathf.Min(start.y + startSize.y/2, end.y + endSize.y/2); y <= (int)Mathf.Max(start.y - startSize.y/2, end.y - endSize.y/2); y++)
+            {
+                AddHallwayWidth(startX, y);
             }
         }
         else // 'ㄴ'자 또는 'ㄱ'자 복도 생성
