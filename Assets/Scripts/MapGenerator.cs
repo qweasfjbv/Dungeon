@@ -1,18 +1,14 @@
 using Delaunay;
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
-using UnityEditor;
 using UnityEngine;
 
-public class MapManager : MonoBehaviour
+public class MapGenerator: MonoBehaviour
 {
     // 방 한개에 해당하는 GO
     [SerializeField] private GameObject GridPrefab;
+
 
     const int PIXEL = 1;
     const int ROOMCNT = 60;
@@ -21,20 +17,13 @@ public class MapManager : MonoBehaviour
 
     int hallwayId = 200;
 
-    int SelectRoomCnt = 7;
+    int selectRoomCnt = 7;
     int overlapOffset = 3;
 
     private List<GameObject> rooms = new List<GameObject>();
 
-
-    public Material lineMaterial;
-
-    private Camera mainCamera;
     private HashSet<Vertex> points;
     private HashSet<GameObject> lines;
-
-    private float meanHeight = 0;
-    private float meanWidth = 0;
 
     private int[,] map; // 2차원 배열 맵
 
@@ -43,19 +32,59 @@ public class MapManager : MonoBehaviour
 
     void Awake()
     {
-        mainCamera = Camera.main;
         points = new HashSet<Vertex>();
         lines = new HashSet<GameObject>();
     }
 
     private void Start()
     {
-        StartCoroutine(TestCoroutine());
+        StartCoroutine(MapGenerateCoroutine());
     }
 
 
 
-    // 원 안에서 랜덤 포인트 만들기
+
+    #region PROCEDURE MAP GENERATE
+
+    /*  
+     *  방 만들어지는 과정 시뮬하기위한 코루틴
+     *  물리연산 되는동안 3.5~5초는 기다려야함
+     */
+    private IEnumerator MapGenerateCoroutine()
+    {
+
+        // 방 랜덤생성
+        for (int i = 0; i < ROOMCNT; i++)
+        {
+            rooms.Add(Instantiate(GridPrefab, GetRandomPointInCircle(10), new Quaternion(0, 0, 0, 0)));
+            rooms[i].transform.localScale = GetRandomScale(rooms[i].transform.position);
+
+            yield return new WaitForSeconds(0.03f);
+        }
+
+        // 물리연산을 하기 위해 Dynamic
+        for (int i = 0; i < ROOMCNT; i++)
+        {
+            rooms[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+            rooms[i].GetComponent<Rigidbody2D>().gravityScale = 0f;
+        }
+
+        yield return new WaitForSeconds(5f);
+
+        // 메인룸결정, point에 메인룸 위치 Vertex로 추가
+        FindMainRooms(selectRoomCnt);
+
+        // 방 정보를 배열에 할당
+        GenerateMapArr();
+
+        // Delaunay Triangulation, MST(Kruskal)로 MainRoom간 연결
+        // Edge배열로 복도 생성
+        RegenerateLines();
+
+        // 세포자동자로 smoothing
+        CellularAutomata();
+    }
+
     private Vector3 GetRandomPointInCircle(int rad)
     {
         float t = 2 * Mathf.PI * Random.Range(0f, 1f);
@@ -67,67 +96,26 @@ public class MapManager : MonoBehaviour
 
         return new Vector3(RoundPos(rad * r * Mathf.Cos(t), PIXEL), RoundPos(rad * r * Mathf.Sin(t), PIXEL), 0);
     }
-
     private Vector3 GetRandomScale(Vector3 pos)
     {
         return new Vector3(Random.Range(minRoomSize, maxRoomSize) * 2, Random.Range(minRoomSize, maxRoomSize) * 2, 1);
     }
 
+    /*  
+     *  물리연산 후에 위치를 정수로 변환하기 위해 사용
+     *  
+     *  float n : 변환할 값
+     *  int m   : 그리드 간격 (2이면 return값이 짝수만 나옴)
+     */
     private int RoundPos(float n, int m)
     {
         return Mathf.FloorToInt(((n + m - 1) / m)) * m;
     }
 
-    
-    private IEnumerator TestCoroutine()
-    {
-
-        
-        meanHeight = 0;
-        meanWidth = 0;
-
-        float totalHeight = 0;
-        float totalWidth = 0;
-
-        for (int i = 0; i < ROOMCNT; i++)
-        {
-            rooms.Add(Instantiate(GridPrefab, GetRandomPointInCircle(10), new Quaternion(0, 0, 0, 0)));
-            rooms[i].transform.localScale = GetRandomScale(rooms[i].transform.position);
-
-            totalHeight += rooms[i].transform.localScale.y;
-            totalWidth += rooms[i].transform.localScale.x;
-
-            yield return new WaitForSeconds(0.03f);
-        }
-
-        meanHeight = totalHeight / ROOMCNT;
-        meanWidth = totalWidth / ROOMCNT;
-
-        for (int i = 0; i < ROOMCNT; i++)
-        {
-            rooms[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-            rooms[i].GetComponent<Rigidbody2D>().gravityScale = 0f;
-        }
-
-        yield return new WaitForSeconds(5f);
-
-        ChangeRoomColorsAndAddPoints();
-        yield return null;
-        
-
-        GenerateMapArr();
-
-        RegenerateLines();
-
-        yield return null;
-
-        CellularAutomata();
-    }
-
-    private void ChangeRoomColorsAndAddPoints()
+    private void FindMainRooms(int roomCount)
     {
         // 각 방의 크기, 비율, 인덱스를 저장할 리스트 생성
-        List<(float size, float ratio, int index)> roomSizes = new List<(float size, float ratio, int index)>();
+        List<(float size, int index)> roomSizes = new List<(float size, int index)>();
 
         for (int i = 0; i < rooms.Count; i++)
         {
@@ -138,7 +126,7 @@ public class MapManager : MonoBehaviour
             float size = scale.x * scale.y; // 방의 크기(넓이) 계산
             float ratio = scale.x / scale.y; // 방의 비율 계산
             if (ratio > 2f || ratio < 0.5f) continue; // 1:2 또는 2:1 비율을 초과하는 경우 건너뛰기
-            roomSizes.Add((size, ratio, i)); // 크기, 비율, 원래 인덱스 저장
+            roomSizes.Add((size, i)); // 크기, 비율, 원래 인덱스 저장
         }
 
         // 방의 크기에 따라 내림차순으로 정렬
@@ -150,43 +138,25 @@ public class MapManager : MonoBehaviour
             room.SetActive(false);
         }
 
-        // 비율 조건을 만족하는 상위 5개 방 선택 및 처리
+        // 비율 조건을 만족하는 방 선택 및 처리
         int count = 0;
         foreach (var roomInfo in sortedRooms)
         {
-            if (count >= SelectRoomCnt) break; // 상위 5개 방을 선택했으면 종료
+            if (count >= roomCount) break; // 선택 후 종료
             GameObject room = rooms[roomInfo.index];
             SpriteRenderer renderer = room.GetComponent<SpriteRenderer>();
             if (renderer != null)
             {
-                renderer.color = Color.black; // SpriteRenderer 색 변경
+                renderer.color = Color.black;
             }
-            room.SetActive(true); // 방 활성화
+            room.SetActive(true);
             points.Add(new Vertex((int)room.transform.position.x, (int)room.transform.position.y)); // points 리스트에 추가
             count++;
         }
     }
 
-
-    private void RegenerateLines()
-    {
-        foreach (var line in lines)
-            Destroy(line);
-        lines.Clear();
-
-        var triangles = BowyerWatson.Triangulate(points);
-
-        var graph = new HashSet<Delaunay.Edge>();
-        foreach (var triangle in triangles)
-            graph.UnionWith(triangle.edges);
-
-        var tree = Kruskal.MinimumSpanningTree(graph);
-
-        GenerateCorridors(tree);
-    }
-
-
-    void GenerateMapArr()
+    // 맵 정보를 2차원 배열에 저장
+    private void GenerateMapArr()
     {
         // 배열 크기 결정을 위한 최소/최대 좌표 초기화
 
@@ -196,7 +166,7 @@ public class MapManager : MonoBehaviour
             Vector3 pos = room.transform.position;
             Vector3 scale = room.transform.localScale;
 
-            minX = Mathf.Min(minX, Mathf.FloorToInt(pos.x-scale.x));
+            minX = Mathf.Min(minX, Mathf.FloorToInt(pos.x - scale.x));
             minY = Mathf.Min(minY, Mathf.FloorToInt(pos.y - scale.y));
             maxX = Mathf.Max(maxX, Mathf.CeilToInt(pos.x + scale.x));
             maxY = Mathf.Max(maxY, Mathf.CeilToInt(pos.y + scale.y));
@@ -217,9 +187,9 @@ public class MapManager : MonoBehaviour
             Vector3 scale = rooms[i].transform.localScale;
 
             // GameObject의 크기와 위치를 고려하여 배열에 저장
-            for (int x = (int)-scale.x/2; x < scale.x/2; x++)
+            for (int x = (int)-scale.x / 2; x < scale.x / 2; x++)
             {
-                for (int y = (int)-scale.y/2; y < scale.y/2; y++)
+                for (int y = (int)-scale.y / 2; y < scale.y / 2; y++)
                 {
                     int mapX = Mathf.FloorToInt(pos.x - minX + x);
                     int mapY = Mathf.FloorToInt(pos.y - minY + y);
@@ -229,8 +199,26 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    // 들로네 삼각분할, 최소 스패닝 트리로 방 연결
+    // + 복도 생성
+    private void RegenerateLines()
+    {
+        foreach (var line in lines)
+            Destroy(line);
+        lines.Clear();
 
-    void GenerateCorridors(IEnumerable<Delaunay.Edge> tree)
+        var triangles = BowyerWatson.Triangulate(points);
+
+        var graph = new HashSet<Delaunay.Edge>();
+        foreach (var triangle in triangles)
+            graph.UnionWith(triangle.edges);
+
+        var tree = Kruskal.MinimumSpanningTree(graph);
+
+        GenerateHallways(tree);
+    }
+
+    private void GenerateHallways(IEnumerable<Delaunay.Edge> tree)
     {
         Vector2Int size1 = new Vector2Int(2, 2);
         Vector2Int size2 = new Vector2Int(2, 2);
@@ -273,12 +261,12 @@ public class MapManager : MonoBehaviour
                     size2 = new Vector2Int((int)rooms[i].transform.localScale.x, (int)rooms[i].transform.localScale.y);
                 }
             }
-            CreateHallway(start, end, size1, size2);
+            CreateCorridorWidth(start, end, size1, size2);
         }
 
 
     }
-    void CreateCorridor(Vertex start, Vertex end, Vector2Int startSize, Vector2Int endSize)
+    private void CreateCorridor(Vertex start, Vertex end, Vector2Int startSize, Vector2Int endSize)
     {
         bool isHorizontalOverlap = Mathf.Abs(start.x - end.x) < ((startSize.x + endSize.x) / 2f - overlapOffset);
         bool isVerticalOverlap = Mathf.Abs(start.y - end.y) < ((startSize.y + endSize.y) / 2f - overlapOffset);
@@ -331,38 +319,7 @@ public class MapManager : MonoBehaviour
             }
         }
     }
-    int DetermineQuadrant(int x, int y)
-    {
-        if (x >= 0 && y >= 0) return 1;
-        if (x < 0 && y >= 0) return 2;
-        if (x < 0 && y < 0) return 3;
-        if (x >= 0 && y < 0) return 4;
-        return 0; // 이 경우는 발생하지 않음
-    }
-    void CreateStraightPath(int startX, int startY, int endX, int endY)
-    {
-        for (int x = Mathf.Min(startX, endX); x <= Mathf.Max(startX, endX); x++)
-        {
-            for (int y = Mathf.Min(startY, endY); y <= Mathf.Max(startY, endY); y++)
-            {
-                InstantiateGrid(x, y);
-            }
-        }
-    }
-
-    void CreateStraightHall(int startX, int startY, int endX, int endY)
-    {
-
-        for (int x = Mathf.Min(startX, endX); x <= Mathf.Max(startX, endX); x++)
-        {
-            for (int y = Mathf.Min(startY, endY); y <= Mathf.Max(startY, endY); y++)
-            {
-                AddHallwayWidth(x, y);
-            }
-        }
-    }
-
-    void CreateHallway(Vertex start, Vertex end, Vector2Int startSize, Vector2Int endSize)
+    private void CreateCorridorWidth(Vertex start, Vertex end, Vector2Int startSize, Vector2Int endSize)
     {
         bool isHorizontalOverlap = Mathf.Abs(start.x - end.x) < ((startSize.x + endSize.x) / 2f - overlapOffset);
         bool isVerticalOverlap = Mathf.Abs(start.y - end.y) < ((startSize.y + endSize.y) / 2f - overlapOffset);
@@ -373,7 +330,7 @@ public class MapManager : MonoBehaviour
 
             int startY = Mathf.Min(start.y + startSize.y / 2, end.y + endSize.y / 2) + Mathf.Max(start.y - startSize.y / 2, end.y - endSize.y / 2);
             startY = startY / 2;
-            for (int x = (int)Mathf.Min(start.x + startSize.x/2, end.x + endSize.x/2); x <= (int)Mathf.Max(start.x - startSize.x/2, end.x - endSize.x/2); x++)
+            for (int x = (int)Mathf.Min(start.x + startSize.x / 2, end.x + endSize.x / 2); x <= (int)Mathf.Max(start.x - startSize.x / 2, end.x - endSize.x / 2); x++)
             {
                 AddHallwayWidth(x, startY);
             }
@@ -383,7 +340,7 @@ public class MapManager : MonoBehaviour
         {
             int startX = Mathf.Min(start.x + startSize.x / 2, end.x + endSize.x / 2) + Mathf.Max(start.x - startSize.x / 2, end.x - endSize.x / 2);
             startX = startX / 2;
-            for (int y = (int)Mathf.Min(start.y + startSize.y/2, end.y + endSize.y/2); y <= (int)Mathf.Max(start.y - startSize.y/2, end.y - endSize.y/2); y++)
+            for (int y = (int)Mathf.Min(start.y + startSize.y / 2, end.y + endSize.y / 2); y <= (int)Mathf.Max(start.y - startSize.y / 2, end.y - endSize.y / 2); y++)
             {
                 AddHallwayWidth(startX, y);
             }
@@ -416,31 +373,35 @@ public class MapManager : MonoBehaviour
             }
         }
     }
-
-    private void InstantiateGrid(int x, int y)
+    private void CreateStraightPath(int startX, int startY, int endX, int endY)
     {
-        if (map[y-minY, x - minX] == -1) // 해당 위치에 이미 그리드가 없는 경우에만 생성
+        for (int x = Mathf.Min(startX, endX); x <= Mathf.Max(startX, endX); x++)
         {
-            GameObject grid = Instantiate(GridPrefab, new Vector3(x +0.5f, y + 0.5f, 0), Quaternion.identity);
-            grid.GetComponent<SpriteRenderer>().color = Color.black;
-            map[y - minY, x - minX] = hallwayId;
-        }
-        else if(map[y - minY, x - minX] != hallwayId)
-        {
-            if(rooms[map[y - minY, x - minX]].activeSelf)
+            for (int y = Mathf.Min(startY, endY); y <= Mathf.Max(startY, endY); y++)
             {
-
-            }
-            else
-            {
-                rooms[map[y - minY, x - minX]].SetActive(true);
-                rooms[map[y - minY, x - minX]].GetComponent<SpriteRenderer>().color = Color.black;
+                InstantiateGrid(x, y);
             }
         }
-
-
     }
+    private void CreateStraightHall(int startX, int startY, int endX, int endY)
+    {
 
+        for (int x = Mathf.Min(startX, endX); x <= Mathf.Max(startX, endX); x++)
+        {
+            for (int y = Mathf.Min(startY, endY); y <= Mathf.Max(startY, endY); y++)
+            {
+                AddHallwayWidth(x, y);
+            }
+        }
+    }
+    private int DetermineQuadrant(int x, int y)
+    {
+        if (x >= 0 && y >= 0) return 1;
+        if (x < 0 && y >= 0) return 2;
+        if (x < 0 && y < 0) return 3;
+        if (x >= 0 && y < 0) return 4;
+        return 0; // 이 경우는 발생하지 않음
+    }
     private void AddHallwayWidth(int x, int y)
     {
         for (int i = -1; i <= 1; i++)
@@ -461,14 +422,14 @@ public class MapManager : MonoBehaviour
             }
         }
     }
-
     private void CellularAutomata()
     {
         for (int x = 0; x < maxX-minX; x++)
         {
             for (int y = 0; y < maxY-minY; y++)
             {
-                if (map[y, x] != -1 || (map[y, x] != -1 && map[x, y] != hallwayId && rooms[map[x, y]].activeSelf)) continue;
+                if (map[y, x] == hallwayId) continue;
+                if ((map[y, x] != -1 && map[y, x] != hallwayId && rooms[map[y, x]].activeSelf)) continue;
 
 
                 int nonWallCount = 0; // 벽이 아닌 공간의 수를 카운트
@@ -486,7 +447,8 @@ public class MapManager : MonoBehaviour
                         {
                             continue;
                         }
-                        else if (map[checkY, checkX] != -1 && (map[checkY, checkX] != hallwayId && rooms[map[checkY, checkX]].activeSelf)) // 벽이 아닌 공간 확인
+                        else if (map[checkY, checkX] == -1) continue;
+                        else if(map[checkY, checkX] == hallwayId || rooms[map[checkY, checkX]].activeSelf) // 벽이 아닌 공간 확인
                         {
                             nonWallCount++;
                         }
@@ -505,5 +467,34 @@ public class MapManager : MonoBehaviour
             }
         }
     }
+    private void InstantiateGrid(int x, int y)
+    {
+        if (map[y - minY, x - minX] == -1) // 해당 위치에 이미 그리드가 없는 경우에만 생성
+        {
+            GameObject grid = Instantiate(GridPrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
+            grid.GetComponent<SpriteRenderer>().color = Color.black;
+            map[y - minY, x - minX] = hallwayId;
+        }
+        else if (map[y - minY, x - minX] != hallwayId)
+        {
+            if (rooms[map[y - minY, x - minX]].activeSelf)
+            {
 
+            }
+            else
+            {
+                rooms[map[y - minY, x - minX]].SetActive(true);
+                rooms[map[y - minY, x - minX]].GetComponent<SpriteRenderer>().color = Color.black;
+            }
+        }
+
+
+    }
+    #endregion
+
+    #region AUTO TILING
+
+
+
+    #endregion
 }

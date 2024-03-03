@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Delaunay
 {
     public class Vertex
-    {
+    { 
         public readonly int x;
         public readonly int y;
 
