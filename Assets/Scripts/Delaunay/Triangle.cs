@@ -51,16 +51,25 @@ namespace Delaunay
                      b.x * (c.y - a.y) +
                      c.x * (a.y - b.y)) * 2;
 
+
             circumCenterX = ((a.x * a.x + a.y * a.y) * (b.y - c.y) +
                     (b.x * b.x + b.y * b.y) * (c.y - a.y) +
                     (c.x * c.x + c.y * c.y) * (a.y - b.y)) / D;
             circumCenterY = ((a.x * a.x + a.y * a.y) * (c.x - b.x) +
                     (b.x * b.x + b.y * b.y) * (a.x - c.x) +
                     (c.x * c.x + c.y * c.y) * (b.x - a.x)) / D;
-
             float dx = a.x - circumCenterX;
             float dy = a.y - circumCenterY;
             circumRadius2 = dx * dx + dy * dy;
+        }
+        public override bool Equals(object obj)
+        {
+            return obj is Triangle t && a == t.a && b == t.b && c == t.c;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(a, b, c);
         }
 
         public bool HasEdge(Edge edge)

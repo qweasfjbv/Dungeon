@@ -199,7 +199,7 @@ public class MapGenerator: MonoBehaviour
             Destroy(line);
         lines.Clear();
 
-        var triangles = BowyerWatson.Triangulate(points);
+        var triangles = DelaunayTriangulation.Triangulate(points);
 
         var graph = new HashSet<Delaunay.Edge>();
         foreach (var triangle in triangles)
@@ -505,21 +505,29 @@ public class MapGenerator: MonoBehaviour
     const int BottomMask = (1 << 3) | (1 << 5) | (1 << 7);
     const int LeftMask = (1 << 1) | (1 << 3) | (1 << 7);
     const int RightMask = (1 << 1) | (1 << 5) | (1 << 7);
+    const int TopLeftMask = (1 << 3) | (1 << 1) | (1 << 0);
+    const int TopRightMask = (1 << 1) | (1 << 2) | (1 << 5);
+    const int BottomLeftMask = (1 << 3) | (1 << 6) | (1 << 7);
+    const int BottomRightMask = (1 << 5) | (1 << 7) | (1 << 8);
 
-    const int TopLeftMask = 1 << 4;
-    const int TopRightMask = 1 << 5;
-    const int BottomLeftMask = 1 << 6;
-    const int BottomRightMask = 1 << 0;
+    const int TopLeftMask_1 = (1 << 3) | (1 << 1) | (1 << 0);
+    const int TopRightMask_1 = (1 << 1) | (1 << 2) | (1 << 5);
+    const int BottomLeftMask_1 = (1 << 3) | (1 << 6) | (1 << 7);
+    const int BottomRightMask_1 = (1 << 5) | (1 << 7) | (1 << 8);
 
     const int TopMatch = 1 << 1;
     const int BottomMatch = 1 << 7;
     const int LeftMatch = 1 << 3;
     const int RightMatch = 1 << 5;
-
-    const int TopLeftMatch = 1 << 5;
-    const int TopRightMatch = 1 << 0;
+    const int TopLeftMatch = 1 << 0;
+    const int TopRightMatch = 1 << 2;
     const int BottomLeftMatch = 1 << 0;
-    const int BottomRightMatch = 1 << 0;
+    const int BottomRightMatch = 1 << 8;
+
+    const int TopLeftMatch_1 = 1 << 0;
+    const int TopRightMatch_1 = 1 << 2;
+    const int BottomLeftMatch_1 = 1 << 0;
+    const int BottomRightMatch_1 = 1 << 8;
 
 
     private void MapArrNormalization()
@@ -585,10 +593,10 @@ public class MapGenerator: MonoBehaviour
         if (Matches(pattern, BottomMask, BottomMatch)) return wall_Bottom;
         if (Matches(pattern, LeftMask, LeftMatch)) return wall_Left;
         if (Matches(pattern, RightMask, RightMatch)) return wall_Right;
-        //if (Matches(pattern, TopLeftMask, TopLeftMatch)) return wall_Top_Left;
-        //if (Matches(pattern, TopRightMask, TopRightMatch)) return wall_Top_Right;
-        //if (Matches(pattern, BottomLeftMask, BottomLeftMatch)) return wall_Bottom_Left;
-        //if (Matches(pattern, BottomRightMask, BottomRightMatch)) return wall_Bottom_Right;
+        if (Matches(pattern, TopLeftMask, TopLeftMatch)) return wall_Top_Left;
+        if (Matches(pattern, TopRightMask, TopRightMatch)) return wall_Top_Right;
+        if (Matches(pattern, BottomLeftMask, BottomLeftMatch)) return wall_Bottom_Left;
+        if (Matches(pattern, BottomRightMask, BottomRightMatch)) return wall_Bottom_Right;
 
         // ±âº»°ª
         return null;

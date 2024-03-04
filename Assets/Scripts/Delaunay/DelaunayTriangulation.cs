@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Delaunay
 {
-    public class BowyerWatson : MonoBehaviour
+    public class DelaunayTriangulation : MonoBehaviour
     {
         // 모든 점을 포함하는 삼각형
         private static Triangle CalcSuperTriangle(IEnumerable<Vertex> vertices)
