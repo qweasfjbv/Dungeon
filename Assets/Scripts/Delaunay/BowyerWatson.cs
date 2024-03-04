@@ -19,16 +19,16 @@ namespace Delaunay
 
             foreach(var v in vertices)
             {
-                if(v.x < minX) minX = v.x;
-                if(v.x > maxX) maxX = v.x;
-                if(v.y < minY) minY = v.y;
-                if(v.y > maxY) maxY = v.y;
+                minX = Mathf.Min(minX, v.x);
+                maxX = Mathf.Max(maxX, v.x);
+                minY = Mathf.Min(minY, v.y);
+                maxY = Mathf.Max(maxY, v.y);
             }
 
             int dx = (maxX - minX + 1);
 
             Vertex v1 = new Vertex(minX - dx - 1, minY - 1);
-            Vertex v2 = new Vertex(minX + dx, maxY + (maxY - minY) + 1);
+            Vertex v2 = new Vertex((minX + maxX)/2, maxY + (maxY - minY) + 1);
             Vertex v3 = new Vertex(maxX + dx + 1, minY - 1);
 
             return new Triangle(v1, v2, v3);
@@ -37,14 +37,17 @@ namespace Delaunay
         public static HashSet<Triangle> Triangulate(IEnumerable<Vertex> vertices)
         {
             Triangle superTriangle = CalcSuperTriangle(vertices);
-            HashSet<Triangle> triangulation = new HashSet<Triangle>() { superTriangle };
+            HashSet<Triangle> triangulation = new HashSet<Triangle>
+            {
+                superTriangle
+            };
 
             foreach (var vertex in vertices)
             {
                 HashSet<Triangle> badTriangles = new HashSet<Triangle>();
                 foreach (var triangle in triangulation)
                 {
-                    if (triangle.CircumCircleContains(vertex))
+                    if (triangle.IsInCircumCircle(vertex))
                         badTriangles.Add(triangle);
                 }
 
@@ -74,7 +77,7 @@ namespace Delaunay
                 }
             }
 
-            triangulation.RemoveWhere((Triangle t) => t.HasVertexFrom(superTriangle));
+            triangulation.RemoveWhere((Triangle t) => t.HasSameVertex(superTriangle));
 
             return triangulation;
         }

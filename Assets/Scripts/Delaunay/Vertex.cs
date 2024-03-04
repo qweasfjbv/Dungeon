@@ -16,21 +16,6 @@ namespace Delaunay
             this.y = y;
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj is Vertex v && v.x == x && v.y == y;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(x, y);
-        }
-
-        public override string ToString()
-        {
-            return $"Vertex({this.x}, {this.y})";
-        }
-
         public static bool operator <(Vertex lv, Vertex rv)
         {
             return (lv.x < rv.x) || ((lv.x == rv.x) && (lv.y < rv.y));

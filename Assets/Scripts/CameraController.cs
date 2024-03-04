@@ -3,7 +3,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     private float zoomSpeed = 5f; // 줌 속도
-    private float minOrthoSize = 20f; // 최소 Orthographic Size
+    private float minOrthoSize = 5f; // 최소 Orthographic Size
     private float maxOrthoSize = 100f; // 최대 Orthographic Size
     private float minPosX = -100f; // 카메라 x축 최소 이동 범위
     private float maxPosX = 100f; // 카메라 x축 최대 이동 범위

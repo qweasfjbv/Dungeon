@@ -47,16 +47,6 @@ namespace Delaunay
             }
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj is Edge e && a == e.a && b == e.b;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(a, b);
-        }
-
         public static int LengthCompare(Edge x, Edge y)
         {
             float lx = x.length;

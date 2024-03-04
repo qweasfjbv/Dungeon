@@ -3,38 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class MapGenerator: MonoBehaviour
 {
-    // 방 한개에 해당하는 GO
+    [Header("Map Generate Variables")]
     [SerializeField] private GameObject GridPrefab;
+    [SerializeField] private int generateRoomCnt = 60;
+    [SerializeField] private int selectRoomCnt = 7;
+    [SerializeField] private int minRoomSize = 2;
+    [SerializeField] private int maxRoomSize = 8;
+    [SerializeField] private int overlapOffset = 3;
 
-
-    const int PIXEL = 1;
-    const int ROOMCNT = 60;
-    int minRoomSize = 2;
-    int maxRoomSize = 8;
-
-    int hallwayId = 200;
-
-    int selectRoomCnt = 7;
-    int overlapOffset = 3;
-
+    private const int PIXEL = 1;
+    private int hallwayId = 200;
+    
     private List<GameObject> rooms = new List<GameObject>();
-
-    private HashSet<Vertex> points;
-    private HashSet<GameObject> lines;
+    private HashSet<Delaunay.Vertex> points = new HashSet<Delaunay.Vertex>();
+    private HashSet<GameObject> lines = new HashSet<GameObject>();
 
     private int[,] map; // 2차원 배열 맵
 
-    int minX = int.MaxValue, minY = int.MaxValue;
-    int maxX = int.MinValue, maxY = int.MinValue;
+    private int minX = int.MaxValue, minY = int.MaxValue;
+    private int maxX = int.MinValue, maxY = int.MinValue;
 
-    void Awake()
-    {
-        points = new HashSet<Vertex>();
-        lines = new HashSet<GameObject>();
-    }
+
 
     private void Start()
     {
@@ -54,16 +48,16 @@ public class MapGenerator: MonoBehaviour
     {
 
         // 방 랜덤생성
-        for (int i = 0; i < ROOMCNT; i++)
+        for (int i = 0; i < generateRoomCnt; i++)
         {
             rooms.Add(Instantiate(GridPrefab, GetRandomPointInCircle(10), new Quaternion(0, 0, 0, 0)));
-            rooms[i].transform.localScale = GetRandomScale(rooms[i].transform.position);
+            rooms[i].transform.localScale = GetRandomScale();
 
             yield return new WaitForSeconds(0.03f);
         }
 
         // 물리연산을 하기 위해 Dynamic
-        for (int i = 0; i < ROOMCNT; i++)
+        for (int i = 0; i < generateRoomCnt; i++)
         {
             rooms[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
             rooms[i].GetComponent<Rigidbody2D>().gravityScale = 0f;
@@ -71,18 +65,16 @@ public class MapGenerator: MonoBehaviour
 
         yield return new WaitForSeconds(5f);
 
-        // 메인룸결정, point에 메인룸 위치 Vertex로 추가
         FindMainRooms(selectRoomCnt);
 
-        // 방 정보를 배열에 할당
         GenerateMapArr();
 
-        // Delaunay Triangulation, MST(Kruskal)로 MainRoom간 연결
-        // Edge배열로 복도 생성
         RegenerateLines();
 
-        // 세포자동자로 smoothing
         CellularAutomata();
+
+        MapArrNormalization();
+        AutoTiling();
     }
 
     private Vector3 GetRandomPointInCircle(int rad)
@@ -96,17 +88,17 @@ public class MapGenerator: MonoBehaviour
 
         return new Vector3(RoundPos(rad * r * Mathf.Cos(t), PIXEL), RoundPos(rad * r * Mathf.Sin(t), PIXEL), 0);
     }
-    private Vector3 GetRandomScale(Vector3 pos)
+    private Vector3 GetRandomScale()
     {
         return new Vector3(Random.Range(minRoomSize, maxRoomSize) * 2, Random.Range(minRoomSize, maxRoomSize) * 2, 1);
     }
 
-    /*  
-     *  물리연산 후에 위치를 정수로 변환하기 위해 사용
-     *  
-     *  float n : 변환할 값
-     *  int m   : 그리드 간격 (2이면 return값이 짝수만 나옴)
-     */
+    /// <summary>
+    /// 물리연산 후에 위치를 정수로 변환하기 위해 사용
+    /// </summary>
+    /// <param name="n">변환할 값</param>
+    /// <param name="m">그리드 간격 (2이면 return값이 짝수만 나옴)</param>
+    /// <returns></returns>
     private int RoundPos(float n, int m)
     {
         return Mathf.FloorToInt(((n + m - 1) / m)) * m;
@@ -150,7 +142,7 @@ public class MapGenerator: MonoBehaviour
                 renderer.color = Color.black;
             }
             room.SetActive(true);
-            points.Add(new Vertex((int)room.transform.position.x, (int)room.transform.position.y)); // points 리스트에 추가
+            points.Add(new Delaunay.Vertex((int)room.transform.position.x, (int)room.transform.position.y)); // points 리스트에 추가
             count++;
         }
     }
@@ -217,7 +209,6 @@ public class MapGenerator: MonoBehaviour
 
         GenerateHallways(tree);
     }
-
     private void GenerateHallways(IEnumerable<Delaunay.Edge> tree)
     {
         Vector2Int size1 = new Vector2Int(2, 2);
@@ -225,10 +216,10 @@ public class MapGenerator: MonoBehaviour
 
         foreach (Delaunay.Edge edge in tree)
         {
-            Vertex start = edge.a;
-            Vertex end = edge.b;
+            Delaunay.Vertex start = edge.a;
+            Delaunay.Vertex end = edge.b;
 
-            for (int i = 0; i < ROOMCNT; i++)
+            for (int i = 0; i < generateRoomCnt; i++)
             {
                 var pos = rooms[i].transform.position;
                 if (pos.x == start.x && pos.y == start.y)
@@ -246,10 +237,10 @@ public class MapGenerator: MonoBehaviour
 
         foreach (Delaunay.Edge edge in tree)
         {
-            Vertex start = edge.a;
-            Vertex end = edge.b;
+            Delaunay.Vertex start = edge.a;
+            Delaunay.Vertex end = edge.b;
 
-            for (int i = 0; i < ROOMCNT; i++)
+            for (int i = 0; i < generateRoomCnt; i++)
             {
                 var pos = rooms[i].transform.position;
                 if (pos.x == start.x && pos.y == start.y)
@@ -266,7 +257,7 @@ public class MapGenerator: MonoBehaviour
 
 
     }
-    private void CreateCorridor(Vertex start, Vertex end, Vector2Int startSize, Vector2Int endSize)
+    private void CreateCorridor(Delaunay.Vertex start, Delaunay.Vertex end, Vector2Int startSize, Vector2Int endSize)
     {
         bool isHorizontalOverlap = Mathf.Abs(start.x - end.x) < ((startSize.x + endSize.x) / 2f - overlapOffset);
         bool isVerticalOverlap = Mathf.Abs(start.y - end.y) < ((startSize.y + endSize.y) / 2f - overlapOffset);
@@ -293,7 +284,7 @@ public class MapGenerator: MonoBehaviour
         }
         else // 'ㄴ'자 또는 'ㄱ'자 복도 생성
         {
-            // 전체 Vertex의 중간점 계산
+            // 전체 Delaunay.Vertex의 중간점 계산
             int mapCenterX = map.GetLength(0) / 2;
             int mapCenterY = map.GetLength(1) / 2;
 
@@ -319,7 +310,7 @@ public class MapGenerator: MonoBehaviour
             }
         }
     }
-    private void CreateCorridorWidth(Vertex start, Vertex end, Vector2Int startSize, Vector2Int endSize)
+    private void CreateCorridorWidth(Delaunay.Vertex start, Delaunay.Vertex end, Vector2Int startSize, Vector2Int endSize)
     {
         bool isHorizontalOverlap = Mathf.Abs(start.x - end.x) < ((startSize.x + endSize.x) / 2f - overlapOffset);
         bool isVerticalOverlap = Mathf.Abs(start.y - end.y) < ((startSize.y + endSize.y) / 2f - overlapOffset);
@@ -347,7 +338,7 @@ public class MapGenerator: MonoBehaviour
         }
         else // 'ㄴ'자 또는 'ㄱ'자 복도 생성
         {
-            // 전체 Vertex의 중간점 계산 (여기서는 단순화를 위해 맵의 중심을 사용)
+            // 전체 Delaunay.Vertex의 중간점 계산 (여기서는 단순화를 위해 맵의 중심을 사용)
             int mapCenterX = map.GetLength(0) / 2;
             int mapCenterY = map.GetLength(1) / 2;
 
@@ -490,11 +481,152 @@ public class MapGenerator: MonoBehaviour
 
 
     }
+
     #endregion
 
     #region AUTO TILING
 
+    [Header("Tilemaps")]
+    [SerializeField] private Tilemap floorTilemap;
+    [SerializeField] private Tilemap wallTilemap;
+    
+    [Header("Tiles")]
+    [SerializeField] private Tile wall_Top_Left;
+    [SerializeField] private Tile wall_Top_Right;
+    [SerializeField] private Tile wall_Bottom_Left;
+    [SerializeField] private Tile wall_Bottom_Right;
+    [SerializeField] private Tile wall_Bottom;
+    [SerializeField] private Tile wall_Top;
+    [SerializeField] private Tile wall_Right;
+    [SerializeField] private Tile wall_Left;
+    [SerializeField] private Tile floor;
 
+    const int TopMask = (1 << 1) | (1 << 3) | (1 << 5);
+    const int BottomMask = (1 << 3) | (1 << 5) | (1 << 7);
+    const int LeftMask = (1 << 1) | (1 << 3) | (1 << 7);
+    const int RightMask = (1 << 1) | (1 << 5) | (1 << 7);
+
+    const int TopLeftMask = 1 << 4;
+    const int TopRightMask = 1 << 5;
+    const int BottomLeftMask = 1 << 6;
+    const int BottomRightMask = 1 << 0;
+
+    const int TopMatch = 1 << 1;
+    const int BottomMatch = 1 << 7;
+    const int LeftMatch = 1 << 3;
+    const int RightMatch = 1 << 5;
+
+    const int TopLeftMatch = 1 << 5;
+    const int TopRightMatch = 1 << 0;
+    const int BottomLeftMatch = 1 << 0;
+    const int BottomRightMatch = 1 << 0;
+
+
+    private void MapArrNormalization()
+    {
+        for (int i = 0; i < map.GetLength(0); i++)
+        {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                if (map[i, j] < 0 || (map[i, j] != hallwayId && !rooms[map[i, j]].activeSelf)) map[i, j] = (int)Define.GridType.None;
+                else map[i, j] = (int)Define.GridType.HallWay;
+            }
+        }
+    }
+
+    private void AutoTiling()
+    {
+        for (int i = 0; i < map.GetLength(0); i++)
+        {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                if (map[i, j] == 0)
+                {
+                    PlaceTile(j, i, 2);
+                }
+                else
+                {
+                    PlaceTile(j, i, 1);
+                }
+            }
+        }
+    }
+
+    // tileType : 1이면 바닥, 2면 벽
+    private void PlaceTile(int x, int y, int tileType)
+    {
+        Tile tile = null;
+        // TODO : 위치 조정 해야함
+        Vector3Int tilePos = new Vector3Int(x, y, 0);
+
+        switch (tileType)
+        {
+            case 1: // floor
+                tile = floor;
+                wallTilemap.SetTile(tilePos, tile);
+                break;
+            case 2: // wall
+                tile = DetermineWallTile(x, y);
+                if (tile != null) wallTilemap.SetTile(tilePos, tile);
+                break;
+            default:
+                break;
+        }
+
+
+    }
+    private Tile DetermineWallTile(int x, int y)
+    {
+        // 패턴 계산
+        int pattern = CalculatePattern(x, y);
+
+        // 패턴에 따른 타일 결정
+        if (Matches(pattern, TopMask, TopMatch)) return wall_Top;
+        if (Matches(pattern, BottomMask, BottomMatch)) return wall_Bottom;
+        if (Matches(pattern, LeftMask, LeftMatch)) return wall_Left;
+        if (Matches(pattern, RightMask, RightMatch)) return wall_Right;
+        //if (Matches(pattern, TopLeftMask, TopLeftMatch)) return wall_Top_Left;
+        //if (Matches(pattern, TopRightMask, TopRightMatch)) return wall_Top_Right;
+        //if (Matches(pattern, BottomLeftMask, BottomLeftMatch)) return wall_Bottom_Left;
+        //if (Matches(pattern, BottomRightMask, BottomRightMatch)) return wall_Bottom_Right;
+
+        // 기본값
+        return null;
+    }
+
+    int[] surrX = { 1, 0, -1, 1, 0, -1, 1, 0, -1 };
+    int[] surrY = { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
+    int CalculatePattern(int x, int y)
+    {
+        int pattern = 0;
+        int bitIndex = 0;
+
+        // 주변 타일을 검사하는 순서 정의 (상단 왼쪽부터 시계 방향으로)
+
+        for (int i = 0; i < surrX.Length; i++)
+        {
+            int checkX = x + surrX[i];
+            int checkY = y + surrY[i];
+
+            // 맵 범위 내에서 검사
+            if (checkX >= 0 && checkX < map.GetLength(1) && checkY >= 0 && checkY < map.GetLength(0))
+            {
+                if (map[checkY, checkX] == (int)Define.GridType.MainRoom || map[checkY, checkX] == (int)Define.GridType.HallWay)
+                {
+                    pattern |= (1 << bitIndex);
+                }
+            }
+
+            bitIndex++;
+        }
+
+        return pattern;
+    }
+
+    bool Matches(int pattern, int mask, int match)
+    {
+        return (pattern & mask) == match;
+    }
 
     #endregion
 }
