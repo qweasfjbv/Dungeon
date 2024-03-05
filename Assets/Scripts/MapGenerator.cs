@@ -505,30 +505,42 @@ public class MapGenerator: MonoBehaviour
     const int BottomMask = (1 << 3) | (1 << 5) | (1 << 7);
     const int LeftMask = (1 << 1) | (1 << 3) | (1 << 7);
     const int RightMask = (1 << 1) | (1 << 5) | (1 << 7);
-    const int TopLeftMask = (1 << 3) | (1 << 1) | (1 << 0);
-    const int TopRightMask = (1 << 1) | (1 << 2) | (1 << 5);
-    const int BottomLeftMask = (1 << 3) | (1 << 6) | (1 << 7);
-    const int BottomRightMask = (1 << 5) | (1 << 7) | (1 << 8);
 
-    const int TopLeftMask_1 = (1 << 3) | (1 << 1) | (1 << 0);
-    const int TopRightMask_1 = (1 << 1) | (1 << 2) | (1 << 5);
-    const int BottomLeftMask_1 = (1 << 3) | (1 << 6) | (1 << 7);
-    const int BottomRightMask_1 = (1 << 5) | (1 << 7) | (1 << 8);
+    const int TopLeftMask_0 = (1 << 3) | (1 << 1) | (1 << 0);
+    const int TopRightMask_0 = (1 << 1) | (1 << 2) | (1 << 5);
+    const int BottomLeftMask_0 = (1 << 3) | (1 << 6) | (1 << 7);
+    const int BottomRightMask_0 = (1 << 5) | (1 << 7) | (1 << 8);
+    const int TopLeftMask_1 = (1 << 5) | (1 << 7) | (1 << 8);
+    const int TopRightMask_1 = (1 << 3) | (1 << 6) | (1 << 7);
+    const int BottomLeftMask_1 = (1 << 1) | (1 << 2) | (1 << 5);
+    const int BottomRightMask_1 = (1 << 0) | (1 << 1) | (1 << 3);
+
 
     const int TopMatch = 1 << 1;
     const int BottomMatch = 1 << 7;
     const int LeftMatch = 1 << 3;
     const int RightMatch = 1 << 5;
-    const int TopLeftMatch = 1 << 0;
-    const int TopRightMatch = 1 << 2;
-    const int BottomLeftMatch = 1 << 0;
-    const int BottomRightMatch = 1 << 8;
 
-    const int TopLeftMatch_1 = 1 << 0;
-    const int TopRightMatch_1 = 1 << 2;
-    const int BottomLeftMatch_1 = 1 << 0;
-    const int BottomRightMatch_1 = 1 << 8;
+    const int TopLeftMatch_0 = 1 << 0;
+    const int TopRightMatch_0 = 1 << 2;
+    const int BottomLeftMatch_0 = 1 << 6;
+    const int BottomRightMatch_0 = 1 << 8;
+    const int TopLeftMatch_1 = (1 << 5) | (1 << 7) | (1 << 8);
+    const int TopRightMatch_1 = (1 << 3) | (1 << 6) | (1 << 7);
+    const int BottomLeftMatch_1 = (1 << 1) | (1 << 2) | (1 << 5);
+    const int BottomRightMatch_1 = (1 << 0) | (1 << 1) | (1 << 3);
 
+
+
+    const int ExceptionMask_0 = (1 << 1) | (1 << 5) | (1 << 7);
+    const int ExceptionMask_1 = (1 << 1) | (1 << 3) | (1 << 7);
+    const int ExceptionMask_2 = (1 << 1) | (1 << 3) | (1 << 5);
+    const int ExceptionMask_3 = (1 << 3) | (1 << 5) | (1 << 7);
+    
+    const int ExceptionMatch_0 = (1 << 1) | (1 << 5) | (1 << 7);
+    const int ExceptionMatch_1 = (1 << 1) | (1 << 3) | (1 << 7);
+    const int ExceptionMatch_2 = (1 << 1) | (1 << 3) | (1 << 5);
+    const int ExceptionMatch_3 = (1 << 3) | (1 << 5) | (1 << 7);
 
     private void MapArrNormalization()
     {
@@ -593,11 +605,20 @@ public class MapGenerator: MonoBehaviour
         if (Matches(pattern, BottomMask, BottomMatch)) return wall_Bottom;
         if (Matches(pattern, LeftMask, LeftMatch)) return wall_Left;
         if (Matches(pattern, RightMask, RightMatch)) return wall_Right;
-        if (Matches(pattern, TopLeftMask, TopLeftMatch)) return wall_Top_Left;
-        if (Matches(pattern, TopRightMask, TopRightMatch)) return wall_Top_Right;
-        if (Matches(pattern, BottomLeftMask, BottomLeftMatch)) return wall_Bottom_Left;
-        if (Matches(pattern, BottomRightMask, BottomRightMatch)) return wall_Bottom_Right;
+        if (Matches(pattern, TopLeftMask_0, TopLeftMatch_0)) return wall_Top_Left;
+        if (Matches(pattern, TopRightMask_0, TopRightMatch_0)) return wall_Top_Right;
+        if (Matches(pattern, BottomLeftMask_0, BottomLeftMatch_0)) return wall_Bottom_Left;
+        if (Matches(pattern, BottomRightMask_0, BottomRightMatch_0)) return wall_Bottom_Right;
 
+        if (Matches(pattern, TopLeftMask_1, TopLeftMatch_1)) return wall_Top_Left;
+        if (Matches(pattern, TopRightMask_1, TopRightMatch_1)) return wall_Top_Right;
+        if (Matches(pattern, BottomLeftMask_1, BottomLeftMatch_1)) return wall_Bottom_Left;
+        if (Matches(pattern, BottomRightMask_1, BottomRightMatch_1)) return wall_Bottom_Right;
+
+        if (Matches(pattern, ExceptionMask_0, ExceptionMatch_0)) return wall_Right;
+        if (Matches(pattern, ExceptionMask_1, ExceptionMatch_1)) return wall_Right;
+        if (Matches(pattern, ExceptionMask_2, ExceptionMatch_2)) return wall_Right;
+        if (Matches(pattern, ExceptionMask_3, ExceptionMatch_3)) return wall_Right;
         // ±âº»°ª
         return null;
     }
