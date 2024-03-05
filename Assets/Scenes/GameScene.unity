@@ -575,6 +575,11 @@ MonoBehaviour:
   wall_Right: {fileID: 11400000, guid: 6ba6afdf8e6c360419174e67b6605f85, type: 2}
   wall_Left: {fileID: 11400000, guid: 6ba6afdf8e6c360419174e67b6605f85, type: 2}
   floor: {fileID: 11400000, guid: b86ed1cf049070f47bb6ff964b1d299a, type: 2}
+  wall_Top_Random: {fileID: 11400000, guid: 852852214524a914caf42f3f913c0b2b, type: 2}
+  floor_Random_0: {fileID: 11400000, guid: 05eb8373cde7d3948bcf469a82e4d6ae, type: 2}
+  floor_Random_1: {fileID: 11400000, guid: 1aa0a7d257a82624b966271f144e7a02, type: 2}
+  floor_Random_2: {fileID: 11400000, guid: 3d917370e336dd1489d4d5d8b716cdd8, type: 2}
+  floor_Random_3: {fileID: 11400000, guid: 08df795d2499ab146952f0684d8b9cdc, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

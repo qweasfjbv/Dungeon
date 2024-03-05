@@ -501,6 +501,13 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tile wall_Left;
     [SerializeField] private Tile floor;
 
+    [Header("Random Tiles")]
+    [SerializeField] private Tile wall_Top_Random;
+    [SerializeField] private Tile floor_Random_0;
+    [SerializeField] private Tile floor_Random_1;
+    [SerializeField] private Tile floor_Random_2;
+    [SerializeField] private Tile floor_Random_3;
+
     const int TopMask = (1 << 1) | (1 << 3) | (1 << 5);
     const int BottomMask = (1 << 3) | (1 << 5) | (1 << 7);
     const int LeftMask = (1 << 1) | (1 << 3) | (1 << 7);
@@ -529,7 +536,6 @@ public class MapGenerator: MonoBehaviour
     const int TopRightMatch_1 = (1 << 3) | (1 << 6) | (1 << 7);
     const int BottomLeftMatch_1 = (1 << 1) | (1 << 2) | (1 << 5);
     const int BottomRightMatch_1 = (1 << 0) | (1 << 1) | (1 << 3);
-
 
 
     const int ExceptionMask_0 = (1 << 1) | (1 << 5) | (1 << 7);
@@ -583,7 +589,7 @@ public class MapGenerator: MonoBehaviour
         {
             case 1: // floor
                 tile = floor;
-                wallTilemap.SetTile(tilePos, tile);
+                wallTilemap.SetTile(tilePos, GetRandomFloorTile());
                 break;
             case 2: // wall
                 tile = DetermineWallTile(x, y);
@@ -601,7 +607,7 @@ public class MapGenerator: MonoBehaviour
         int pattern = CalculatePattern(x, y);
 
         // 패턴에 따른 타일 결정
-        if (Matches(pattern, TopMask, TopMatch)) return wall_Top;
+        if (Matches(pattern, TopMask, TopMatch)) return GetRandomTopTile();
         if (Matches(pattern, BottomMask, BottomMatch)) return wall_Bottom;
         if (Matches(pattern, LeftMask, LeftMatch)) return wall_Left;
         if (Matches(pattern, RightMask, RightMatch)) return wall_Right;
@@ -621,6 +627,40 @@ public class MapGenerator: MonoBehaviour
         if (Matches(pattern, ExceptionMask_3, ExceptionMatch_3)) return wall_Right;
         // 기본값
         return null;
+    }
+
+    private Tile GetRandomFloorTile()
+    {
+        int rInt = Random.Range(0, 100);
+        switch (rInt) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                return floor_Random_0;
+            case 11:
+                return floor_Random_1;
+            case 12:
+                return floor_Random_2;
+            case 13:
+                return floor_Random_3;
+            default:
+                return floor;
+        }
+
+    }
+
+    private Tile GetRandomTopTile()
+    {
+        if (Random.Range(0, 7) == 0) return wall_Top_Random;
+        else return wall_Top;
     }
 
     int[] surrX = { 1, 0, -1, 1, 0, -1, 1, 0, -1 };
