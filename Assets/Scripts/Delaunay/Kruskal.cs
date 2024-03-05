@@ -10,8 +10,7 @@ namespace Delaunay
     {
         public static List<Edge> MinimumSpanningTree(IEnumerable<Edge> graph)
         {
-            List<Edge> ans = new List<Edge>();
-
+            List<Edge> ret = new List<Edge>();
             List<Edge> edges = new List<Edge>(graph);
             edges.Sort(Edge.LengthCompare);
 
@@ -26,30 +25,37 @@ namespace Delaunay
             foreach (var point in points)
                 parents[point] = point;
 
-            Vertex UnionFind(Vertex x)
+            Vertex find(Vertex x)
             {
-                if (parents[x] != x)
-                    parents[x] = UnionFind(parents[x]);
+                if (parents[x] == x) return x;
+                parents[x] = find(parents[x]);
+
                 return parents[x];
             }
 
-            foreach (var edge in edges)
+            void Union(Edge edge)
             {
-                var x = UnionFind(edge.a);
-                var y = UnionFind(edge.b);
-                if (x != y)
+                var x_par = find(edge.a);
+                var y_par = find(edge.b);
+
+                // 이미 이어진 경우에는 랜덤으로 몇개만 선택
+                if (x_par == y_par)
                 {
-                    ans.Add(edge);
-                    parents[x] = y;
+                    if (Random.Range(0, 6) == 0)
+                    {
+                        ret.Add(edge);
+                    }
                 }
-                // 랜덤한 엣지 추가. 항상 선형의 던전을 생성하는건 지루함.
-                else if (Random.Range(0, 6) == 0)
-                {
-                    ans.Add(edge);
-                }
+
+                ret.Add(edge);
+
+                if (x_par < y_par) parents[y_par] = x_par;
+                else parents[x_par] = y_par;
             }
 
-            return ans;
+            foreach (var edge in edges) Union(edge);
+
+            return ret;
         }
     }
 }

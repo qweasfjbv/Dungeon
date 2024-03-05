@@ -205,10 +205,11 @@ public class MapGenerator: MonoBehaviour
         foreach (var triangle in triangles)
             graph.UnionWith(triangle.edges);
 
-        var tree = Kruskal.MinimumSpanningTree(graph);
+        //var tree = Kruskal.MinimumSpanningTree(graph);
 
-        GenerateHallways(tree);
+        GenerateHallways(graph);
     }
+
     private void GenerateHallways(IEnumerable<Delaunay.Edge> tree)
     {
         Vector2Int size1 = new Vector2Int(2, 2);
@@ -489,17 +490,23 @@ public class MapGenerator: MonoBehaviour
     [Header("Tilemaps")]
     [SerializeField] private Tilemap floorTilemap;
     [SerializeField] private Tilemap wallTilemap;
+    [SerializeField] private Tilemap cliffTilemap;
     
     [Header("Tiles")]
     [SerializeField] private Tile wall_Top_Left;
     [SerializeField] private Tile wall_Top_Right;
+    [SerializeField] private Tile wall_Top_Center;
     [SerializeField] private Tile wall_Bottom_Left;
     [SerializeField] private Tile wall_Bottom_Right;
     [SerializeField] private Tile wall_Bottom;
     [SerializeField] private Tile wall_Top;
     [SerializeField] private Tile wall_Right;
     [SerializeField] private Tile wall_Left;
+    [SerializeField] private Tile wall_Center;
+    [SerializeField] private Tile wall_Center_Center;
     [SerializeField] private Tile floor;
+    [SerializeField] private Tile cliff_0;
+    [SerializeField] private Tile cliff_1;
 
     [Header("Random Tiles")]
     [SerializeField] private Tile wall_Top_Random;
@@ -517,10 +524,10 @@ public class MapGenerator: MonoBehaviour
     const int TopRightMask_0 = (1 << 1) | (1 << 2) | (1 << 5);
     const int BottomLeftMask_0 = (1 << 3) | (1 << 6) | (1 << 7);
     const int BottomRightMask_0 = (1 << 5) | (1 << 7) | (1 << 8);
-    const int TopLeftMask_1 = (1 << 5) | (1 << 7) | (1 << 8);
-    const int TopRightMask_1 = (1 << 3) | (1 << 6) | (1 << 7);
-    const int BottomLeftMask_1 = (1 << 1) | (1 << 2) | (1 << 5);
-    const int BottomRightMask_1 = (1 << 0) | (1 << 1) | (1 << 3);
+    const int TopLeftMask_1 = (1 << 5) | (1 << 7);
+    const int TopRightMask_1 = (1 << 3) | (1 << 7);
+    const int BottomLeftMask_1 = (1 << 1) | (1 << 5);
+    const int BottomRightMask_1 = (1 << 1) | (1 << 3);
 
 
     const int TopMatch = 1 << 1;
@@ -532,10 +539,10 @@ public class MapGenerator: MonoBehaviour
     const int TopRightMatch_0 = 1 << 2;
     const int BottomLeftMatch_0 = 1 << 6;
     const int BottomRightMatch_0 = 1 << 8;
-    const int TopLeftMatch_1 = (1 << 5) | (1 << 7) | (1 << 8);
-    const int TopRightMatch_1 = (1 << 3) | (1 << 6) | (1 << 7);
-    const int BottomLeftMatch_1 = (1 << 1) | (1 << 2) | (1 << 5);
-    const int BottomRightMatch_1 = (1 << 0) | (1 << 1) | (1 << 3);
+    const int TopLeftMatch_1 = (1 << 5) | (1 << 7);
+    const int TopRightMatch_1 = (1 << 3) | (1 << 7);
+    const int BottomLeftMatch_1 = (1 << 1) | (1 << 5);
+    const int BottomRightMatch_1 = (1 << 1) | (1 << 3);
 
 
     const int ExceptionMask_0 = (1 << 1) | (1 << 5) | (1 << 7);
@@ -562,11 +569,11 @@ public class MapGenerator: MonoBehaviour
 
     private void AutoTiling()
     {
-        for (int i = 0; i < map.GetLength(0); i++)
+        for (int i = map.GetLength(0)-1; i>=0; i--)
         {
-            for (int j = 0; j < map.GetLength(1); j++)
+            for (int j = map.GetLength(1)-1; j >= 0 ; j--)
             {
-                if (map[i, j] == 0)
+                if (map[i, j] == (int)Define.GridType.None)
                 {
                     PlaceTile(j, i, 2);
                 }
@@ -589,11 +596,37 @@ public class MapGenerator: MonoBehaviour
         {
             case 1: // floor
                 tile = floor;
-                wallTilemap.SetTile(tilePos, GetRandomFloorTile());
+                floorTilemap.SetTile(tilePos, GetRandomFloorTile());
                 break;
             case 2: // wall
                 tile = DetermineWallTile(x, y);
-                if (tile != null) wallTilemap.SetTile(tilePos, tile);
+                if (tile == null) break;
+
+                if (tile == wall_Left || tile == wall_Right)
+                {
+                    wallTilemap.SetTile(tilePos, tile);
+                }
+                else if(tile == wall_Top_Left || tile == wall_Top_Right)
+                {
+                    wallTilemap.SetTile(tilePos + new Vector3Int(0, 1, 0), tile);
+                    wallTilemap.SetTile(tilePos, wall_Left);
+                }
+                else if(tile == wall_Top_Center)
+                {
+                    wallTilemap.SetTile(tilePos + new Vector3Int(0, 1, 0), tile);
+                    wallTilemap.SetTile(tilePos, wall_Center_Center);
+                }
+                else
+                {
+                    wallTilemap.SetTile(tilePos + new Vector3Int(0, 1, 0), tile);
+                    wallTilemap.SetTile(tilePos, wall_Center);
+
+                    if (tile == wall_Bottom_Left || tile == wall_Bottom_Right || tile == wall_Bottom)
+                    {
+                        cliffTilemap.SetTile(tilePos - new Vector3Int(0, 1, 0), cliff_0);
+                        cliffTilemap.SetTile(tilePos - new Vector3Int(0, 2, 0), cliff_1);
+                    }
+                }
                 break;
             default:
                 break;
@@ -607,6 +640,13 @@ public class MapGenerator: MonoBehaviour
         int pattern = CalculatePattern(x, y);
 
         // 패턴에 따른 타일 결정
+
+        if (Matches(pattern, ExceptionMask_0, ExceptionMatch_0)) return wall_Top_Center;
+        if (Matches(pattern, ExceptionMask_1, ExceptionMatch_1)) return wall_Top_Center;
+        if (Matches(pattern, ExceptionMask_2, ExceptionMatch_2)) return wall_Top_Center;
+        if (Matches(pattern, ExceptionMask_3, ExceptionMatch_3)) return wall_Top_Center;
+
+
         if (Matches(pattern, TopMask, TopMatch)) return GetRandomTopTile();
         if (Matches(pattern, BottomMask, BottomMatch)) return wall_Bottom;
         if (Matches(pattern, LeftMask, LeftMatch)) return wall_Left;
@@ -621,17 +661,13 @@ public class MapGenerator: MonoBehaviour
         if (Matches(pattern, BottomLeftMask_1, BottomLeftMatch_1)) return wall_Bottom_Left;
         if (Matches(pattern, BottomRightMask_1, BottomRightMatch_1)) return wall_Bottom_Right;
 
-        if (Matches(pattern, ExceptionMask_0, ExceptionMatch_0)) return wall_Right;
-        if (Matches(pattern, ExceptionMask_1, ExceptionMatch_1)) return wall_Right;
-        if (Matches(pattern, ExceptionMask_2, ExceptionMatch_2)) return wall_Right;
-        if (Matches(pattern, ExceptionMask_3, ExceptionMatch_3)) return wall_Right;
         // 기본값
         return null;
     }
 
     private Tile GetRandomFloorTile()
     {
-        int rInt = Random.Range(0, 100);
+        int rInt = Random.Range(0, 200);
         switch (rInt) {
             case 0:
             case 1:
@@ -669,8 +705,6 @@ public class MapGenerator: MonoBehaviour
     {
         int pattern = 0;
         int bitIndex = 0;
-
-        // 주변 타일을 검사하는 순서 정의 (상단 왼쪽부터 시계 방향으로)
 
         for (int i = 0; i < surrX.Length; i++)
         {
