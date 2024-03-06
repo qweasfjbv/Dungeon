@@ -23,7 +23,7 @@ namespace EnemyUI.BehaviorTree {
                         continue;
                     case NodeState.Running:
                         isChildRunning = true;
-                        continue;
+                        return state;
                     default:
                         state = NodeState.Success;
                         return state;

@@ -664,10 +664,11 @@ public class MapGenerator: MonoBehaviour
         Tile wallTile = wallTilemap.GetTile<Tile>(tilePos);
 
         if (wallTile == null) return;
+        if (wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(1, 0)) != null) return;
 
         if (wallTile == wall_Right || wallTile == wall_Left)
             shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right);
-        else if (wallTile == wall_Top_Left)
+        else if (wallTile == wall_Top_Left || wallTile == wall_Top_Center)
             shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right_Top);
         else if (wallTile == wall_Bottom_Left)
             shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right);
