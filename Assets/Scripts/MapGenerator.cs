@@ -18,7 +18,8 @@ public class MapGenerator: MonoBehaviour
 
     private const int PIXEL = 1;
     private int hallwayId = 200;
-    
+    private int cellularId = 300;
+
     private List<GameObject> rooms = new List<GameObject>();
     private HashSet<Delaunay.Vertex> points = new HashSet<Delaunay.Vertex>();
     private HashSet<GameObject> lines = new HashSet<GameObject>();
@@ -50,10 +51,9 @@ public class MapGenerator: MonoBehaviour
         // 방 랜덤생성
         for (int i = 0; i < generateRoomCnt; i++)
         {
-            rooms.Add(Instantiate(GridPrefab, GetRandomPointInCircle(10), new Quaternion(0, 0, 0, 0)));
+            rooms.Add(Instantiate(GridPrefab, GetRandomPointInCircle(10), Quaternion.identity));
             rooms[i].transform.localScale = GetRandomScale();
-
-            yield return new WaitForSeconds(0.03f);
+            yield return null;
         }
 
         // 물리연산을 하기 위해 Dynamic
@@ -63,7 +63,7 @@ public class MapGenerator: MonoBehaviour
             rooms[i].GetComponent<Rigidbody2D>().gravityScale = 0f;
         }
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(4f);
 
         FindMainRooms(selectRoomCnt);
 
@@ -71,7 +71,8 @@ public class MapGenerator: MonoBehaviour
 
         RegenerateLines();
 
-        CellularAutomata();
+        CellularAutomata(5);
+        CellularAutomata(5);
 
         MapArrNormalization();
         AutoTiling();
@@ -118,7 +119,7 @@ public class MapGenerator: MonoBehaviour
             float size = scale.x * scale.y; // 방의 크기(넓이) 계산
             float ratio = scale.x / scale.y; // 방의 비율 계산
             if (ratio > 2f || ratio < 0.5f) continue; // 1:2 또는 2:1 비율을 초과하는 경우 건너뛰기
-            roomSizes.Add((size, i)); // 크기, 비율, 원래 인덱스 저장
+            roomSizes.Add((size, i));
         }
 
         // 방의 크기에 따라 내림차순으로 정렬
@@ -195,9 +196,6 @@ public class MapGenerator: MonoBehaviour
     // + 복도 생성
     private void RegenerateLines()
     {
-        foreach (var line in lines)
-            Destroy(line);
-        lines.Clear();
 
         var triangles = DelaunayTriangulation.Triangulate(points);
 
@@ -205,9 +203,9 @@ public class MapGenerator: MonoBehaviour
         foreach (var triangle in triangles)
             graph.UnionWith(triangle.edges);
 
-        //var tree = Kruskal.MinimumSpanningTree(graph);
+        var tree = Kruskal.MinimumSpanningTree(graph);
 
-        GenerateHallways(graph);
+        GenerateHallways(tree);
     }
 
     private void GenerateHallways(IEnumerable<Delaunay.Edge> tree)
@@ -220,18 +218,9 @@ public class MapGenerator: MonoBehaviour
             Delaunay.Vertex start = edge.a;
             Delaunay.Vertex end = edge.b;
 
-            for (int i = 0; i < generateRoomCnt; i++)
-            {
-                var pos = rooms[i].transform.position;
-                if (pos.x == start.x && pos.y == start.y)
-                {
-                    size1 = new Vector2Int((int)rooms[i].transform.localScale.x, (int)rooms[i].transform.localScale.y);
-                }
-                else if (pos.x == end.x && pos.y == end.y)
-                {
-                    size2 = new Vector2Int((int)rooms[i].transform.localScale.x, (int)rooms[i].transform.localScale.y);
-                }
-            }
+            size1 = new Vector2Int((int)rooms[map[start.y-minY, start.x-minX]].transform.localScale.x, (int)rooms[map[start.y-minY, start.x-minX]].transform.localScale.y);
+            size2 = new Vector2Int((int)rooms[map[end.y-minY, end.x-minX]].transform.localScale.x, (int)rooms[map[end.y-minY, end.x-minX]].transform.localScale.y);
+
             // 시작점과 끝점 사이의 복도 생성
             CreateCorridor(start, end, size1, size2);
         }
@@ -241,23 +230,14 @@ public class MapGenerator: MonoBehaviour
             Delaunay.Vertex start = edge.a;
             Delaunay.Vertex end = edge.b;
 
-            for (int i = 0; i < generateRoomCnt; i++)
-            {
-                var pos = rooms[i].transform.position;
-                if (pos.x == start.x && pos.y == start.y)
-                {
-                    size1 = new Vector2Int((int)rooms[i].transform.localScale.x, (int)rooms[i].transform.localScale.y);
-                }
-                else if(pos.x == end.x && pos.y == end.y)
-                {
-                    size2 = new Vector2Int((int)rooms[i].transform.localScale.x, (int)rooms[i].transform.localScale.y);
-                }
-            }
+            size1 = new Vector2Int((int)rooms[map[start.y - minY, start.x - minX]].transform.localScale.x, (int)rooms[map[start.y - minY, start.x - minX]].transform.localScale.y);
+            size2 = new Vector2Int((int)rooms[map[end.y - minY, end.x - minX]].transform.localScale.x, (int)rooms[map[end.y - minY, end.x - minX]].transform.localScale.y);
+
             CreateCorridorWidth(start, end, size1, size2);
         }
 
-
     }
+
     private void CreateCorridor(Delaunay.Vertex start, Delaunay.Vertex end, Vector2Int startSize, Vector2Int endSize)
     {
         bool isHorizontalOverlap = Mathf.Abs(start.x - end.x) < ((startSize.x + endSize.x) / 2f - overlapOffset);
@@ -414,11 +394,11 @@ public class MapGenerator: MonoBehaviour
             }
         }
     }
-    private void CellularAutomata()
+    private void CellularAutomata(int n)
     {
-        for (int x = 0; x < maxX-minX; x++)
+        for (int x = 0; x < maxX - minX; x++)
         {
-            for (int y = 0; y < maxY-minY; y++)
+            for (int y = 0; y < maxY - minY; y++)
             {
                 if (map[y, x] == hallwayId) continue;
                 if ((map[y, x] != -1 && map[y, x] != hallwayId && rooms[map[y, x]].activeSelf)) continue;
@@ -440,22 +420,30 @@ public class MapGenerator: MonoBehaviour
                             continue;
                         }
                         else if (map[checkY, checkX] == -1) continue;
-                        else if(map[checkY, checkX] == hallwayId || rooms[map[checkY, checkX]].activeSelf) // 벽이 아닌 공간 확인
+                        else if (map[checkY, checkX] == cellularId) continue;
+                        else if (map[checkY, checkX] == hallwayId || rooms[map[checkY, checkX]].activeSelf) // 벽이 아닌 공간 확인
                         {
                             nonWallCount++;
                         }
                     }
                 }
 
-                // 주변에 벽이 아닌 공간이 5칸 이상이면 일반 공간으로 변경
-                if (nonWallCount >= 5)
+                //
+                if (nonWallCount >= n)
                 {
-                    map[y, x] = hallwayId; // 배열에 hallwayId 저장
-
-                    GameObject grid = Instantiate(GridPrefab, new Vector3(x + minX + 0.5f, y +minY + 0.5f, 0), Quaternion.identity);
+                    GameObject grid = Instantiate(GridPrefab, new Vector3(x + minX + 0.5f, y + minY + 0.5f, 0), Quaternion.identity);
                     grid.GetComponent<SpriteRenderer>().color = Color.black;
-                    map[y, x] = hallwayId;
+                    map[y, x] = cellularId;
                 }
+            }
+        }
+
+
+        for (int x = 0; x < maxX - minX; x++)
+        {
+            for (int y = 0; y < maxY - minY; y++)
+            {
+                if (map[y, x] == cellularId) map[y, x] = hallwayId;
             }
         }
     }
@@ -491,7 +479,9 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tilemap floorTilemap;
     [SerializeField] private Tilemap wallTilemap;
     [SerializeField] private Tilemap cliffTilemap;
-    
+    [SerializeField] private Tilemap shadowTilemap;
+
+
     [Header("Tiles")]
     [SerializeField] private Tile wall_Top_Left;
     [SerializeField] private Tile wall_Top_Right;
@@ -504,6 +494,8 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tile wall_Left;
     [SerializeField] private Tile wall_Center;
     [SerializeField] private Tile wall_Center_Center;
+    [SerializeField] private Tile wall_Center_Right;
+    [SerializeField] private Tile wall_Center_Left;
     [SerializeField] private Tile floor;
     [SerializeField] private Tile cliff_0;
     [SerializeField] private Tile cliff_1;
@@ -514,6 +506,11 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tile floor_Random_1;
     [SerializeField] private Tile floor_Random_2;
     [SerializeField] private Tile floor_Random_3;
+
+    [Header("Show Tiles")]
+    [SerializeField] private Tile shadow_Right_Top;
+    [SerializeField] private Tile shadow_Right;
+    [SerializeField] private Tile shadow_Right_Bottom;
 
     const int TopMask = (1 << 1) | (1 << 3) | (1 << 5);
     const int BottomMask = (1 << 3) | (1 << 5) | (1 << 7);
@@ -582,7 +579,16 @@ public class MapGenerator: MonoBehaviour
                     PlaceTile(j, i, 1);
                 }
             }
+
         }
+        for (int i = map.GetLength(0) - 1; i >= 0; i--)
+        {
+            for (int j = map.GetLength(1) - 1; j >= 0; j--)
+            {
+                PlaceShadowTile(j, i);
+            }
+        }
+
     }
 
     // tileType : 1이면 바닥, 2면 벽
@@ -609,7 +615,8 @@ public class MapGenerator: MonoBehaviour
                 else if(tile == wall_Top_Left || tile == wall_Top_Right)
                 {
                     wallTilemap.SetTile(tilePos + new Vector3Int(0, 1, 0), tile);
-                    wallTilemap.SetTile(tilePos, wall_Left);
+                    if (tile == wall_Top_Left) wallTilemap.SetTile(tilePos, wall_Left);
+                    else wallTilemap.SetTile(tilePos, wall_Right);
                 }
                 else if(tile == wall_Top_Center)
                 {
@@ -619,12 +626,27 @@ public class MapGenerator: MonoBehaviour
                 else
                 {
                     wallTilemap.SetTile(tilePos + new Vector3Int(0, 1, 0), tile);
-                    wallTilemap.SetTile(tilePos, wall_Center);
 
                     if (tile == wall_Bottom_Left || tile == wall_Bottom_Right || tile == wall_Bottom)
                     {
                         cliffTilemap.SetTile(tilePos - new Vector3Int(0, 1, 0), cliff_0);
                         cliffTilemap.SetTile(tilePos - new Vector3Int(0, 2, 0), cliff_1);
+                        if (tile == wall_Bottom_Left)
+                        {
+                            wallTilemap.SetTile(tilePos, wall_Center_Left);
+                        }
+                        else if (tile == wall_Bottom_Right)
+                        {
+                            wallTilemap.SetTile(tilePos, wall_Center_Right);
+                        }
+                        else
+                        {
+                            wallTilemap.SetTile(tilePos, wall_Center);
+                        }
+                    }
+                    else
+                    {
+                        wallTilemap.SetTile(tilePos, wall_Center);
                     }
                 }
                 break;
@@ -634,6 +656,26 @@ public class MapGenerator: MonoBehaviour
 
 
     }
+
+    private void PlaceShadowTile(int y, int x)
+    {
+        Vector3Int tilePos = new Vector3Int(x, y, 0);
+
+        Tile wallTile = wallTilemap.GetTile<Tile>(tilePos);
+
+        if (wallTile == null) return;
+
+        if (wallTile == wall_Right || wallTile == wall_Left)
+            shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right);
+        else if (wallTile == wall_Top_Left)
+            shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right_Top);
+        else if (wallTile == wall_Bottom_Left)
+            shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right);
+        else if (wallTile == wall_Center_Center || wallTile == wall_Center_Left)
+            shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right_Bottom);
+
+    }
+
     private Tile DetermineWallTile(int x, int y)
     {
         // 패턴 계산
