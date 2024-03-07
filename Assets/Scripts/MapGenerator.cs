@@ -595,7 +595,6 @@ public class MapGenerator: MonoBehaviour
     private void PlaceTile(int x, int y, int tileType)
     {
         Tile tile = null;
-        // TODO : 위치 조정 해야함
         Vector3Int tilePos = new Vector3Int(x, y, 0);
 
         switch (tileType)
@@ -657,7 +656,7 @@ public class MapGenerator: MonoBehaviour
 
     }
 
-    private void PlaceShadowTile(int y, int x)
+    private void PlaceShadowTile(int x, int y)
     {
         Vector3Int tilePos = new Vector3Int(x, y, 0);
 

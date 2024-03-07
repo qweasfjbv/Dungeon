@@ -12,7 +12,6 @@ namespace EnemyUI.BehaviorTree {
 
         public override NodeState Evaluate()
         {
-            bool isChildRunning = false;
             foreach (Node child in children)
             {
                 switch (child.Evaluate()) {
@@ -22,7 +21,7 @@ namespace EnemyUI.BehaviorTree {
                     case NodeState.Success:
                         continue;
                     case NodeState.Running:
-                        isChildRunning = true;
+                        state = NodeState.Running;
                         return state;
                     default:
                         state = NodeState.Success;
@@ -30,8 +29,7 @@ namespace EnemyUI.BehaviorTree {
                 }
             }
 
-            if (isChildRunning) state = NodeState.Running;
-            else state = NodeState.Success;
+            state = NodeState.Success;
 
             return state;
         }

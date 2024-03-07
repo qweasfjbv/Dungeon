@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -17,9 +18,9 @@ namespace EnemyUI.BehaviorTree
 
         public NodeState state;
         public Node parent;
-        protected List<Node> children= new List<Node>();
+        protected List<Node> children= new();
 
-        private Dictionary<string, object> nodeData = new Dictionary<string, object>();
+        private Dictionary<string, object> nodeData = new();
 
         public Node(){
             parent = null;
@@ -50,14 +51,16 @@ namespace EnemyUI.BehaviorTree
 
         public object GetNodeData(string key)
         {
-            object ret = null;
 
-            if (nodeData.TryGetValue(key, out ret)) return ret;
-
+            if (nodeData.TryGetValue(key, out object ret))
+            {
+                return ret;
+            }
             Node cur = this.parent;
 
-            while (cur.parent != null)
+            while (cur != null)
             {
+
                 ret = cur.GetNodeData(key);
                 if (ret != null) return ret;
                 cur = cur.parent;
