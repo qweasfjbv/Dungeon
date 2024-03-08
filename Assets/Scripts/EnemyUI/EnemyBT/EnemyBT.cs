@@ -10,20 +10,22 @@ namespace EnemyUI.BehaviorTree
     public class EnemyBT : Tree
     {
         [SerializeField] private int searchRange;
-        [SerializeField] private int trackRange;
         [SerializeField] private int attackRange;
+
+        [SerializeField] private float moveSpeed;
+        [SerializeField] private float trackSpeed;
 
         public override Node SetupRoot()
         {
             Node root = new Selector(new List<Node> {
                     new Sequence(new List<Node>
                     {
-                        new Search(transform, searchRange, trackRange),
-                        new Move(transform)
+                        new Search(transform, searchRange),
+                        new Move(transform, moveSpeed)
                     }),
                     new Sequence(new List<Node>
                     {
-                        new Track(transform, attackRange),
+                        new Track(transform, attackRange, trackSpeed),
                         new Attack(transform)
                     })
                 });
@@ -37,14 +39,12 @@ namespace EnemyUI.BehaviorTree
 
         private Transform transform;
         private int searchRange;
-        private int trackRange;
 
-        public Search(Transform transform, int searchRange, int trackRange)
+        public Search(Transform transform, int searchRange)
         {
             // 필요한 초기화
             this.transform = transform;
             this.searchRange = searchRange;
-            this.trackRange = trackRange;
         }
 
         public override NodeState Evaluate()
@@ -67,18 +67,18 @@ namespace EnemyUI.BehaviorTree
     {
 
         private Transform transform;
+        private float moveSpeed;
 
-
-        public Move(Transform transform)
+        public Move(Transform transform, float moveSpeed)
         {
             this.transform = transform;
+            this.moveSpeed = moveSpeed;
         }
 
         public override NodeState Evaluate()
         {
-            // 움직이는 로직 구현
-            transform.position += new Vector3(0.1f, 0, 0);
-
+            transform.position += new Vector3(moveSpeed, 0, 0);
+            Debug.Log("Moving");
             return NodeState.Running;
         }
 
@@ -87,16 +87,31 @@ namespace EnemyUI.BehaviorTree
     {
         private Transform transform;
         private int attackRange;
+        private float trackSpeed;
 
-        public Track(Transform transform, int attackRange)
+        public Track(Transform transform, int attackRange, float trackSpeed)
         {
             this.transform = transform;
             this.attackRange = attackRange;
+            this.trackSpeed = trackSpeed;
         }
 
         public override NodeState Evaluate()
         {
-            return NodeState.Fail;
+            // BossObject 변수 받고 따라가기
+            var boss = (GameObject)GetNodeData("BossObject");
+
+            Vector3 dir = boss.transform.position - transform.position;
+            float dis2 = dir.x * dir.x + dir.y * dir.y;
+
+
+            // 성공 -> Seq의 다음노드 실행
+            if (dis2 < attackRange* attackRange) return NodeState.Success;
+
+            dir.Normalize();
+            this.transform.position += trackSpeed * dir;
+            Debug.Log("Tracking");
+            return NodeState.Running;
         }
 
     }
@@ -114,7 +129,7 @@ namespace EnemyUI.BehaviorTree
         public override NodeState Evaluate()
         {
             var tr = (GameObject)GetNodeData("BossObject");
-            Debug.Log(tr.transform.position);
+            Debug.Log("Attack");
             return NodeState.Success;
         }
 
