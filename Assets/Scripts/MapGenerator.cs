@@ -69,9 +69,8 @@ public class MapGenerator: MonoBehaviour
 
         GenerateMapArr();
 
-        RegenerateLines();
+        ConnectRooms();
 
-        CellularAutomata(5);
         CellularAutomata(5);
 
         MapArrNormalization();
@@ -194,7 +193,7 @@ public class MapGenerator: MonoBehaviour
 
     // 들로네 삼각분할, 최소 스패닝 트리로 방 연결
     // + 복도 생성
-    private void RegenerateLines()
+    private void ConnectRooms()
     {
 
         var triangles = DelaunayTriangulation.Triangulate(points);

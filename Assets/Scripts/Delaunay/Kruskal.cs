@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using UnityEngine;
 
 
@@ -43,8 +44,10 @@ namespace Delaunay
                 {
                     if (Random.Range(0, 6) == 0)
                     {
+                        Debug.Log("Randomed");
                         ret.Add(edge);
                     }
+                    return;
                 }
 
                 ret.Add(edge);
