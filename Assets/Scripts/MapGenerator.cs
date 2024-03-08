@@ -507,7 +507,7 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tile floor_Random_2;
     [SerializeField] private Tile floor_Random_3;
 
-    [Header("Show Tiles")]
+    [Header("Shadow Tiles")]
     [SerializeField] private Tile shadow_Right_Top;
     [SerializeField] private Tile shadow_Right;
     [SerializeField] private Tile shadow_Right_Bottom;
@@ -559,7 +559,8 @@ public class MapGenerator: MonoBehaviour
             for (int j = 0; j < map.GetLength(1); j++)
             {
                 if (map[i, j] < 0 || (map[i, j] != hallwayId && !rooms[map[i, j]].activeSelf)) map[i, j] = (int)Define.GridType.None;
-                else map[i, j] = (int)Define.GridType.HallWay;
+                else if (map[i, j] == hallwayId) map[i, j] = (int)Define.GridType.HallWay;
+                else map[i, j] = (int)Define.GridType.MainRoom;
             }
         }
     }
@@ -581,6 +582,7 @@ public class MapGenerator: MonoBehaviour
             }
 
         }
+
         for (int i = map.GetLength(0) - 1; i >= 0; i--)
         {
             for (int j = map.GetLength(1) - 1; j >= 0; j--)
@@ -652,8 +654,6 @@ public class MapGenerator: MonoBehaviour
             default:
                 break;
         }
-
-
     }
 
     private void PlaceShadowTile(int x, int y)
