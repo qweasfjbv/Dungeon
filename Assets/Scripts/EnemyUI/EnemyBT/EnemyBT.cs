@@ -2,6 +2,7 @@ using EnemyUI.BehaviorTree;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,6 +26,7 @@ namespace EnemyUI.BehaviorTree
                     }),
                     new Sequence(new List<Node>
                     {
+                        new IsAttacking(transform),
                         new Track(transform, attackRange, trackSpeed),
                         new Attack(transform)
                     })
@@ -68,32 +70,62 @@ namespace EnemyUI.BehaviorTree
 
         private Transform transform;
         private float moveSpeed;
+        private Animator animator;
+        private Rigidbody2D rigid;
 
         public Move(Transform transform, float moveSpeed)
         {
             this.transform = transform;
             this.moveSpeed = moveSpeed;
+            this.animator = transform.GetComponent<Animator>();
+            this.rigid = transform.GetComponent<Rigidbody2D>();
         }
 
         public override NodeState Evaluate()
         {
-            transform.position += new Vector3(moveSpeed, 0, 0);
-            Debug.Log("Moving");
+            animator.SetBool("Walk", true);
+            animator.SetFloat("X", moveSpeed);
+            animator.SetFloat("Y", 0);
+            rigid.MovePosition(transform.position + new Vector3(moveSpeed, 0, 0));
             return NodeState.Running;
         }
 
+
     }
+
+    public class IsAttacking : Node {
+
+        private Transform transform;
+        private Animator animator;
+
+        public IsAttacking(Transform transform)
+        {
+            animator = transform.GetComponent<Animator>();
+        }
+
+        public override NodeState Evaluate()
+        {
+            var isAtt= animator.GetBool("Attack");
+            if (isAtt) return NodeState.Fail;
+            else return NodeState.Success;
+        }
+    }
+
     public class Track : Node
     {
         private Transform transform;
         private int attackRange;
         private float trackSpeed;
+        private Animator animator;
+        private Rigidbody2D rigid;
 
         public Track(Transform transform, int attackRange, float trackSpeed)
         {
             this.transform = transform;
             this.attackRange = attackRange;
             this.trackSpeed = trackSpeed;
+            this.animator = transform.GetComponent<Animator>();
+            this.rigid = transform.GetComponent<Rigidbody2D>();
         }
 
         public override NodeState Evaluate()
@@ -104,13 +136,19 @@ namespace EnemyUI.BehaviorTree
             Vector3 dir = boss.transform.position - transform.position;
             float dis2 = dir.x * dir.x + dir.y * dir.y;
 
+            animator.SetFloat("X", dir.x);
+            animator.SetFloat("Y", dir.y);
 
             // 성공 -> Seq의 다음노드 실행
-            if (dis2 < attackRange* attackRange) return NodeState.Success;
+            if (dis2 < attackRange * attackRange) {
+                animator.SetBool("Walk", false);
+                return NodeState.Success; 
+            }
 
+            animator.SetBool("Walk", true);
             dir.Normalize();
-            this.transform.position += trackSpeed * dir;
-            Debug.Log("Tracking");
+            rigid.MovePosition(transform.position + trackSpeed * dir);
+
             return NodeState.Running;
         }
 
@@ -120,16 +158,20 @@ namespace EnemyUI.BehaviorTree
     public class Attack : Node
     {
         private Transform transform;
+        private Animator animator;
         public Attack(Transform transform)
         {
             this.transform = transform;
+            this.animator = transform.GetComponent<Animator>();
         }
 
 
         public override NodeState Evaluate()
         {
+            if (!animator.GetBool("Attack"))
+                animator.SetTrigger("Attack");
+
             var tr = (GameObject)GetNodeData("BossObject");
-            Debug.Log("Attack");
             return NodeState.Success;
         }
 

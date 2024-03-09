@@ -479,7 +479,7 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tilemap wallTilemap;
     [SerializeField] private Tilemap cliffTilemap;
     [SerializeField] private Tilemap shadowTilemap;
-
+    [SerializeField] private Tilemap colliderTilmap;
 
     [Header("Tiles")]
     [SerializeField] private Tile wall_Top_Left;
@@ -557,7 +557,9 @@ public class MapGenerator: MonoBehaviour
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
-                if (map[i, j] < 0 || (map[i, j] != hallwayId && !rooms[map[i, j]].activeSelf)) map[i, j] = (int)Define.GridType.None;
+                if (map[i, j] < 0 || (map[i, j] != hallwayId && !rooms[map[i, j]].activeSelf)) { map[i, j] = (int)Define.GridType.None;
+                    colliderTilmap.SetTile(new Vector3Int(j, i, 0), floor);
+                }
                 else if (map[i, j] == hallwayId) map[i, j] = (int)Define.GridType.HallWay;
                 else map[i, j] = (int)Define.GridType.MainRoom;
             }

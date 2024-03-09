@@ -44,7 +44,6 @@ namespace Delaunay
                 {
                     if (Random.Range(0, 6) == 0)
                     {
-                        Debug.Log("Randomed");
                         ret.Add(edge);
                     }
                     return;

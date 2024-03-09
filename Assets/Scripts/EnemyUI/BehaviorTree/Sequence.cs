@@ -23,9 +23,6 @@ namespace EnemyUI.BehaviorTree {
                     case NodeState.Running:
                         state = NodeState.Running;
                         return state;
-                    default:
-                        state = NodeState.Success;
-                        return state;
                 }
             }
 
