@@ -15,8 +15,8 @@ namespace EnemyUI.BehaviorTree {
             foreach (Node child in children)
             {
                 switch (child.Evaluate()) {
-                    case NodeState.Fail:
-                        state = NodeState.Fail;
+                    case NodeState.Failure:
+                        state = NodeState.Failure;
                         return state;
                     case NodeState.Success:
                         continue;

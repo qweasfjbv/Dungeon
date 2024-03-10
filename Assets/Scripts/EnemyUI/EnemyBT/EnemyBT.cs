@@ -57,7 +57,7 @@ namespace EnemyUI.BehaviorTree
                 if (col.CompareTag("Monster"))
                 {
                     parent.parent.SetNodeData("BossObject", col.gameObject);
-                    return NodeState.Fail;
+                    return NodeState.Failure;
                 }
             }
             return NodeState.Success;
@@ -106,7 +106,7 @@ namespace EnemyUI.BehaviorTree
         public override NodeState Evaluate()
         {
             var isAtt= animator.GetBool("Attack");
-            if (isAtt) return NodeState.Fail;
+            if (isAtt) return NodeState.Failure;
             else return NodeState.Success;
         }
     }

@@ -8,7 +8,7 @@ using UnityEngine.Animations;
 namespace EnemyUI.BehaviorTree
 {
     public enum NodeState { 
-    Fail,
+    Failure,
     Running,
     Success
     }
@@ -18,7 +18,7 @@ namespace EnemyUI.BehaviorTree
 
         public NodeState state;
         public Node parent;
-        protected List<Node> children= new();
+        protected List<Node> children = new();
 
         private Dictionary<string, object> nodeData = new();
 
@@ -42,7 +42,7 @@ namespace EnemyUI.BehaviorTree
         }
 
         
-        public virtual NodeState Evaluate () => NodeState.Fail;
+        public virtual NodeState Evaluate () => NodeState.Failure;
 
         public void SetNodeData(string key, object value)
         {

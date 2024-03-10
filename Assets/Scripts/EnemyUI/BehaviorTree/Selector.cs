@@ -16,7 +16,7 @@ namespace EnemyUI.BehaviorTree
             {
                 switch (child.Evaluate())
                 {
-                    case NodeState.Fail:
+                    case NodeState.Failure:
                         continue;
                     case NodeState.Success:
                         state = NodeState.Success;
@@ -29,7 +29,7 @@ namespace EnemyUI.BehaviorTree
                 }
             }
 
-            state = NodeState.Fail;
+            state = NodeState.Failure;
             return state;
         }
     }
