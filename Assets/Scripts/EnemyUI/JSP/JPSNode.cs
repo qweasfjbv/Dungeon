@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace JSP {
+namespace JPS {
 
-    public enum JSPDir
+    public enum JPSDir
     {
         Up, Down, Left, Right,
         UpRight, DownRight, 
@@ -12,16 +12,16 @@ namespace JSP {
         None
     }
 
-    public class JSPNode
+    public class JPSNode
     {
-        public JSPNode parent;
-        public Vector2 pos;
-        public JSPDir dir;
+        public JPSNode parent;
+        public Vector2Int pos;
+        public JPSDir dir;
         private float cost;
         private float heuri;
 
 
-        public JSPNode(JSPNode parent, Vector2 pos, JSPDir dir, float cost, float huri)
+        public JPSNode(JPSNode parent, Vector2Int pos, JPSDir dir, float cost, float huri)
         {
             this.parent = parent;
             this.pos = pos;
