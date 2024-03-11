@@ -1,7 +1,10 @@
 using Delaunay;
+using JPS;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
@@ -29,6 +32,9 @@ public class MapGenerator: MonoBehaviour
     private int minX = int.MaxValue, minY = int.MaxValue;
     private int maxX = int.MinValue, maxY = int.MinValue;
 
+
+    private Vector2Int startV;
+    private Vector2Int endV;
 
 
     private void Start()
@@ -75,6 +81,8 @@ public class MapGenerator: MonoBehaviour
 
         MapArrNormalization();
         AutoTiling();
+
+        PathFinding();
     }
 
     private Vector3 GetRandomPointInCircle(int rad)
@@ -145,6 +153,7 @@ public class MapGenerator: MonoBehaviour
             points.Add(new Delaunay.Vertex((int)room.transform.position.x, (int)room.transform.position.y)); // points 리스트에 추가
             count++;
         }
+
     }
 
     // 맵 정보를 2차원 배열에 저장
@@ -774,5 +783,35 @@ public class MapGenerator: MonoBehaviour
         return (pattern & mask) == match;
     }
 
+    #endregion
+
+    #region PATH FINDING
+    private void PathFinding()
+    {
+        int i = 0;
+        foreach (var point in points)
+        {
+            if (i == 0)
+            {
+                startV = new Vector2Int(point.y -minY, point.x - minX);
+                i++;
+            }
+            else if (i == 1)
+            {
+                endV = new Vector2Int(point.y- minY, point.x - minX);
+            }
+        }
+
+
+        JumpPointSearch jpm = new JumpPointSearch(map, startV, endV);
+        var list = jpm.PathFind();
+
+        
+        foreach (var point in list)
+        {
+            Debug.Log("instancePoint : " + point.y + ", " + point.x);
+            InstantiateGrid(point.y, point.x);
+        }
+}
     #endregion
 }
