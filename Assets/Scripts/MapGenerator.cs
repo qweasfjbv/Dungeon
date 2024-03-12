@@ -43,7 +43,32 @@ public class MapGenerator: MonoBehaviour
     }
 
 
+    int count = 0;
+    void Update()
+    {
+        // 마우스 왼쪽 버튼이 클릭되었을 때
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            // 마우스 클릭 지점의 스크린 좌표를 가져옵니다.
+            Vector3 mousePosition = Input.mousePosition;
 
+            // 스크린 좌표를 월드 좌표로 변환합니다.
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+            // 결과 출력
+            Debug.Log("마우스 클릭 위치(월드 좌표계): " + worldPosition);
+
+            if (count == 0) startV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x);
+            if (count == 1) endV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x);
+            count++;
+        }
+
+        if (count == 2)
+        {
+            PathFinding();
+            count++;
+        }
+    }
 
     #region PROCEDURE MAP GENERATE
 
@@ -82,7 +107,6 @@ public class MapGenerator: MonoBehaviour
         MapArrNormalization();
         AutoTiling();
 
-        PathFinding();
     }
 
     private Vector3 GetRandomPointInCircle(int rad)
@@ -507,6 +531,7 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tile floor;
     [SerializeField] private Tile cliff_0;
     [SerializeField] private Tile cliff_1;
+    [SerializeField] private Tile wall_T;
 
     [Header("Random Tiles")]
     [SerializeField] private Tile wall_Top_Random;
@@ -554,11 +579,17 @@ public class MapGenerator: MonoBehaviour
     const int ExceptionMask_1 = (1 << 1) | (1 << 3) | (1 << 7);
     const int ExceptionMask_2 = (1 << 1) | (1 << 3) | (1 << 5);
     const int ExceptionMask_3 = (1 << 3) | (1 << 5) | (1 << 7);
-    
+
     const int ExceptionMatch_0 = (1 << 1) | (1 << 5) | (1 << 7);
     const int ExceptionMatch_1 = (1 << 1) | (1 << 3) | (1 << 7);
     const int ExceptionMatch_2 = (1 << 1) | (1 << 3) | (1 << 5);
     const int ExceptionMatch_3 = (1 << 3) | (1 << 5) | (1 << 7);
+
+    const int ExceptionMask_T1 = (1 << 0) | (1 << 1) | (1 << 3) | (1 << 5) | (1 << 4) | (1 << 7);
+    const int ExceptionMask_T2 = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 5) | (1 << 4) | (1 << 7);
+
+    const int ExceptionMatch_T1 = (1 << 2) | (1 << 7);
+    const int ExceptionMatch_T2 = (1 << 0) | (1 << 7);
 
     private void MapArrNormalization()
     {
@@ -684,6 +715,15 @@ public class MapGenerator: MonoBehaviour
         else if (wallTile == wall_Center_Center || wallTile == wall_Center_Left)
             shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right_Bottom);
 
+
+
+        int pattern = CalculatePattern(x, y);
+
+        if(Matches(pattern, ExceptionMask_T1, ExceptionMatch_T1) || Matches(pattern, ExceptionMask_T2, ExceptionMatch_T2))
+        {
+            wallTilemap.SetTile(tilePos + new Vector3Int(0, 1, 0), wall_T);
+            wallTilemap.SetTile(tilePos, wall_Right);
+        } 
     }
 
     private Tile DetermineWallTile(int x, int y)
@@ -791,20 +831,6 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] GameObject Line;
     private void PathFinding()
     {
-        int i = 0;
-        foreach (var point in points)
-        {
-            if (i == 0)
-            {
-                startV = new Vector2Int(point.y -minY, point.x - minX);
-                i++;
-            }
-            else if (i == 1)
-            {
-                endV = new Vector2Int(point.y- minY, point.x - minX);
-            }
-        }
-
 
         JumpPointSearch jpm = new JumpPointSearch(map, startV, endV);
         var list = jpm.PathFind();
@@ -818,7 +844,7 @@ public class MapGenerator: MonoBehaviour
             grid.GetComponent<SpriteRenderer>().color = Color.red;
             grid.GetComponent<SpriteRenderer>().sortingOrder = 8;
 
-            if (prevPoint != null)
+            if (prevPoint.x != 0 || prevPoint.y != 0)
             {
                 GameObject line = Instantiate(Line);
                 line.GetComponent<LineRenderer>().SetPosition(0, new Vector3(prevPoint.y, prevPoint.x, -1));

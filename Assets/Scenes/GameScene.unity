@@ -1276,6 +1276,7 @@ MonoBehaviour:
   floor: {fileID: 11400000, guid: b86ed1cf049070f47bb6ff964b1d299a, type: 2}
   cliff_0: {fileID: 11400000, guid: 9ebd7aad1ec095149b1361d062c4c6c6, type: 2}
   cliff_1: {fileID: 11400000, guid: f468a4c59fdf23547a79f831a4d98eb9, type: 2}
+  wall_T: {fileID: 11400000, guid: e2f9e38f7d0d3284fb486bc5829881aa, type: 2}
   wall_Top_Random: {fileID: 11400000, guid: 852852214524a914caf42f3f913c0b2b, type: 2}
   floor_Random_0: {fileID: 11400000, guid: 05eb8373cde7d3948bcf469a82e4d6ae, type: 2}
   floor_Random_1: {fileID: 11400000, guid: 1aa0a7d257a82624b966271f144e7a02, type: 2}
