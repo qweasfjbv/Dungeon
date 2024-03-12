@@ -786,6 +786,9 @@ public class MapGenerator: MonoBehaviour
     #endregion
 
     #region PATH FINDING
+
+
+    [SerializeField] GameObject Line;
     private void PathFinding()
     {
         int i = 0;
@@ -806,12 +809,26 @@ public class MapGenerator: MonoBehaviour
         JumpPointSearch jpm = new JumpPointSearch(map, startV, endV);
         var list = jpm.PathFind();
 
-        
+        Vector2Int prevPoint = new Vector2Int(0, 0);
         foreach (var point in list)
         {
-            Debug.Log("instancePoint : " + point.y + ", " + point.x);
-            InstantiateGrid(point.y, point.x);
+            Debug.Log("instancePoint : " + point.y + ", " + point.x); 
+            
+            GameObject grid = Instantiate(GridPrefab, new Vector3(point.y + 0.5f, point.x + 0.5f, 0), Quaternion.identity);
+            grid.GetComponent<SpriteRenderer>().color = Color.red;
+            grid.GetComponent<SpriteRenderer>().sortingOrder = 8;
+
+            if (prevPoint != null)
+            {
+                GameObject line = Instantiate(Line);
+                line.GetComponent<LineRenderer>().SetPosition(0, new Vector3(prevPoint.y, prevPoint.x, -1));
+                line.GetComponent<LineRenderer>().SetPosition(1, new Vector3(point.y, point.x, -1));
+                line.GetComponent<LineRenderer>().startWidth = 0.3f;
+                line.GetComponent<LineRenderer>().endWidth = 0.3f;
+            }
+
+            prevPoint = point;
         }
-}
+    }
     #endregion
 }
