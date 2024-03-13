@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -44,30 +45,11 @@ public class MapGenerator: MonoBehaviour
 
 
     int count = 0;
+    bool again = false;
+    
     void Update()
     {
-        // 마우스 왼쪽 버튼이 클릭되었을 때
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            // 마우스 클릭 지점의 스크린 좌표를 가져옵니다.
-            Vector3 mousePosition = Input.mousePosition;
-
-            // 스크린 좌표를 월드 좌표로 변환합니다.
-            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-
-            // 결과 출력
-            Debug.Log("마우스 클릭 위치(월드 좌표계): " + worldPosition);
-
-            if (count == 0) startV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x);
-            if (count == 1) endV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x);
-            count++;
-        }
-
-        if (count == 2)
-        {
-            PathFinding();
-            count++;
-        }
+        PathFindDebug();
     }
 
     #region PROCEDURE MAP GENERATE
@@ -829,20 +811,23 @@ public class MapGenerator: MonoBehaviour
 
 
     [SerializeField] GameObject Line;
-    private void PathFinding()
+    [SerializeField] Transform PathTest;
+    public List<Vector2> PathFinding()
     {
 
-        JumpPointSearch jpm = new JumpPointSearch(map, startV, endV);
-        var list = jpm.PathFind();
+        JumpPointSearch jpm = new JumpPointSearch(map);
+        var pathList = jpm.PathFind(startV, endV);
+        var retList = new List<Vector2>();
 
         Vector2Int prevPoint = new Vector2Int(0, 0);
-        foreach (var point in list)
-        {
-            Debug.Log("instancePoint : " + point.y + ", " + point.x); 
+        foreach (var point in pathList)
+        { 
             
-            GameObject grid = Instantiate(GridPrefab, new Vector3(point.y + 0.5f, point.x + 0.5f, 0), Quaternion.identity);
-            grid.GetComponent<SpriteRenderer>().color = Color.red;
-            grid.GetComponent<SpriteRenderer>().sortingOrder = 8;
+            //GameObject grid = Instantiate(GridPrefab, new Vector3(point.y + 0.5f, point.x + 0.5f, 0), Quaternion.identity);
+            retList.Add(new Vector2(point.y + 0.5f, point.x + 0.5f));
+
+            //grid.GetComponent<SpriteRenderer>().color = Color.red;
+            //grid.GetComponent<SpriteRenderer>().sortingOrder = 8;
 
             if (prevPoint.x != 0 || prevPoint.y != 0)
             {
@@ -854,6 +839,50 @@ public class MapGenerator: MonoBehaviour
             }
 
             prevPoint = point;
+        }
+
+        return retList;
+    }
+
+    private void PathFindDebug()
+    {
+
+        // 마우스 왼쪽 버튼이 클릭되었을 때
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            // 마우스 클릭 지점의 스크린 좌표를 가져옵니다.
+            Vector3 mousePosition = Input.mousePosition;
+
+            // 스크린 좌표를 월드 좌표로 변환합니다.
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+
+            if (count == 0) { startV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x); }
+            if (count == 1)
+            {
+                endV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x);
+                again = true;
+            }
+            else if (count >= 2)
+            {
+                startV = endV;
+                endV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x);
+                again = true;
+            }
+            count++;
+        }
+
+        if (count >= 1 && again)
+        {
+            var tmpList = PathFinding();
+            again = false;
+
+
+            PathTest.position = new Vector3(tmpList[0].x, tmpList[0].y, 0);
+            Debug.Log(PathTest.position);
+            PathTest.GetComponent<PathTest>().SetPath(tmpList);
+            PathTest.gameObject.SetActive(true);
+
         }
     }
     #endregion

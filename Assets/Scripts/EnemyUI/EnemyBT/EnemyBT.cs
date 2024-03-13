@@ -83,6 +83,7 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
+
             animator.SetBool("Walk", true);
             animator.SetFloat("X", moveSpeed);
             animator.SetFloat("Y", 0);
