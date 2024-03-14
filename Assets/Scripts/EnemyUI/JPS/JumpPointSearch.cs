@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Xml;
 using System.Xml.Schema;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,7 +17,6 @@ namespace JPS
 
         readonly private int[,] map;
 
-        private bool[,] checkedMap;
         private Vector2Int startPoint;
         private Vector2Int endPoint;
 
@@ -26,11 +26,6 @@ namespace JPS
         public JumpPointSearch(int[,] map)
         {
             this.map = map;
-            checkedMap = new bool[map.GetLength(0), map.GetLength(1)];
-
-            for (int i = 0; i < checkedMap.GetLength(0); i++)
-                for (int j = 0; j < checkedMap.GetLength(1); j++)
-                    checkedMap[i, j] = false;
 
             openList = new SortedSet<JPSNode>(new NodeComparer());
             closedList = new List<JPSNode>();
@@ -45,7 +40,6 @@ namespace JPS
 
             if (map[endPoint.x, endPoint.y] == (int)Define.GridType.None || map[startPoint.x, startPoint.y] == (int)Define.GridType.None)
             {
-                Debug.Log("Invalid Position");
                 return new List<Vector2Int>();
             }
 
@@ -60,7 +54,6 @@ namespace JPS
                 EditorApplication.isPaused = true;
 
                 JPSNode curNode = openList.First();
-                Debug.Log("WHILE START  :" + curNode.pos + ", " + curNode.dir);
                 closedList.Add(curNode);
                 openList.Remove(curNode);
 
@@ -189,9 +182,8 @@ namespace JPS
                         }
                         else break;
 
-                        if (found) return true;
                     }
-                    return false;
+                    return found;
 
                 case JPSDir.UpLeft:
 
@@ -216,9 +208,8 @@ namespace JPS
                         }
                         else break;
 
-                        if (found) return true;
                     }
-                    return false;
+                    return found;
 
                 case JPSDir.DownRight:
                     SecondarySearch(parentNode, pos, JPSDir.Down, JPSDir.Right);
@@ -241,9 +232,8 @@ namespace JPS
                         }
                         else break;
 
-                        if (found) return true;
                     }
-                    return false;
+                    return found;
                 case JPSDir.DownLeft:
                     SecondarySearch(parentNode, pos, JPSDir.Down, JPSDir.Left);
                     for (int i = 1; ; i++)
@@ -266,9 +256,8 @@ namespace JPS
                         }
                         else break;
 
-                        if (found) return true;
                     }
-                    return false;
+                    return found;
             }
 
             return false;
@@ -421,9 +410,11 @@ namespace JPS
 
         private void AddToOpenList(JPSNode node)
         {
-            if (openList.Contains(node)) { Debug.Log("CONTAIN"); return; }
-            if (closedList.Contains(node)) return;
-            Debug.Log("ADD TO OL : " + node.pos);
+            if(openList.Where(n=> n.pos.x == node.pos.x && n.pos.y == node.pos.y).Count() > 0)
+            {
+                return;
+            }
+
             openList.Add(node);
         }
 
@@ -451,6 +442,8 @@ namespace JPS
             public int Compare(JPSNode x, JPSNode y)
             {
                 var result = x.GetExpectedCost().CompareTo(y.GetExpectedCost());
+                if (result == 0) result = x.pos.x.CompareTo(y.pos.x);
+                if (result == 0) result = x.pos.y.CompareTo(y.pos.y);
 
                 return result;
             }
