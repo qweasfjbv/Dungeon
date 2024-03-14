@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Xml;
 using System.Xml.Schema;
+using UnityEditor;
 using UnityEngine;
 
 namespace JPS
@@ -13,7 +14,9 @@ namespace JPS
         const int COST_STRAIGHT = 10;
         const int COST_DIAGONAL = 14;
 
-        private int[,] map;
+        readonly private int[,] map;
+
+        private bool[,] checkedMap;
         private Vector2Int startPoint;
         private Vector2Int endPoint;
 
@@ -23,17 +26,22 @@ namespace JPS
         public JumpPointSearch(int[,] map)
         {
             this.map = map;
+            checkedMap = new bool[map.GetLength(0), map.GetLength(1)];
+
+            for (int i = 0; i < checkedMap.GetLength(0); i++)
+                for (int j = 0; j < checkedMap.GetLength(1); j++)
+                    checkedMap[i, j] = false;
 
             openList = new SortedSet<JPSNode>(new NodeComparer());
             closedList = new List<JPSNode>();
         }
 
-        public List<Vector2Int> PathFind(Vector2Int startPoint, Vector2Int endPoint)
+        public List<Vector2Int> PathFind(Vector2Int sp, Vector2Int ep)
         {
             // 초기화
 
-            this.startPoint = startPoint;
-            this.endPoint = endPoint;
+            this.startPoint = sp;
+            this.endPoint = ep;
 
             if (map[endPoint.x, endPoint.y] == (int)Define.GridType.None || map[startPoint.x, startPoint.y] == (int)Define.GridType.None)
             {
@@ -49,7 +57,10 @@ namespace JPS
 
             while (openList.Count > 0)
             {
+                EditorApplication.isPaused = true;
+
                 JPSNode curNode = openList.First();
+                Debug.Log("WHILE START  :" + curNode.pos + ", " + curNode.dir);
                 closedList.Add(curNode);
                 openList.Remove(curNode);
 
@@ -81,12 +92,12 @@ namespace JPS
                     SearchLine(curNode, curNode.pos, curNode.dir);
 
 
+
             }
 
 
             return ans;
         }
-
         /// <summary>
         /// 현재 위치에서 한 방향으로 Jump Point 탐색
         /// </summary>
@@ -106,10 +117,10 @@ namespace JPS
                     for (int i = pos.x + 1; i < map.GetLength(0); i++)
                     {
                         checkPoint = pos + new Vector2Int(i - pos.x, 0);
-                        check = JPSCheck(checkPoint, dir, out destDir);
+                        check = JPSCheck(parentNode, checkPoint, dir, out destDir);
                         if (check == 1)
                         {
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
+                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                             return true;
                         }
                         else if (check == -1) return false;
@@ -119,10 +130,10 @@ namespace JPS
                     for (int i = pos.x - 1; i >= 0; i--)
                     {
                         checkPoint = pos + new Vector2Int(i - pos.x, 0);
-                        check = JPSCheck(checkPoint, dir, out destDir);
+                        check = JPSCheck(parentNode, checkPoint, dir, out destDir);
                         if (check == 1)
                         {
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
+                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                             return true;
                         }
                         else if (check == -1) return false;
@@ -132,11 +143,10 @@ namespace JPS
                     for (int i = pos.y + 1; i < map.GetLength(1); i++)
                     {
                         checkPoint = pos + new Vector2Int(0, i - pos.y);
-                        check = JPSCheck(checkPoint, dir, out destDir);
+                        check = JPSCheck(parentNode, checkPoint, dir, out destDir);
                         if (check == 1)
                         {
-                            found = true;
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
+                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                             return true;
                         }
                         else if (check == -1) return false;
@@ -146,10 +156,10 @@ namespace JPS
                     for (int i = pos.y - 1; i >= 0; i--)
                     {
                         checkPoint = pos + new Vector2Int(0, i - pos.y);
-                        check = JPSCheck(checkPoint, dir, out destDir);
+                        check = JPSCheck(parentNode, checkPoint, dir, out destDir);
                         if (check == 1)
                         {
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
+                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                             return true;
                         }
                         else if (check == -1) return false;
@@ -162,18 +172,17 @@ namespace JPS
                     for (int i = 1; ; i++)
                     {
                         checkPoint = pos + new Vector2Int(i, i);
-                        check = JPSCheck(checkPoint, dir, out destDir);
+                        check = JPSCheck(parentNode, checkPoint, dir, out destDir);
 
 
                         if (check == 1)
                         {
                             found = true;
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
-                            SecondarySearch(parentNode, checkPoint, JPSDir.Up, JPSDir.Right);
+                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                         }
                         else if (check == 0)
                         {
-                            JPSNode tmpNode = new JPSNode(parentNode, checkPoint, dir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint));
+                            JPSNode tmpNode = new JPSNode(parentNode, checkPoint, dir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint));
 
                             if (SecondarySearch(tmpNode, checkPoint, JPSDir.Up, JPSDir.Right))
                                 closedList.Add(tmpNode);
@@ -190,18 +199,17 @@ namespace JPS
                     for (int i = 1; ; i++)
                     {
                         checkPoint = pos + new Vector2Int(-i, i);
-                        check = JPSCheck(checkPoint, dir, out destDir);
+                        check = JPSCheck(parentNode, checkPoint, dir, out destDir);
 
 
                         if (check == 1)
                         {
                             found = true;
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
-                            SecondarySearch(parentNode, checkPoint, JPSDir.Up, JPSDir.Left);
+                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                         }
                         else if (check == 0)
                         {
-                            JPSNode tmpNode = new JPSNode(parentNode, checkPoint, dir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint));
+                            JPSNode tmpNode = new JPSNode(parentNode, checkPoint, dir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint));
 
                             if (SecondarySearch(tmpNode, checkPoint, JPSDir.Up, JPSDir.Left))
                                 closedList.Add(tmpNode);
@@ -217,18 +225,16 @@ namespace JPS
                     for (int i = 1; ; i++)
                     {
                         checkPoint = pos + new Vector2Int(i, -i);
-                        check = JPSCheck(checkPoint, dir, out destDir);
-
+                        check = JPSCheck(parentNode, checkPoint, dir, out destDir);
 
                         if (check == 1)
                         {
                             found = true;
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
-                            SecondarySearch(parentNode, checkPoint, JPSDir.Down, JPSDir.Right);
+                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                         }
                         else if (check == 0)
                         {
-                            JPSNode tmpNode = new JPSNode(parentNode, checkPoint, dir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint));
+                            JPSNode tmpNode = new JPSNode(parentNode, checkPoint, dir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint));
 
                             if (SecondarySearch(tmpNode, checkPoint, JPSDir.Down, JPSDir.Right))
                                 closedList.Add(tmpNode);
@@ -243,18 +249,17 @@ namespace JPS
                     for (int i = 1; ; i++)
                     {
                         checkPoint = pos + new Vector2Int(-i, -i);
-                        check = JPSCheck(checkPoint, dir, out destDir);
+                        check = JPSCheck(parentNode, checkPoint, dir, out destDir);
 
 
                         if (check == 1)
                         {
                             found = true;
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
-                            SecondarySearch(parentNode, checkPoint, JPSDir.Down, JPSDir.Left);
+                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                         }
                         else if (check == 0)
                         {
-                            JPSNode tmpNode = new JPSNode(parentNode, checkPoint, dir, parentNode.GetExpectedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint));
+                            JPSNode tmpNode = new JPSNode(parentNode, checkPoint, dir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint));
 
                             if (SecondarySearch(tmpNode, checkPoint, JPSDir.Down, JPSDir.Left))
                                 closedList.Add(tmpNode);
@@ -284,10 +289,15 @@ namespace JPS
         /// 해당 노드 에서 ForceNeighbor 검사
         /// 범위를 벗어나면 -1, FN이 없으면 0, 있으면 1 리턴
         /// </summary>
-        private int JPSCheck(Vector2Int pos, JPSDir dir, out JPSDir destDir)
+        private int JPSCheck(JPSNode node, Vector2Int pos, JPSDir dir, out JPSDir destDir)
         {
 
+
             destDir = JPSDir.None;
+
+            //if (checkedMap[pos.x, pos.y]) return 0;
+            //else checkedMap[pos.y, pos.y] = true;
+
 
             //BoundCheck
             if (!IsMovable(pos)) return -1;
@@ -295,6 +305,7 @@ namespace JPS
             if (pos.x == endPoint.x && pos.y == endPoint.y)
             {
                 destDir = dir;
+                AddToOpenList(new JPSNode(node, pos, dir, 0, 0));
                 return 1;
             }
 
@@ -410,6 +421,9 @@ namespace JPS
 
         private void AddToOpenList(JPSNode node)
         {
+            if (openList.Contains(node)) { Debug.Log("CONTAIN"); return; }
+            if (closedList.Contains(node)) return;
+            Debug.Log("ADD TO OL : " + node.pos);
             openList.Add(node);
         }
 

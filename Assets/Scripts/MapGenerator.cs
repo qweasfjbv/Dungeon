@@ -261,7 +261,7 @@ public class MapGenerator: MonoBehaviour
         if (isVerticalOverlap)
         {
             int startY = Mathf.Min(start.y + startSize.y / 2, end.y + endSize.y/2) + Mathf.Max(start.y - startSize.y / 2, end.y - endSize.y/2);
-            startY = startY / 2;
+            startY /= 2;
             for (int x = Mathf.Min(start.x + startSize.x/2, end.x + endSize.x/2) ; x <= Mathf.Max(start.x - startSize.x/2, end.x - endSize.x/2); x++)
             {
                 InstantiateGrid(x, startY);
@@ -271,7 +271,7 @@ public class MapGenerator: MonoBehaviour
         else if (isHorizontalOverlap)
         {
             int startX= Mathf.Min(start.x + startSize.x / 2, end.x + endSize.x / 2) + Mathf.Max(start.x - startSize.x / 2, end.x - endSize.x / 2);
-            startX = startX / 2;
+            startX /= 2;
             for (int y = Mathf.Min(start.y + startSize.y/2, end.y + endSize.y/2); y <= Mathf.Max(start.y - startSize.y/2, end.y - endSize.y/2); y++)
             {
                 InstantiateGrid(startX, y);
@@ -315,7 +315,7 @@ public class MapGenerator: MonoBehaviour
         {
 
             int startY = Mathf.Min(start.y + startSize.y / 2, end.y + endSize.y / 2) + Mathf.Max(start.y - startSize.y / 2, end.y - endSize.y / 2);
-            startY = startY / 2;
+            startY /= 2;
             for (int x = (int)Mathf.Min(start.x + startSize.x / 2, end.x + endSize.x / 2); x <= (int)Mathf.Max(start.x - startSize.x / 2, end.x - endSize.x / 2); x++)
             {
                 AddHallwayWidth(x, startY);
@@ -325,7 +325,7 @@ public class MapGenerator: MonoBehaviour
         else if (isHorizontalOverlap)
         {
             int startX = Mathf.Min(start.x + startSize.x / 2, end.x + endSize.x / 2) + Mathf.Max(start.x - startSize.x / 2, end.x - endSize.x / 2);
-            startX = startX / 2;
+            startX /= 2;
             for (int y = (int)Mathf.Min(start.y + startSize.y / 2, end.y + endSize.y / 2); y <= (int)Mathf.Max(start.y - startSize.y / 2, end.y - endSize.y / 2); y++)
             {
                 AddHallwayWidth(startX, y);
@@ -823,11 +823,8 @@ public class MapGenerator: MonoBehaviour
         foreach (var point in pathList)
         { 
             
-            //GameObject grid = Instantiate(GridPrefab, new Vector3(point.y + 0.5f, point.x + 0.5f, 0), Quaternion.identity);
             retList.Add(new Vector2(point.y + 0.5f, point.x + 0.5f));
 
-            //grid.GetComponent<SpriteRenderer>().color = Color.red;
-            //grid.GetComponent<SpriteRenderer>().sortingOrder = 8;
 
             if (prevPoint.x != 0 || prevPoint.y != 0)
             {

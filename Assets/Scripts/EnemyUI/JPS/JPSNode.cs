@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -31,9 +32,25 @@ namespace JPS {
             this.heuri = huri;
         }
 
+        public int GetPassedCost()
+        {
+            return cost;
+        }
         public int GetExpectedCost()
         {
             return cost + heuri;
+        }
+
+
+        public override bool Equals(object obj)
+        {
+            return obj is JPSNode n && n.pos.x == this.pos.x && n.pos.y == this.pos.y;
+        }
+
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(pos.x, pos.y);
         }
 
     }
