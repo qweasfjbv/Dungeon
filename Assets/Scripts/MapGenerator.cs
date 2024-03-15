@@ -855,12 +855,12 @@ public class MapGenerator: MonoBehaviour
 
 
             if (count == 0) { startV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x); }
-            if (count == 1)
+            if (count ==1)
             {
                 endV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x);
                 again = true;
             }
-            else if (count >= 2)
+            else if (count >=2)
             {
                 startV = endV;
                 endV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x);
@@ -879,7 +879,7 @@ public class MapGenerator: MonoBehaviour
             Debug.Log(PathTest.position);
             PathTest.GetComponent<PathTest>().SetPath(tmpList);
             PathTest.gameObject.SetActive(true);
-
+            
         }
     }
     #endregion
