@@ -23,7 +23,6 @@ public class PathTest : MonoBehaviour
         var step = speed * new Vector3(currentTarget.x-transform.position.x, currentTarget.y - transform.position.y, 0).normalized;
         GetComponent<Rigidbody2D>().MovePosition(transform.position + new Vector3(step.x, step.y, 0));
 
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 100));
 
         GetComponent<Animator>().SetFloat("X", step.x);
         GetComponent<Animator>().SetFloat("Y", step.y);

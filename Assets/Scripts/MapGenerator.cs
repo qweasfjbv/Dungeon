@@ -3,22 +3,18 @@ using JPS;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 
 public class MapGenerator: MonoBehaviour
 {
     [Header("Map Generate Variables")]
     [SerializeField] private GameObject GridPrefab;
-    [SerializeField] private int generateRoomCnt = 60;
-    [SerializeField] private int selectRoomCnt = 7;
-    [SerializeField] private int minRoomSize = 2;
-    [SerializeField] private int maxRoomSize = 8;
-    [SerializeField] private int overlapOffset = 3;
+    [SerializeField] private int generateRoomCnt;
+    [SerializeField] private int selectRoomCnt;
+    [SerializeField] private int minRoomSize;
+    [SerializeField] private int maxRoomSize;
+    [SerializeField] private int overlapOffset;
 
     private const int PIXEL = 1;
     private int hallwayId = 200;
@@ -84,7 +80,7 @@ public class MapGenerator: MonoBehaviour
 
         ConnectRooms();
 
-        CellularAutomata(5);
+        //CellularAutomata(5);
 
         MapArrNormalization();
         AutoTiling();
@@ -557,21 +553,25 @@ public class MapGenerator: MonoBehaviour
     const int BottomRightMatch_1 = (1 << 1) | (1 << 3);
 
 
+    const int ExceptionMask = (1 << 1) | (1 << 3) | (1 << 5) | (1 << 7);
     const int ExceptionMask_0 = (1 << 1) | (1 << 5) | (1 << 7);
     const int ExceptionMask_1 = (1 << 1) | (1 << 3) | (1 << 7);
     const int ExceptionMask_2 = (1 << 1) | (1 << 3) | (1 << 5);
     const int ExceptionMask_3 = (1 << 3) | (1 << 5) | (1 << 7);
 
+    const int ExceptionMatch = (1 << 1) | (1 << 3) | (1 << 5) | (1 << 7);
     const int ExceptionMatch_0 = (1 << 1) | (1 << 5) | (1 << 7);
     const int ExceptionMatch_1 = (1 << 1) | (1 << 3) | (1 << 7);
     const int ExceptionMatch_2 = (1 << 1) | (1 << 3) | (1 << 5);
     const int ExceptionMatch_3 = (1 << 3) | (1 << 5) | (1 << 7);
 
-    const int ExceptionMask_T1 = (1 << 0) | (1 << 1) | (1 << 3) | (1 << 5) | (1 << 4) | (1 << 7);
-    const int ExceptionMask_T2 = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 5) | (1 << 4) | (1 << 7);
+    const int ExceptionMask_T1 = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 5) | (1 << 4) | (1 << 7);
+    const int ExceptionMask_T2 = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 5) | (1 << 4) | (1 << 7);
+    const int ExceptionMask_T3 = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3) | (1 << 5) | (1 << 4);
 
-    const int ExceptionMatch_T1 = (1 << 2) | (1 << 7);
-    const int ExceptionMatch_T2 = (1 << 0) | (1 << 7);
+    const int ExceptionMatch_T1 = (1 << 0) | (1<<7);
+    const int ExceptionMatch_T2 = (1 << 2) | (1 << 7);
+    const int ExceptionMatch_T3 = (1 << 0) | (1 << 2);
 
     private void MapArrNormalization()
     {
@@ -604,6 +604,14 @@ public class MapGenerator: MonoBehaviour
                 }
             }
 
+        }
+
+        for (int i = map.GetLength(0) - 1; i >= 0; i--)
+        {
+            for (int j = map.GetLength(1) - 1; j >= 0; j--)
+            {
+                PlaceExceptionTiles(j, i);
+            }
         }
 
         for (int i = map.GetLength(0) - 1; i >= 0; i--)
@@ -699,13 +707,18 @@ public class MapGenerator: MonoBehaviour
 
 
 
+    }
+
+    private void PlaceExceptionTiles(int x, int y)
+    {
+        Vector3Int tilePos = new Vector3Int(x, y, 0);
         int pattern = CalculatePattern(x, y);
 
-        if(Matches(pattern, ExceptionMask_T1, ExceptionMatch_T1) || Matches(pattern, ExceptionMask_T2, ExceptionMatch_T2))
+        if (Matches(pattern, ExceptionMask_T1, ExceptionMatch_T1) || Matches(pattern, ExceptionMask_T2, ExceptionMatch_T2) || Matches(pattern, ExceptionMask_T3, ExceptionMatch_T3))
         {
             wallTilemap.SetTile(tilePos + new Vector3Int(0, 1, 0), wall_T);
             wallTilemap.SetTile(tilePos, wall_Right);
-        } 
+        }
     }
 
     private Tile DetermineWallTile(int x, int y)
@@ -715,10 +728,18 @@ public class MapGenerator: MonoBehaviour
 
         // 패턴에 따른 타일 결정
 
+
+        if (Matches(pattern, ExceptionMask, ExceptionMatch)) return wall_Top_Center;
         if (Matches(pattern, ExceptionMask_0, ExceptionMatch_0)) return wall_Top_Center;
         if (Matches(pattern, ExceptionMask_1, ExceptionMatch_1)) return wall_Top_Center;
         if (Matches(pattern, ExceptionMask_2, ExceptionMatch_2)) return wall_Top_Center;
-        if (Matches(pattern, ExceptionMask_3, ExceptionMatch_3)) return wall_Top_Center;
+
+        if (Matches(pattern, ExceptionMask_3, ExceptionMatch_3)) {
+
+            wallTilemap.SetTile(new Vector3Int(x, y, 0) + new Vector3Int(0, 1, 0), wall_Right);
+            wallTilemap.SetTile(new Vector3Int(x, y, 0), wall_Right);
+            return null;
+                }
 
 
         if (Matches(pattern, TopMask, TopMatch)) return GetRandomTopTile();
@@ -816,7 +837,8 @@ public class MapGenerator: MonoBehaviour
     {
 
         JumpPointSearch jpm = new JumpPointSearch(map);
-        var pathList = jpm.PathFind(startV, endV);
+        var pathList = (jpm.PathFind(startV, endV));
+        
         var retList = new List<Vector2>();
 
         Vector2Int prevPoint = new Vector2Int(0, 0);
@@ -882,5 +904,6 @@ public class MapGenerator: MonoBehaviour
             
         }
     }
+
     #endregion
 }
