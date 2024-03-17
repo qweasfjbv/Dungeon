@@ -10,7 +10,7 @@ namespace EnemyUI.BehaviorTree
 
         private Node root = null;
 
-        private void Start()
+        private void OnEnable()
         {
             root = SetupRoot();
         }

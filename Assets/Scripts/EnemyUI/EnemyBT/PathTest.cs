@@ -9,9 +9,9 @@ public class PathTest : MonoBehaviour
 
     public List<Vector2> path;
     [SerializeField]
+
     public float speed;
     private int currentPointIndex = 0;
-
     void Update()
     {
         GetComponent<Animator>().SetBool("Walk", true);

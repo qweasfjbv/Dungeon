@@ -16,13 +16,21 @@ namespace EnemyUI.BehaviorTree
         [SerializeField] private float moveSpeed;
         [SerializeField] private float trackSpeed;
 
+        private List<Vector2> path;
+
+        public void SetValues(List<Vector2> path)
+        {
+            this.path = path;
+            Debug.Log(this.path.Count);
+        }
+
         public override Node SetupRoot()
         {
             Node root = new Selector(new List<Node> {
                     new Sequence(new List<Node>
                     {
                         new Search(transform, searchRange),
-                        new Move(transform, moveSpeed)
+                        new Move(transform, moveSpeed, path)
                     }),
                     new Sequence(new List<Node>
                     {
@@ -69,25 +77,45 @@ namespace EnemyUI.BehaviorTree
     {
 
         private Transform transform;
-        private float moveSpeed;
         private Animator animator;
         private Rigidbody2D rigid;
 
-        public Move(Transform transform, float moveSpeed)
+        public List<Vector2> path;
+        public float speed;
+        private int currentPointIndex = 0;
+        public Move(Transform transform, float moveSpeed, List<Vector2> path)
         {
             this.transform = transform;
-            this.moveSpeed = moveSpeed;
+            this.speed = moveSpeed;
             this.animator = transform.GetComponent<Animator>();
             this.rigid = transform.GetComponent<Rigidbody2D>();
+            this.path = path;
         }
 
         public override NodeState Evaluate()
         {
 
             animator.SetBool("Walk", true);
-            animator.SetFloat("X", moveSpeed);
-            animator.SetFloat("Y", 0);
-            rigid.MovePosition(transform.position + new Vector3(moveSpeed, 0, 0));
+
+            if (path == null || path.Count == 0) return NodeState.Success;
+
+            Vector2 currentTarget = path[currentPointIndex];
+
+            var step = speed * new Vector3(currentTarget.x - transform.position.x, currentTarget.y - transform.position.y, 0).normalized;
+            rigid.MovePosition(transform.position + new Vector3(step.x, step.y, 0));
+
+
+            animator.SetFloat("X", step.x);
+            animator.SetFloat("Y", step.y);
+
+            if (Vector2.Distance(transform.position, currentTarget) < 0.1f)
+            {
+                currentPointIndex++;
+                if (currentPointIndex >= path.Count)
+                {
+                    // µµÂø
+                }
+            }
             return NodeState.Running;
         }
 

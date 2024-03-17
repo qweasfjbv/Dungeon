@@ -1,8 +1,12 @@
 using Delaunay;
+using EnemyUI.BehaviorTree;
+using JetBrains.Annotations;
 using JPS;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -833,7 +837,7 @@ public class MapGenerator: MonoBehaviour
 
     [SerializeField] GameObject Line;
     [SerializeField] Transform PathTest;
-    public List<Vector2> PathFinding()
+    public List<Vector2> PreprocessPath()
     {
 
         JumpPointSearch jpm = new JumpPointSearch(map);
@@ -893,13 +897,13 @@ public class MapGenerator: MonoBehaviour
 
         if (count >= 1 && again)
         {
-            var tmpList = PathFinding();
+            var tmpList = PreprocessPath();
             again = false;
 
 
             PathTest.position = new Vector3(tmpList[0].x, tmpList[0].y, 0);
-            Debug.Log(PathTest.position);
-            PathTest.GetComponent<PathTest>().SetPath(tmpList);
+            
+            PathTest.GetComponent<EnemyBT>().SetValues(tmpList);
             PathTest.gameObject.SetActive(true);
             
         }

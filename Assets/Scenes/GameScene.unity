@@ -1436,7 +1436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridPrefab: {fileID: 3217465669588638, guid: c31797b22dd061b43865f296b71fa9f1, type: 3}
-  generateRoomCnt: 70
+  generateRoomCnt: 65
   selectRoomCnt: 7
   minRoomSize: 2
   maxRoomSize: 8
@@ -1473,7 +1473,7 @@ MonoBehaviour:
   shadow_Right_Bottom: {fileID: 11400000, guid: 57fc72d196d79a943a53140b7129801b,
     type: 2}
   Line: {fileID: 6887163925364720780, guid: 3563ff7aa77c5ec4bb62e79d2051791e, type: 3}
-  PathTest: {fileID: 574710716}
+  PathTest: {fileID: 1806366043}
 --- !u!1 &1998584183
 GameObject:
   m_ObjectHideFlags: 0
