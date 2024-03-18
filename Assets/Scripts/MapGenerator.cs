@@ -1,12 +1,9 @@
 using Delaunay;
 using EnemyUI.BehaviorTree;
-using JetBrains.Annotations;
 using JPS;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -18,11 +15,15 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private int selectRoomCnt;
     [SerializeField] private int minRoomSize;
     [SerializeField] private int maxRoomSize;
+    [SerializeField] private int smallMinRoomSize;
+    [SerializeField] private int smallMaxRoomSize;
     [SerializeField] private int overlapOffset;
 
     private const int PIXEL = 1;
     private int hallwayId = 200;
     private int cellularId = 300;
+
+    int MainRoomSizeCount = 0;
 
     private List<GameObject> rooms = new List<GameObject>();
     private HashSet<Delaunay.Vertex> points = new HashSet<Delaunay.Vertex>();
@@ -30,13 +31,15 @@ public class MapGenerator: MonoBehaviour
 
     private int[,] map; // 2차원 배열 맵
 
-    private int minX = int.MaxValue, minY = int.MaxValue;
-    private int maxX = int.MinValue, maxY = int.MinValue;
 
+    int minX = int.MaxValue, minY = int.MaxValue;
+    int maxX = int.MinValue, maxY = int.MinValue;
 
     private Vector2Int startV;
     private Vector2Int endV;
 
+
+    private List<int> selectedRooms = new List<int>();
 
     private void Start()
     {
@@ -60,12 +63,19 @@ public class MapGenerator: MonoBehaviour
      */
     private IEnumerator MapGenerateCoroutine()
     {
-
+        MainRoomSizeCount = 0;
         // 방 랜덤생성
         for (int i = 0; i < generateRoomCnt; i++)
         {
             rooms.Add(Instantiate(GridPrefab, GetRandomPointInCircle(10), Quaternion.identity));
-            rooms[i].transform.localScale = GetRandomScale();
+            if (i > selectRoomCnt)
+            {
+                rooms[i].transform.localScale = GetRandomScale(smallMinRoomSize, smallMaxRoomSize);
+            }
+            else
+            {
+                rooms[i].transform.localScale = GetRandomScale(minRoomSize, maxRoomSize);
+            }
             yield return null;
         }
 
@@ -82,6 +92,7 @@ public class MapGenerator: MonoBehaviour
 
         GenerateMapArr();
 
+        MainRoomFraming();
         ConnectRooms();
 
         //CellularAutomata(5);
@@ -102,9 +113,13 @@ public class MapGenerator: MonoBehaviour
 
         return new Vector3(RoundPos(rad * r * Mathf.Cos(t), PIXEL), RoundPos(rad * r * Mathf.Sin(t), PIXEL), 0);
     }
-    private Vector3 GetRandomScale()
+    private Vector3 GetRandomScale(int minS, int maxS)
     {
-        return new Vector3(Random.Range(minRoomSize, maxRoomSize) * 2, Random.Range(minRoomSize, maxRoomSize) * 2, 1);
+        int x = Random.Range(minS, maxS) * 2;
+        int y = Random.Range(minS, maxS) * 2;
+
+
+        return new Vector3(x, y, 1);
     }
 
     /// <summary>
@@ -117,11 +132,10 @@ public class MapGenerator: MonoBehaviour
     {
         return Mathf.FloorToInt(((n + m - 1) / m)) * m;
     }
-
     private void FindMainRooms(int roomCount)
     {
         // 각 방의 크기, 비율, 인덱스를 저장할 리스트 생성
-        List<(float size, int index)> roomSizes = new List<(float size, int index)>();
+        List<(float size, int index)> tmpRooms = new List<(float size, int index)>();
 
         for (int i = 0; i < rooms.Count; i++)
         {
@@ -132,11 +146,11 @@ public class MapGenerator: MonoBehaviour
             float size = scale.x * scale.y; // 방의 크기(넓이) 계산
             float ratio = scale.x / scale.y; // 방의 비율 계산
             if (ratio > 2f || ratio < 0.5f) continue; // 1:2 또는 2:1 비율을 초과하는 경우 건너뛰기
-            roomSizes.Add((size, i));
+            tmpRooms.Add((size, i));
         }
 
         // 방의 크기에 따라 내림차순으로 정렬
-        var sortedRooms = roomSizes.OrderByDescending(room => room.size).ToList();
+        var sortedRooms = tmpRooms.OrderByDescending(room => room.size).ToList();
 
         // 모든 방을 일단 비활성화
         foreach (var room in rooms)
@@ -146,6 +160,7 @@ public class MapGenerator: MonoBehaviour
 
         // 비율 조건을 만족하는 방 선택 및 처리
         int count = 0;
+        selectedRooms = new List<int>();
         foreach (var roomInfo in sortedRooms)
         {
             if (count >= roomCount) break; // 선택 후 종료
@@ -153,10 +168,11 @@ public class MapGenerator: MonoBehaviour
             SpriteRenderer renderer = room.GetComponent<SpriteRenderer>();
             if (renderer != null)
             {
-                renderer.color = Color.black;
+                renderer.color = Color.red;
             }
             room.SetActive(true);
             points.Add(new Delaunay.Vertex((int)room.transform.position.x, (int)room.transform.position.y)); // points 리스트에 추가
+            selectedRooms.Add(roomInfo.index);
             count++;
         }
 
@@ -166,6 +182,7 @@ public class MapGenerator: MonoBehaviour
     private void GenerateMapArr()
     {
         // 배열 크기 결정을 위한 최소/최대 좌표 초기화
+
 
         // 최소/최대 좌표 탐색
         foreach (var room in rooms)
@@ -483,6 +500,43 @@ public class MapGenerator: MonoBehaviour
         }
 
 
+    }
+
+    private void MainRoomFraming()
+    {
+        foreach (var selectedId in selectedRooms)
+        {
+            // 직사각형 영역의 최소 및 최대 x, y 좌표를 찾습니다.
+            int minIx = int.MaxValue, minIy = int.MaxValue;
+            int maxIx = int.MinValue, maxIy = int.MinValue;
+
+            for (int y = 0; y < map.GetLength(0); y++)
+            {
+                for (int x = 0; x < map.GetLength(1); x++)
+                {
+                    if (map[y, x] == selectedId)
+                    {
+                        minIx = Mathf.Min(minIx, x);
+                        maxIx = Mathf.Max(maxIx, x);
+                        minIy = Mathf.Min(minIy, y);
+                        maxIy = Mathf.Max(maxIy, y);
+                    }
+                }
+            }
+            Debug.Log("ROOM : " + rooms[selectedId].transform.position + ", " + maxIx + ", " + minIx + ", " + maxIy + ", " + minIy);
+            // 찾은 경계를 따라 끝부분을 0으로 설정합니다.
+            for (int y = minIy; y <= maxIy; y++)
+            {
+                for (int x = minIx; x <= maxIx; x++)
+                {
+                    // 가장자리인지 확인하고, 가장자리라면 0으로 설정
+                    if (x == minIx || x == maxIx || y == minIy || y == maxIy)
+                    {
+                        map[y, x] = -1;
+                    }
+                }
+            }
+        }
     }
 
     #endregion
@@ -813,7 +867,7 @@ public class MapGenerator: MonoBehaviour
             // 맵 범위 내에서 검사
             if (checkX >= 0 && checkX < map.GetLength(1) && checkY >= 0 && checkY < map.GetLength(0))
             {
-                if (map[checkY, checkX] == (int)Define.GridType.MainRoom || map[checkY, checkX] == (int)Define.GridType.HallWay)
+                if (map[checkY, checkX] != (int) Define.GridType.None)
                 {
                     pattern |= (1 << bitIndex);
                 }
@@ -837,11 +891,11 @@ public class MapGenerator: MonoBehaviour
 
     [SerializeField] GameObject Line;
     [SerializeField] Transform PathTest;
-    public List<Vector2> PreprocessPath()
+    public List<Vector2> PreprocessPath(Vector2Int startPoint, Vector2Int endPoint)
     {
 
         JumpPointSearch jpm = new JumpPointSearch(map);
-        var pathList = (jpm.PathFind(startV, endV));
+        var pathList = (jpm.PathFind(startPoint, endPoint));
         
         var retList = new List<Vector2>();
 
@@ -897,13 +951,13 @@ public class MapGenerator: MonoBehaviour
 
         if (count >= 1 && again)
         {
-            var tmpList = PreprocessPath();
+            var tmpList = PreprocessPath(startV, endV);
             again = false;
 
 
             PathTest.position = new Vector3(tmpList[0].x, tmpList[0].y, 0);
             
-            PathTest.GetComponent<EnemyBT>().SetValues(tmpList);
+            PathTest.GetComponent<EnemyBT>().SetValues(endV);
             PathTest.gameObject.SetActive(true);
             
         }

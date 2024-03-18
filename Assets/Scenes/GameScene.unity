@@ -1335,6 +1335,7 @@ MonoBehaviour:
   attackRange: 1
   moveSpeed: 0.05
   trackSpeed: 0.05
+  mapGenerator: {fileID: 1923759213}
 --- !u!95 &1806366045
 Animator:
   serializedVersion: 5
@@ -1356,8 +1357,8 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!58 &1806366046
-CircleCollider2D:
+--- !u!70 &1806366046
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1388,9 +1389,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.2
+  m_Offset: {x: 0.006722331, y: 0.06436181}
+  m_Size: {x: 0.4004494, y: 0.8087888}
+  m_Direction: 0
 --- !u!1 &1923759210
 GameObject:
   m_ObjectHideFlags: 0
@@ -1438,8 +1439,10 @@ MonoBehaviour:
   GridPrefab: {fileID: 3217465669588638, guid: c31797b22dd061b43865f296b71fa9f1, type: 3}
   generateRoomCnt: 65
   selectRoomCnt: 7
-  minRoomSize: 2
+  minRoomSize: 6
   maxRoomSize: 8
+  smallMinRoomSize: 2
+  smallMaxRoomSize: 4
   overlapOffset: 3
   floorTilemap: {fileID: 33452813}
   wallTilemap: {fileID: 828546662}

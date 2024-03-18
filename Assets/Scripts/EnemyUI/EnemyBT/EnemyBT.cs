@@ -1,14 +1,17 @@
 using EnemyUI.BehaviorTree;
+using JPS;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace EnemyUI.BehaviorTree
 {
-    public class EnemyBT : Tree
+    public class EnemyBT : BTree
     {
         [SerializeField] private int searchRange;
         [SerializeField] private int attackRange;
@@ -16,12 +19,13 @@ namespace EnemyUI.BehaviorTree
         [SerializeField] private float moveSpeed;
         [SerializeField] private float trackSpeed;
 
-        private List<Vector2> path;
+        [SerializeField] private MapGenerator mapGenerator;
 
-        public void SetValues(List<Vector2> path)
+        private Vector2Int destination;
+
+        public void SetValues(Vector2Int dest)
         {
-            this.path = path;
-            Debug.Log(this.path.Count);
+            destination = dest;
         }
 
         public override Node SetupRoot()
@@ -30,7 +34,7 @@ namespace EnemyUI.BehaviorTree
                     new Sequence(new List<Node>
                     {
                         new Search(transform, searchRange),
-                        new Move(transform, moveSpeed, path)
+                        new Move(transform, moveSpeed, mapGenerator, destination)
                     }),
                     new Sequence(new List<Node>
                     {
@@ -59,15 +63,18 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
+
             var cols = Physics2D.OverlapCircleAll(transform.position, searchRange);
             foreach (var col in cols)
             {
                 if (col.CompareTag("Monster"))
                 {
                     parent.parent.SetNodeData("BossObject", col.gameObject);
+                    parent.SetNodeData("pathfindFlag", true);
                     return NodeState.Failure;
                 }
             }
+            //
             return NodeState.Success;
         }
 
@@ -79,24 +86,35 @@ namespace EnemyUI.BehaviorTree
         private Transform transform;
         private Animator animator;
         private Rigidbody2D rigid;
+        private MapGenerator mapGen;
 
-        public List<Vector2> path;
+        private List<Vector2> path;
+        private Vector2Int dest;
         public float speed;
         private int currentPointIndex = 0;
-        public Move(Transform transform, float moveSpeed, List<Vector2> path)
+        public Move(Transform transform, float moveSpeed, MapGenerator mapGenerator, Vector2Int dest)
         {
             this.transform = transform;
             this.speed = moveSpeed;
             this.animator = transform.GetComponent<Animator>();
             this.rigid = transform.GetComponent<Rigidbody2D>();
-            this.path = path;
+            mapGen = mapGenerator;
+            this.dest = dest;
+            this.path = mapGen.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
+                dest);
         }
 
         public override NodeState Evaluate()
         {
+            if (GetNodeData("pathfindFlag") != null)
+            {
+                RemoveNodeData("pathfindFlag"); 
+                path = mapGen.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
+            dest);
+                currentPointIndex = 0;
+            }
 
             animator.SetBool("Walk", true);
-
             if (path == null || path.Count == 0) return NodeState.Success;
 
             Vector2 currentTarget = path[currentPointIndex];
@@ -135,8 +153,15 @@ namespace EnemyUI.BehaviorTree
         public override NodeState Evaluate()
         {
             var isAtt= animator.GetBool("Attack");
-            if (isAtt) return NodeState.Failure;
-            else return NodeState.Success;
+            if (isAtt)
+            {
+                return NodeState.Failure;
+            }
+            else { 
+                
+                return NodeState.Success; 
+
+            }
         }
     }
 

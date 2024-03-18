@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EnemyUI.BehaviorTree
 {
-    public abstract class Tree : MonoBehaviour
+    public abstract class BTree : MonoBehaviour
     {
 
         private Node root = null;
