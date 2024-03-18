@@ -23,7 +23,6 @@ public class MapGenerator: MonoBehaviour
     private int hallwayId = 200;
     private int cellularId = 300;
 
-    int MainRoomSizeCount = 0;
 
     private List<GameObject> rooms = new List<GameObject>();
     private HashSet<Delaunay.Vertex> points = new HashSet<Delaunay.Vertex>();
@@ -39,7 +38,7 @@ public class MapGenerator: MonoBehaviour
     private Vector2Int endV;
 
 
-    private List<int> selectedRooms = new List<int>();
+    private List<(int index, Vector2 pos)> selectedRooms = new List<(int, Vector2)>();
 
     private void Start()
     {
@@ -63,7 +62,6 @@ public class MapGenerator: MonoBehaviour
      */
     private IEnumerator MapGenerateCoroutine()
     {
-        MainRoomSizeCount = 0;
         // 방 랜덤생성
         for (int i = 0; i < generateRoomCnt; i++)
         {
@@ -160,7 +158,7 @@ public class MapGenerator: MonoBehaviour
 
         // 비율 조건을 만족하는 방 선택 및 처리
         int count = 0;
-        selectedRooms = new List<int>();
+        selectedRooms = new List<(int, Vector2)>();
         foreach (var roomInfo in sortedRooms)
         {
             if (count >= roomCount) break; // 선택 후 종료
@@ -172,7 +170,7 @@ public class MapGenerator: MonoBehaviour
             }
             room.SetActive(true);
             points.Add(new Delaunay.Vertex((int)room.transform.position.x, (int)room.transform.position.y)); // points 리스트에 추가
-            selectedRooms.Add(roomInfo.index);
+            selectedRooms.Add((roomInfo.index, new Vector2((int)room.transform.position.x, (int)room.transform.position.y)));
             count++;
         }
 
@@ -504,8 +502,14 @@ public class MapGenerator: MonoBehaviour
 
     private void MainRoomFraming()
     {
-        foreach (var selectedId in selectedRooms)
+        foreach (var selectedRoom in selectedRooms)
         {
+            int selectedId = selectedRoom.index;
+
+            rooms[selectedId].transform.position = selectedRoom.pos - new Vector2(minX, minY);
+            rooms[selectedId].GetComponent<SpriteRenderer>().sortingOrder = 4;
+            rooms[selectedId].AddComponent<RoomOnMouseOver>();
+            
             // 직사각형 영역의 최소 및 최대 x, y 좌표를 찾습니다.
             int minIx = int.MaxValue, minIy = int.MaxValue;
             int maxIx = int.MinValue, maxIy = int.MinValue;
@@ -538,6 +542,7 @@ public class MapGenerator: MonoBehaviour
             }
         }
     }
+
 
     #endregion
 
@@ -951,12 +956,9 @@ public class MapGenerator: MonoBehaviour
 
         if (count >= 1 && again)
         {
-            var tmpList = PreprocessPath(startV, endV);
             again = false;
 
-
-            PathTest.position = new Vector3(tmpList[0].x, tmpList[0].y, 0);
-            
+            PathTest.transform.position = new Vector3(startV.y, startV.x, 0);
             PathTest.GetComponent<EnemyBT>().SetValues(endV);
             PathTest.gameObject.SetActive(true);
             

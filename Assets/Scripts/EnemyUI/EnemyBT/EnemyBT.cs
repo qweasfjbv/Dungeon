@@ -132,6 +132,7 @@ namespace EnemyUI.BehaviorTree
                 if (currentPointIndex >= path.Count)
                 {
                     // µµÂø
+                    transform.gameObject.SetActive(false);
                 }
             }
             return NodeState.Running;
