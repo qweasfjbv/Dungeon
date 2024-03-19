@@ -1,0 +1,13 @@
+{
+    "cardInfo" :[
+        {
+            "cardId" : 11,
+            "cardCost" : 5,
+            "cardType" : 1,
+            "duration" : 2.5,
+            "value" : 3,
+            "spriteName" : "",
+            "effectName" : ""
+        }
+    ]
+}

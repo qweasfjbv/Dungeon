@@ -84,7 +84,7 @@ public class MapGenerator: MonoBehaviour
             rooms[i].GetComponent<Rigidbody2D>().gravityScale = 0f;
         }
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(5f);
 
         FindMainRooms(selectRoomCnt);
 
@@ -138,7 +138,9 @@ public class MapGenerator: MonoBehaviour
         for (int i = 0; i < rooms.Count; i++)
         {
             rooms[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+            rooms[i].GetComponent<BoxCollider2D>().isTrigger = true;
             rooms[i].transform.position = new Vector3(RoundPos(rooms[i].transform.position.x, PIXEL), RoundPos(rooms[i].transform.position.y, PIXEL), 1);
+
 
             Vector3 scale = rooms[i].transform.localScale;
             float size = scale.x * scale.y; // 방의 크기(넓이) 계산
@@ -502,11 +504,12 @@ public class MapGenerator: MonoBehaviour
 
     private void MainRoomFraming()
     {
-        foreach (var selectedRoom in selectedRooms)
+        foreach (var (index, pos) in selectedRooms)
         {
-            int selectedId = selectedRoom.index;
+            int selectedId = index;
 
-            rooms[selectedId].transform.position = selectedRoom.pos - new Vector2(minX, minY);
+            rooms[selectedId].transform.position = pos - new Vector2(minX, minY) + new Vector2(0, 0.5f);
+            rooms[selectedId].transform.localScale = rooms[selectedId].transform.localScale + new Vector3(0, 1f, 0);
             rooms[selectedId].GetComponent<SpriteRenderer>().sortingOrder = 4;
             rooms[selectedId].AddComponent<RoomOnMouseOver>();
             

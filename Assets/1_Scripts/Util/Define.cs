@@ -10,6 +10,14 @@ public class Define
         HallWay
     }
 
+    public enum CardType
+    {
+        None = 0,
+        Summon,
+        Buff,
+        Debuff,
+
+    }
     
 
 }
