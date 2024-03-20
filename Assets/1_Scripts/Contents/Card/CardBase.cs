@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public abstract class CardBase : MonoBehaviour
+    , IPointerEnterHandler
+    , IPointerExitHandler
+    , IDragHandler
 {
 
     public static string spritePath = "Sprites/Card/";
@@ -28,6 +32,11 @@ public abstract class CardBase : MonoBehaviour
 
     public static readonly float CARD_WIDTH = 200 * Settings.xScale;
     public static readonly float CARD_HEIGHT = 300 * Settings.yScale;
+    public static readonly float CARD_SCALE = 1.0f;
+    public static readonly float CARD_SCALE_HOVERED = 1.3f;
+
+    private bool isHover = false;
+    public bool IsHover { get=>isHover; }
 
     private RectTransform rect;
 
@@ -40,6 +49,11 @@ public abstract class CardBase : MonoBehaviour
     public void SetTargetPosY(float y)
     {
         targetPos.y = y;
+    }
+
+    public float GetTargetPosY()
+    {
+        return targetPos.y;
     }
 
     public void SetTargetScaleX(float x)
@@ -98,5 +112,48 @@ public abstract class CardBase : MonoBehaviour
         targetScale.x = rect.localScale.x;
         targetScale.y = rect.localScale.y;
         targetAngle = 0;
+    }
+
+
+    private void Hover()
+    {
+        if (!isHover)
+        {
+            isHover = true;
+            targetScale = new Vector3(CARD_SCALE_HOVERED, CARD_SCALE_HOVERED);
+        }
+    }
+
+    private void UnHover()
+    {
+        if (isHover)
+        {
+            isHover = false;
+            targetScale = new Vector3(CARD_SCALE, CARD_SCALE);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Hover();
+        if(transform.parent != null)
+        {
+            transform.parent.GetComponent<CardInHand>().OnHover();
+        }
+    }
+
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        UnHover();
+        if (transform.parent != null)
+        {
+            transform.parent.GetComponent<CardInHand>().OnUnHover();
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+
     }
 }

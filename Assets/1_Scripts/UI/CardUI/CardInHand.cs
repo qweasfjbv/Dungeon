@@ -1,8 +1,8 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CardInHand : MonoBehaviour
 {
@@ -17,6 +17,8 @@ public class CardInHand : MonoBehaviour
     const float ANGLE_PER_CARD = 4f;
 
     const float CARD_POS_Y_OFFSET = 20f;
+
+
 
     [ContextMenu("AddCardInHand")]
     public bool AddCardInHand()
@@ -55,6 +57,8 @@ public class CardInHand : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.D)) AddCardInHand();
         else if(Input.GetKeyDown(KeyCode.A)) RemoveCardInHand();
+
+
     }
 
     private void UpdateCardList()
@@ -132,7 +136,12 @@ public class CardInHand : MonoBehaviour
                 return;
         }
 
-        // angle and pos.y
+
+        /*
+         * angle과 posy 로직 구현
+         * 이 둘은 반복문으로 처리 가능
+         */
+
         for (int i = 0; i < cardsInHand.Count/2; i++)
         {
             cardsInHand[i].SetTargetAngle(ANGLE_PER_CARD * (cardsInHand.Count/2 - i));
@@ -158,14 +167,48 @@ public class CardInHand : MonoBehaviour
             cardsInHand[cardsInHand.Count / 2].SetTargetAngle(0);
             float offsetSum = 0;
 
-            for (int t = 0; t < cardsInHand.Count / 2; t++) offsetSum += CARD_POS_Y_OFFSET * Mathf.Pow(0.5f, t);
+            for (int t = 0; t < cardsInHand.Count / 2; t++) offsetSum += CARD_POS_Y_OFFSET * Mathf.Pow(0.65f, t);
 
             cardsInHand[cardsInHand.Count /2].SetTargetPosY(offsetSum);
         }
 
+        /*
+         * 마우스 올라가있을 때 추가 로직 처리 부분
+         * scale은 CardBase에서 늘리거나 줄임
+         * 여기서는 pos는 더하고 angle은 덮어씀
+         */
 
 
+    }
 
+    private void UpdateWhenHovered()
+    {
+        int hoverIdx = -1;
+        for (int i = 0; i < cardsInHand.Count; i++)
+        {
+            if (cardsInHand[i].IsHover)
+            {
+                hoverIdx = i; break;
+            }
+        }
+
+        if (hoverIdx == -1) return;
+
+        cardsInHand[hoverIdx].SetTargetAngle(0f);
+
+        cardsInHand[hoverIdx].SetTargetPosY(cardsInHand[hoverIdx].GetTargetPosY() + CardBase.CARD_SCALE_HOVERED * CardBase.CARD_HEIGHT / 2f);
+
+    }
+
+
+    public void OnHover()
+    {
+        UpdateWhenHovered();
+    }
+    public void OnUnHover()
+    {
+        UpdateWhenHovered();
+        UpdateCardList();
     }
 
 }
