@@ -36,8 +36,8 @@ public abstract class CardBase : MonoBehaviour
     private Vector2 targetScale;
     private float targetAngle;
 
-    public static readonly float CARD_WIDTH = 200 * Settings.xScale;
-    public static readonly float CARD_HEIGHT = 300 * Settings.yScale;
+    public static readonly float CARD_WIDTH = 250 * Settings.xScale;
+    public static readonly float CARD_HEIGHT = 350 * Settings.yScale;
     public static readonly float CARD_SCALE = 1.0f;
     public static readonly float CARD_SCALE_HOVERED = 1.3f;
 
@@ -101,16 +101,16 @@ public abstract class CardBase : MonoBehaviour
 
     private void Update()
     {
-        var targetV = MathHelper.CardLerp(rect.anchoredPosition, targetPos, 6f);
+        var targetV = UtilFunctions.CardLerp(rect.anchoredPosition, targetPos, 6f);
         this.rect.anchoredPosition = new Vector3(targetV.x, targetV.y);
         this.rect.localPosition = new Vector3(rect.localPosition.x, rect.localPosition.y, 0);
 
-        this.rect.localScale= MathHelper.CardLerp(rect.localScale, targetScale, cardMoveSpeed);
+        this.rect.localScale= UtilFunctions.CardLerp(rect.localScale, targetScale, cardMoveSpeed);
 
         var rotateZ = rect.localRotation.eulerAngles.z;
         if (rotateZ >= 180) rotateZ = rotateZ - 360;
 
-        this.rect.localRotation = Quaternion.Euler(0, 0, MathHelper.CardRotateLerp(rotateZ, targetAngle, 6f));
+        this.rect.localRotation = Quaternion.Euler(0, 0, UtilFunctions.CardRotateLerp(rotateZ, targetAngle, 6f));
 
 
     }
@@ -119,6 +119,7 @@ public abstract class CardBase : MonoBehaviour
     {
         parentDeck = this.transform.parent;
         rect = GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(CARD_WIDTH, CARD_HEIGHT);
         targetPos.x = 0;
         targetPos.y = 0;
         targetScale.x = rect.localScale.x;
@@ -175,13 +176,13 @@ public abstract class CardBase : MonoBehaviour
         if (mousePos.y > CARD_HEIGHT)
         {
             isInField = true;
-            tmpColor.a = MathHelper.ColorAlphaLerp(tmpColor.a, 0f, 10f);
+            tmpColor.a = UtilFunctions.ColorAlphaLerp(tmpColor.a, 0f, 10f);
             GetComponent<Image>().color = tmpColor;
         }
         else
         {
             isInField = false;
-            tmpColor.a = MathHelper.ColorAlphaLerp(tmpColor.a, 1f, 6f);
+            tmpColor.a = UtilFunctions.ColorAlphaLerp(tmpColor.a, 1f, 6f);
             GetComponent<Image>().color = tmpColor;
         }
 
@@ -190,25 +191,24 @@ public abstract class CardBase : MonoBehaviour
     public void OnBeginDrag(PointerEventData eventData)
     {
         isDragged = true;
-        transform.parent.GetComponent<CardInHand>().OnUnHover();
+        transform.parent.GetComponent<CardInHand>().UpdateCardLayout();
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        isDragged = false;
+
         if (isInField)
         {
             // TODO : EFFECT ÇÊ¿ä
 
-            isDragged = false;
             transform.parent.GetComponent<CardInHand>().RemoveCardInHand(transform.GetSiblingIndex());
         }
         else
         {
 
-            isDragged = false;
-
             GetComponent<Image>().color = Color.white;
-            transform.parent.GetComponent<CardInHand>().OnUnHover();
+            transform.parent.GetComponent<CardInHand>().UpdateCardLayout();
         }
 
     }
