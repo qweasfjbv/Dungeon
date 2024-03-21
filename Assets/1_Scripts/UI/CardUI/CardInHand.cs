@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,6 +11,7 @@ public class CardInHand : MonoBehaviour
 
     List<CardBase> cardsInHand = new List<CardBase>();
 
+    #region »ó¼ö°ª
     const int CARD_INS_X = 0;
     const int CARD_INS_Y = 0;
 
@@ -17,7 +19,7 @@ public class CardInHand : MonoBehaviour
     const float ANGLE_PER_CARD = 4f;
 
     const float CARD_POS_Y_OFFSET = 20f;
-
+    #endregion
 
 
     [ContextMenu("AddCardInHand")]
@@ -31,12 +33,12 @@ public class CardInHand : MonoBehaviour
         }
 
         var tmpCard = Instantiate(cardPrefab, transform.TransformPoint(new Vector3(0, Settings.HEIGHT/2, 0)), Quaternion.identity, transform);
-        UpdateCardList();
+        UpdateCardLayout();
         return true;
     }
 
     [ContextMenu("RemoveCardInHand")]
-    public bool RemoveCardInHand()
+    public bool RemoveCardInHand(int id)
     {
         if(cardsInHand.Count == 0)
         {
@@ -44,11 +46,12 @@ public class CardInHand : MonoBehaviour
             return false;
         }
 
-        cardsInHand[0].transform.SetParent(null);
-        Destroy(cardsInHand[0].gameObject);
-
-
         UpdateCardList();
+
+        cardsInHand[id].transform.SetParent(null);
+        Destroy(cardsInHand[id].gameObject);
+
+
 
         return true;
     }
@@ -56,22 +59,28 @@ public class CardInHand : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.D)) AddCardInHand();
-        else if(Input.GetKeyDown(KeyCode.A)) RemoveCardInHand();
+        else if(Input.GetKeyDown(KeyCode.A)) RemoveCardInHand(0);
 
 
     }
 
-    private void UpdateCardList()
+    public void UpdateCardList()
     {
         cardsInHand.Clear();
         int q = 0;
         foreach (Transform child in transform)
         {
             q++;
+            if (child.GetComponent<CardBase>().IsDragged) continue;
             cardsInHand.Add(child.GetComponent<CardBase>());
         }
 
+    }
 
+    public void UpdateCardLayout()
+    {
+
+        UpdateCardList();
         switch (cardsInHand.Count)
         {
             case 0:
@@ -181,7 +190,7 @@ public class CardInHand : MonoBehaviour
 
     }
 
-    private void UpdateWhenHovered()
+    private int HasAnyHovoeredCard()
     {
         int hoverIdx = -1;
         for (int i = 0; i < cardsInHand.Count; i++)
@@ -192,6 +201,11 @@ public class CardInHand : MonoBehaviour
             }
         }
 
+        return hoverIdx;
+    }
+    private void UpdateWhenHovered()
+    {
+        var hoverIdx = HasAnyHovoeredCard();
         if (hoverIdx == -1) return;
 
         cardsInHand[hoverIdx].SetTargetAngle(0f);
@@ -208,7 +222,7 @@ public class CardInHand : MonoBehaviour
     public void OnUnHover()
     {
         UpdateWhenHovered();
-        UpdateCardList();
+        UpdateCardLayout();
     }
 
 }

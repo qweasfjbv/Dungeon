@@ -45,4 +45,19 @@ public class MathHelper
 
         return startR;
     }
+
+    public static float ColorAlphaLerp(float start, float target, float speed)
+    {
+        float startA = start;
+        if (start != target)
+        {
+            startA = Mathf.Lerp(start, target, speed * Time.deltaTime);
+            if (Mathf.Abs(start - target) <= APPROXMATE)
+                startA = target;
+        }
+
+        return startA;
+    }
+
+
 }
