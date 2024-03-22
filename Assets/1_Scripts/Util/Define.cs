@@ -12,11 +12,10 @@ public class Define
 
     public enum CardType
     {
-        None = 0,
         Summon,
         Buff,
-        Debuff,
-
+        Trap,
+        None
     }
     
 

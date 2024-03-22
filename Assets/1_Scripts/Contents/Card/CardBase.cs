@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -36,8 +33,8 @@ public abstract class CardBase : MonoBehaviour
     private Vector2 targetScale;
     private float targetAngle;
 
-    public static readonly float CARD_WIDTH = 250 * Settings.xScale;
-    public static readonly float CARD_HEIGHT = 350 * Settings.yScale;
+    public static readonly float CARD_WIDTH = 200 * Settings.xScale;
+    public static readonly float CARD_HEIGHT = 300 * Settings.yScale;
     public static readonly float CARD_SCALE = 1.0f;
     public static readonly float CARD_SCALE_HOVERED = 1.3f;
 

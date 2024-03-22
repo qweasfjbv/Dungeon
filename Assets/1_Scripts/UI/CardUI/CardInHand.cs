@@ -1,15 +1,18 @@
-using JetBrains.Annotations;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class CardInHand : MonoBehaviour
 {
     [SerializeField] private GameObject cardPrefab;
 
-    List<CardBase> cardsInHand = new List<CardBase>();
+    private List<CardBase> cardsInHand = new List<CardBase>();
+
+    private Vector3 targetPos = new Vector3(0, CardDecks.HIDDEN_DECK_POS_Y, 0);
+
+    public void SetTargetPosY(float y)
+    {
+        targetPos.y = y;
+    }
 
     #region »ó¼ö°ª
     const int CARD_INS_X = 0;
@@ -56,9 +59,11 @@ public class CardInHand : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D)) AddCardInHand();
-        else if(Input.GetKeyDown(KeyCode.A)) RemoveCardInHand(0);
+        var targetV = UtilFunctions.CardLerp(GetComponent<RectTransform>().anchoredPosition, targetPos, 6f);
+        this.GetComponent<RectTransform>().anchoredPosition = new Vector3(targetV.x, targetV.y);
 
+        if (Input.GetKeyDown(KeyCode.D)) AddCardInHand();
+        else if (Input.GetKeyDown(KeyCode.A)) RemoveCardInHand(0);
 
     }
 
