@@ -47,7 +47,7 @@ public abstract class CardBase : MonoBehaviour
 
     private RectTransform rect;
 
-    #region Setter
+    #region Getter/Setter
     public void SetTargetPosX(float x)
     {
         targetPos.x = x;
@@ -62,6 +62,11 @@ public abstract class CardBase : MonoBehaviour
     {
         return targetPos.y;
     }
+    public float GetTargetPosX()
+    {
+        return targetPos.x;
+    }
+
 
     public void SetTargetScaleX(float x)
     {
@@ -131,6 +136,11 @@ public abstract class CardBase : MonoBehaviour
         {
             isHover = true;
             targetScale = new Vector3(CARD_SCALE_HOVERED, CARD_SCALE_HOVERED);
+            SetTargetAngle(0f);
+            if (!isDragged)
+            {
+                SetTargetPosY(CardBase.CARD_SCALE_HOVERED * CardBase.CARD_HEIGHT / 2f);
+            }
         }
     }
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UtilFunctions
 {
-    const float APPROXMATE = 0.1f;
+    const float APPROXMATE = 0.05f;
 
     public static Vector3 CardLerp(Vector2 startV, Vector2 targetV, float speed)
     {

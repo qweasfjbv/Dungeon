@@ -62,8 +62,6 @@ public class CardInHand : MonoBehaviour
         var targetV = UtilFunctions.CardLerp(GetComponent<RectTransform>().anchoredPosition, targetPos, 6f);
         this.GetComponent<RectTransform>().anchoredPosition = new Vector3(targetV.x, targetV.y);
 
-        if (Input.GetKeyDown(KeyCode.D)) AddCardInHand();
-        else if (Input.GetKeyDown(KeyCode.A)) RemoveCardInHand(0);
 
     }
 
@@ -90,9 +88,7 @@ public class CardInHand : MonoBehaviour
         float posXUnit = 0.43f;
         float sum = 0;
 
-        /*
-         * posx 로직구현
-         */
+        // posX 로직구현
         if (cardsInHand.Count % 2 == 0) sum += posXUnit;
 
 
@@ -105,9 +101,8 @@ public class CardInHand : MonoBehaviour
         }
         
 
-        /*
-         * angle과 posy 로직 구현
-         */
+
+        //angle과 posy 로직 구현
 
         for (int i = 0; i < cardsInHand.Count/2; i++)
         {
@@ -160,10 +155,14 @@ public class CardInHand : MonoBehaviour
         var hoverIdx = HasAnyHovoeredCard();
         if (hoverIdx == -1) return;
 
-        cardsInHand[hoverIdx].SetTargetAngle(0f);
 
-        cardsInHand[hoverIdx].SetTargetPosY(cardsInHand[hoverIdx].GetTargetPosY() + CardBase.CARD_SCALE_HOVERED * CardBase.CARD_HEIGHT / 2f);
+        // hover시 다른 카드들이 밀려나도록 만듦
+        for (int i=0; i< cardsInHand.Count; i++)
+        {
+            if (i == hoverIdx) continue;
 
+            cardsInHand[i].SetTargetPosX(cardsInHand[i].GetTargetPosX() + Mathf.Pow(0.3f, Mathf.Abs(i-hoverIdx)) * CardBase.CARD_WIDTH * Mathf.Sign(i-hoverIdx));
+        }
     }
 
 
@@ -173,7 +172,6 @@ public class CardInHand : MonoBehaviour
     }
     public void OnUnHover()
     {
-        UpdateWhenHovered();
         UpdateCardLayout();
     }
 

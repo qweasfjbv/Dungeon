@@ -26,6 +26,8 @@ public class CardDecks : MonoBehaviour
         {
             ShowCardDeck(2);
         }
+
+        if (Input.GetKeyDown(KeyCode.D)) AddCardInDeck(showingDeckIndex);
     }
 
     private void ShowCardDeck(int deckIdx)
@@ -43,7 +45,10 @@ public class CardDecks : MonoBehaviour
 
     public void AddCardInDeck(int cardId)
     {
-        // CardType에 따라 각 카드 덱에 넣음
+        if (cardId == -1) return;
+
+        cardDecks[cardId].AddCardInHand();
     }
+
 
 }
