@@ -1810,7 +1810,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridPrefab: {fileID: 3217465669588638, guid: c31797b22dd061b43865f296b71fa9f1, type: 3}
   generateRoomCnt: 65
-  selectRoomCnt: 7
+  selectRoomCnt: 6
   minRoomSize: 6
   maxRoomSize: 8
   smallMinRoomSize: 2

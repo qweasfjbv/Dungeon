@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Xml;
 using System.Xml.Schema;
@@ -112,7 +113,7 @@ namespace JPS
                         check = JPCheck(parentNode, checkPoint, dir, out destDir);
                         if (check == 1)
                         {
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
+                            AddToOpenList(new JPSNode(parentNode, checkPoint + new Vector2Int(1, 0), destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                             return true;
                         }
                         else if (check == -1) return false;
@@ -125,7 +126,7 @@ namespace JPS
                         check = JPCheck(parentNode, checkPoint, dir, out destDir);
                         if (check == 1)
                         {
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
+                            AddToOpenList(new JPSNode(parentNode, checkPoint + new Vector2Int(-1, 0), destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                             return true;
                         }
                         else if (check == -1) return false;
@@ -138,7 +139,7 @@ namespace JPS
                         check = JPCheck(parentNode, checkPoint, dir, out destDir);
                         if (check == 1)
                         {
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
+                            AddToOpenList(new JPSNode(parentNode, checkPoint + new Vector2Int(0, 1), destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                             return true;
                         }
                         else if (check == -1) return false;
@@ -151,7 +152,7 @@ namespace JPS
                         check = JPCheck(parentNode, checkPoint, dir, out destDir);
                         if (check == 1)
                         {
-                            AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
+                            AddToOpenList(new JPSNode(parentNode, checkPoint + new Vector2Int(0, -1) , destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
                             return true;
                         }
                         else if (check == -1) return false;
@@ -159,13 +160,15 @@ namespace JPS
                     break;
 
                 case JPSDir.UpRight:
-
                     SecondarySearch(parentNode, pos, JPSDir.Up, JPSDir.Right);
                     for (int i = 1; ; i++)
                     {
                         checkPoint = pos + new Vector2Int(i, i);
                         check = JPCheck(parentNode, checkPoint, dir, out destDir);
 
+
+                        if (check == -1) break;
+                        if (AvoidWall(parentNode, checkPoint, dir)) return true;
 
                         if (check == 1)
                         {
@@ -179,7 +182,6 @@ namespace JPS
                             if (SecondarySearch(tmpNode, checkPoint, JPSDir.Up, JPSDir.Right))
                                 closedList.Add(tmpNode);
                         }
-                        else break;
 
                     }
                     return found;
@@ -192,6 +194,8 @@ namespace JPS
                         checkPoint = pos + new Vector2Int(-i, i);
                         check = JPCheck(parentNode, checkPoint, dir, out destDir);
 
+                        if (check == -1) break;
+                        if (AvoidWall(parentNode, checkPoint, dir)) return true;
 
                         if (check == 1)
                         {
@@ -205,7 +209,6 @@ namespace JPS
                             if (SecondarySearch(tmpNode, checkPoint, JPSDir.Up, JPSDir.Left))
                                 closedList.Add(tmpNode);
                         }
-                        else break;
 
                     }
                     return found;
@@ -217,7 +220,10 @@ namespace JPS
                         checkPoint = pos + new Vector2Int(i, -i);
                         check = JPCheck(parentNode, checkPoint, dir, out destDir);
 
-                        if (check == 1)
+                        if (check == -1) break;
+                        if (AvoidWall(parentNode, checkPoint, dir)) return true;
+
+                        else if (check == 1)
                         {
                             found = true;
                             AddToOpenList(new JPSNode(parentNode, checkPoint, destDir, parentNode.GetPassedCost() + CalcHeuri(parentNode.pos, checkPoint), CalcHeuri(checkPoint, endPoint)));
@@ -229,7 +235,6 @@ namespace JPS
                             if (SecondarySearch(tmpNode, checkPoint, JPSDir.Down, JPSDir.Right))
                                 closedList.Add(tmpNode);
                         }
-                        else break;
 
                     }
                     return found;
@@ -240,6 +245,8 @@ namespace JPS
                         checkPoint = pos + new Vector2Int(-i, -i);
                         check = JPCheck(parentNode, checkPoint, dir, out destDir);
 
+                        if (check == -1) break;
+                        if (AvoidWall(parentNode, checkPoint, dir)) return true;
 
                         if (check == 1)
                         {
@@ -253,7 +260,6 @@ namespace JPS
                             if (SecondarySearch(tmpNode, checkPoint, JPSDir.Down, JPSDir.Left))
                                 closedList.Add(tmpNode);
                         }
-                        else break;
 
                     }
                     return found;
@@ -421,6 +427,54 @@ namespace JPS
             if (pos.x < 0 || pos.y < 0 || pos.x >= map.GetLength(0) || pos.y >= map.GetLength(1)) return false;
             if (map[pos.x, pos.y] == (int)Define.GridType.None) return false;
 
+
+            return true;
+        }
+
+        private bool AvoidWall(JPSNode parent,  Vector2Int check, JPSDir dir)
+        {
+
+            // parent 위치에서 진행방향 오른쪽/왼쪽에 벽이 있는지
+            // 있으면 피해가도록 Node생성
+
+
+            Vector2Int nextV1 = new Vector2Int(0, 0);
+            Vector2Int nextV2 = new Vector2Int(0, 0);
+            switch (dir) {
+                case JPSDir.UpRight:
+                    nextV1 = check + new Vector2Int(1, 0);
+                    nextV2 = check + new Vector2Int(0, 1);
+                    break;
+                case JPSDir.UpLeft:
+                    nextV1 = check + new Vector2Int(0, 1);
+                    nextV2 = check + new Vector2Int(-1, 0);
+                    break;
+                case JPSDir.DownRight:
+                    nextV1 = check + new Vector2Int(1, 0);
+                    nextV2 = check + new Vector2Int(0, -1);
+                    break;
+                case JPSDir.DownLeft:
+                    nextV1 = check + new Vector2Int(-1, 0);
+                    nextV2 = check + new Vector2Int(0, -1);
+                    break;
+            }
+
+
+            if (map[nextV1.x, nextV1.y] == (int)Define.GridType.None && map[nextV2.x, nextV2.y] == (int)Define.GridType.None) return true;
+            if (map[nextV1.x, nextV1.y] != (int)Define.GridType.None && map[nextV2.x, nextV2.y] != (int)Define.GridType.None) return false;
+
+            if (map[nextV1.x, nextV1.y] != (int)Define.GridType.None)
+            {
+                var tmpNode = new JPSNode(parent, check, JPSDir.None, parent.GetPassedCost() + CalcHeuri(parent.pos, check), CalcHeuri(check, endPoint));
+                closedList.Add(tmpNode);
+                AddToOpenList(new JPSNode(tmpNode, nextV1, dir, tmpNode.GetPassedCost() + 1, CalcHeuri(nextV1, endPoint)));
+            }
+            if (map[nextV2.x, nextV2.y] != (int)Define.GridType.None)
+            {
+                var tmpNode = new JPSNode(parent, check, JPSDir.None, parent.GetPassedCost() + CalcHeuri(parent.pos, check), CalcHeuri(check, endPoint));
+                closedList.Add(tmpNode);
+                AddToOpenList(new JPSNode(tmpNode, nextV2, dir, tmpNode.GetPassedCost() + 1, CalcHeuri(nextV2, endPoint)));
+            }
 
             return true;
         }

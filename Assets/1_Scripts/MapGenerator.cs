@@ -530,7 +530,6 @@ public class MapGenerator: MonoBehaviour
                     }
                 }
             }
-            Debug.Log("ROOM : " + rooms[selectedId].transform.position + ", " + maxIx + ", " + minIx + ", " + maxIy + ", " + minIy);
             // 찾은 경계를 따라 끝부분을 0으로 설정합니다.
             for (int y = minIy; y <= maxIy; y++)
             {
