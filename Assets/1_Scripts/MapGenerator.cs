@@ -549,8 +549,10 @@ public class MapGenerator: MonoBehaviour
 
             rooms[selectedId].transform.position = pos - new Vector2(minX, minY) + new Vector2(0, 0.5f);
             rooms[selectedId].transform.localScale = rooms[selectedId].transform.localScale + new Vector3(0, 1f, 0);
+
+            rooms[selectedId].GetComponent<SpriteRenderer>().color = Color.clear;
             rooms[selectedId].GetComponent<SpriteRenderer>().sortingOrder = 4;
-            rooms[selectedId].AddComponent<RoomOnMouseOver>();
+            //rooms[selectedId].AddComponent<RoomOnMouseOver>();
             
             // 직사각형 영역의 최소 및 최대 x, y 좌표를 찾습니다.
             int minIx = int.MaxValue, minIy = int.MaxValue;
