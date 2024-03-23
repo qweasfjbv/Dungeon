@@ -1775,7 +1775,7 @@ GameObject:
   - component: {fileID: 1923759212}
   - component: {fileID: 1923759213}
   m_Layer: 0
-  m_Name: MapGenerator
+  m_Name: '@MapGenerator'
   m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1820,7 +1820,7 @@ MonoBehaviour:
   wallTilemap: {fileID: 828546662}
   cliffTilemap: {fileID: 1111008274}
   shadowTilemap: {fileID: 1998584186}
-  colliderTilmap: {fileID: 836484628}
+  colliderTilemap: {fileID: 836484628}
   wall_Top_Left: {fileID: 11400000, guid: b1bf5b5cb812a2e4991eea38fdbe1bbc, type: 2}
   wall_Top_Right: {fileID: 11400000, guid: c5c9c4e90f80eb844b323ad6b211e9a8, type: 2}
   wall_Top_Center: {fileID: 11400000, guid: 0beedbbf28af9704ea7493fd0a4306d4, type: 2}

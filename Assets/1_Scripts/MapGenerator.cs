@@ -4,11 +4,17 @@ using JPS;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class MapGenerator: MonoBehaviour
 {
+
+    static MapGenerator s_instance;
+    public static MapGenerator Instance { get { return s_instance; } }
+    
+
     [Header("Map Generate Variables")]
     [SerializeField] private GameObject GridPrefab;
     [SerializeField] private int generateRoomCnt;
@@ -39,6 +45,31 @@ public class MapGenerator: MonoBehaviour
 
 
     private List<(int index, Vector2 pos)> selectedRooms = new List<(int, Vector2)>();
+
+    private void Awake()
+    {
+
+        if (s_instance == null)
+        {
+            GameObject go = GameObject.Find("@MapGenerator");
+            if (go == null)
+            {
+                go = new GameObject { name = "@MapGenerator" };
+                go.AddComponent<MapGenerator>();
+            }
+
+            DontDestroyOnLoad(go);
+            s_instance = go.GetComponent<MapGenerator>();
+
+        }
+        else
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+
+    }
 
     private void Start()
     {
@@ -563,7 +594,7 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tilemap wallTilemap;
     [SerializeField] private Tilemap cliffTilemap;
     [SerializeField] private Tilemap shadowTilemap;
-    [SerializeField] private Tilemap colliderTilmap;
+    [SerializeField] private Tilemap colliderTilemap;
 
     [Header("Tiles")]
     [SerializeField] private Tile wall_Top_Left;
@@ -652,8 +683,10 @@ public class MapGenerator: MonoBehaviour
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
-                if (map[i, j] < 0 || (map[i, j] != hallwayId && !rooms[map[i, j]].activeSelf)) { map[i, j] = (int)Define.GridType.None;
-                    colliderTilmap.SetTile(new Vector3Int(j, i, 0), floor);
+                if (map[i, j] < 0 || (map[i, j] != hallwayId && !rooms[map[i, j]].activeSelf)) { 
+
+                    map[i, j] = (int)Define.GridType.None;
+                    colliderTilemap.SetTile(new Vector3Int(j, i, 0), floor);
                 }
                 else if (map[i, j] == hallwayId) map[i, j] = (int)Define.GridType.HallWay;
                 else map[i, j] = (int)Define.GridType.MainRoom;
