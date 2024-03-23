@@ -395,7 +395,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 14.66
+  orthographic size: 3.74
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1553,7 +1553,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &1606266770
 RectTransform:
@@ -1776,11 +1776,11 @@ GameObject:
   - component: {fileID: 1923759213}
   m_Layer: 0
   m_Name: MapGenerator
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1923759212
 Transform:
   m_ObjectHideFlags: 0

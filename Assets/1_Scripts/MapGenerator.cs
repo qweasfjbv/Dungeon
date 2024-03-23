@@ -56,6 +56,14 @@ public class MapGenerator: MonoBehaviour
 
     #region PROCEDURE MAP GENERATE
 
+    public Define.GridType GetGridType(int x, int y)
+    {
+
+        if(y < 0 || x < 0 || (maxX-minX)<= x || (maxY-minY)<= y) return Define.GridType.None;
+
+        return (Define.GridType)map[y, x];
+    }
+
     /*  
      *  방 만들어지는 과정 시뮬하기위한 코루틴
      *  물리연산 되는동안 3.5~5초는 기다려야함

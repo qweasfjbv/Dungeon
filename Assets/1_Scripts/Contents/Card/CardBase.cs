@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -26,9 +27,12 @@ public abstract class CardBase : MonoBehaviour
 
     [SerializeField] private string effectName;
 
+
+
+
+
     private float cardMoveSpeed = 6f;
 
-    [SerializeField]
     private Vector2 targetPos;
     private Vector2 targetScale;
     private float targetAngle;
@@ -103,7 +107,7 @@ public abstract class CardBase : MonoBehaviour
 
     private void Update()
     {
-        var targetV = UtilFunctions.CardLerp(rect.anchoredPosition, targetPos, 6f);
+        var targetV = UtilFunctions.CardLerp(rect.anchoredPosition, targetPos, cardMoveSpeed);
         this.rect.anchoredPosition = new Vector3(targetV.x, targetV.y);
         this.rect.localPosition = new Vector3(rect.localPosition.x, rect.localPosition.y, 0);
 
@@ -112,11 +116,12 @@ public abstract class CardBase : MonoBehaviour
         var rotateZ = rect.localRotation.eulerAngles.z;
         if (rotateZ >= 180) rotateZ = rotateZ - 360;
 
-        this.rect.localRotation = Quaternion.Euler(0, 0, UtilFunctions.CardRotateLerp(rotateZ, targetAngle, 6f));
+        this.rect.localRotation = Quaternion.Euler(0, 0, UtilFunctions.CardRotateLerp(rotateZ, targetAngle, cardMoveSpeed));
 
 
     }
 
+    #region LifeCycle
     private void OnEnable()
     {
         parentDeck = this.transform.parent;
@@ -129,7 +134,15 @@ public abstract class CardBase : MonoBehaviour
         targetAngle = 0;
     }
 
+    private void OnDestroy()
+    {
+        parentDeck.GetComponent<CardInHand>().UpdateCardLayout();
+    }
 
+    #endregion
+
+
+    #region IHandler
     private void Hover()
     {
         if (!isHover)
@@ -183,13 +196,13 @@ public abstract class CardBase : MonoBehaviour
         if (mousePos.y > CARD_HEIGHT)
         {
             isInField = true;
-            tmpColor.a = UtilFunctions.ColorAlphaLerp(tmpColor.a, 0f, 10f);
+            tmpColor.a = UtilFunctions.ColorAlphaLerp(tmpColor.a, 0f, 2* cardMoveSpeed);
             GetComponent<Image>().color = tmpColor;
         }
         else
         {
             isInField = false;
-            tmpColor.a = UtilFunctions.ColorAlphaLerp(tmpColor.a, 1f, 6f);
+            tmpColor.a = UtilFunctions.ColorAlphaLerp(tmpColor.a, 1f, cardMoveSpeed);
             GetComponent<Image>().color = tmpColor;
         }
 
@@ -197,18 +210,21 @@ public abstract class CardBase : MonoBehaviour
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+
+        CameraController.CanMove = false;
         isDragged = true;
         transform.parent.GetComponent<CardInHand>().UpdateCardLayout();
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        CameraController.CanMove = true;
         isDragged = false;
 
         if (isInField)
         {
             // TODO : EFFECT ÇÊ¿ä
-
+            ActivateEffect(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             transform.parent.GetComponent<CardInHand>().RemoveCardInHand(transform.GetSiblingIndex());
         }
         else
@@ -219,9 +235,6 @@ public abstract class CardBase : MonoBehaviour
         }
 
     }
+    #endregion
 
-    private void OnDestroy()
-    {
-        parentDeck.GetComponent<CardInHand>().UpdateCardLayout();
-    }
 }

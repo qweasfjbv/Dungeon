@@ -12,6 +12,10 @@ public class CameraController : MonoBehaviour
 
     private Vector3 dragOrigin; // 드래그 시작점
 
+    private static bool canMove = true;
+    public static bool CanMove { get => canMove;  set=> canMove = value; }
+    
+
     void Update()
     {
         ZoomCamera();
@@ -27,6 +31,8 @@ public class CameraController : MonoBehaviour
 
     void MoveCamera()
     {
+        if (!canMove) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             dragOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
