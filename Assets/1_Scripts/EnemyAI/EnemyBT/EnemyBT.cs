@@ -7,12 +7,29 @@ using UnityEngine.UIElements;
 
 namespace EnemyUI.BehaviorTree
 {
+    public class EnemyStat
+    {
+        private float moveSpeed;
+        private float attack;
+        private float hp;
+
+        public float MoveSpeed { get=>moveSpeed; set => moveSpeed = value; }
+
+
+        public EnemyStat(float moveSpeed, float attack, float hp)
+        {
+            this.moveSpeed = moveSpeed;
+            this.attack = attack;
+            this.hp = hp;
+        }
+    }
     public class EnemyBT : BTree
     {
         [SerializeField] private int searchRange;
         [SerializeField] private int attackRange;
+        
+        private EnemyStat enemyStat = new EnemyStat(0.05f, 0, 10);
 
-        [SerializeField] public static float moveSpeed = 0.05f;
 
         [SerializeField] private MapGenerator mapGenerator;
 
@@ -29,12 +46,12 @@ namespace EnemyUI.BehaviorTree
                     new Sequence(new List<Node>
                     {
                         new Search(transform, searchRange),
-                        new Move(transform, mapGenerator, destination)
+                        new Move(transform, mapGenerator, destination, enemyStat)
                     }),
                     new Sequence(new List<Node>
                     {
                         new IsAttacking(transform),
-                        new Track(transform, attackRange),
+                        new Track(transform, attackRange, enemyStat),
                         new Attack(transform)
                     })
                 });
@@ -42,7 +59,18 @@ namespace EnemyUI.BehaviorTree
 
             return root;
         }
+
+        public void MoveDebuff(float w)
+        {
+            enemyStat.MoveSpeed /= w;
+        }
+        public void MoveBuff(float w)
+        {
+            enemyStat.MoveSpeed *= w;
+        }
     }
+
+
 
     public class Search : Node {
 
@@ -86,8 +114,11 @@ namespace EnemyUI.BehaviorTree
         private List<Vector2> path;
         private Vector2Int dest;
         private int currentPointIndex = 0;
-        public Move(Transform transform, MapGenerator mapGenerator, Vector2Int dest)
+
+        private EnemyStat stat;
+        public Move(Transform transform, MapGenerator mapGenerator, Vector2Int dest, EnemyStat stat)
         {
+            this.stat = stat;
             this.transform = transform;
             this.animator = transform.GetComponent<Animator>();
             this.rigid = transform.GetComponent<Rigidbody2D>();
@@ -112,7 +143,7 @@ namespace EnemyUI.BehaviorTree
 
             Vector2 currentTarget = path[currentPointIndex];
 
-            var step = EnemyBT.moveSpeed* new Vector3(currentTarget.x - transform.position.x, currentTarget.y - transform.position.y, 0).normalized;
+            var step = stat.MoveSpeed* new Vector3(currentTarget.x - transform.position.x, currentTarget.y - transform.position.y, 0).normalized;
             rigid.MovePosition(transform.position + new Vector3(step.x, step.y, 0));
 
 
@@ -165,9 +196,11 @@ namespace EnemyUI.BehaviorTree
         private int attackRange;
         private Animator animator;
         private Rigidbody2D rigid;
+        private EnemyStat stat;
 
-        public Track(Transform transform, int attackRange)
+        public Track(Transform transform, int attackRange, EnemyStat stat)
         {
+            this.stat = stat;
             this.transform = transform;
             this.attackRange = attackRange;
             this.animator = transform.GetComponent<Animator>();
@@ -193,7 +226,7 @@ namespace EnemyUI.BehaviorTree
 
             animator.SetBool("Walk", true);
             dir.Normalize();
-            rigid.MovePosition(transform.position + EnemyBT.moveSpeed * dir);
+            rigid.MovePosition(transform.position + stat.MoveSpeed * dir);
 
             return NodeState.Running;
         }

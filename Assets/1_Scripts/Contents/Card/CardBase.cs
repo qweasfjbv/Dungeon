@@ -41,7 +41,7 @@ public abstract class CardBase : MonoBehaviour
     public static readonly float CARD_WIDTH = 100 * Settings.xScale;
     public static readonly float CARD_HEIGHT = 150 * Settings.yScale;
     public static readonly float CARD_SCALE = 1.0f;
-    public static readonly float CARD_SCALE_HOVERED = 1.3f;
+    public static readonly float CARD_SCALE_HOVERED = 1.5f;
 
     private bool isHover = false;
     private bool isDragged = false;
