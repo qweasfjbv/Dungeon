@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -37,8 +38,8 @@ public abstract class CardBase : MonoBehaviour
     private Vector2 targetScale;
     private float targetAngle;
 
-    public static readonly float CARD_WIDTH = 200 * Settings.xScale;
-    public static readonly float CARD_HEIGHT = 300 * Settings.yScale;
+    public static readonly float CARD_WIDTH = 100 * Settings.xScale;
+    public static readonly float CARD_HEIGHT = 150 * Settings.yScale;
     public static readonly float CARD_SCALE = 1.0f;
     public static readonly float CARD_SCALE_HOVERED = 1.3f;
 
@@ -126,7 +127,6 @@ public abstract class CardBase : MonoBehaviour
     {
         parentDeck = this.transform.parent;
         rect = GetComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(CARD_WIDTH, CARD_HEIGHT);
         targetPos.x = 0;
         targetPos.y = 0;
         targetScale.x = rect.localScale.x;
@@ -152,7 +152,7 @@ public abstract class CardBase : MonoBehaviour
             SetTargetAngle(0f);
             if (!isDragged)
             {
-                SetTargetPosY(CardBase.CARD_SCALE_HOVERED * CardBase.CARD_HEIGHT / 2f);
+                SetTargetPosY(CardBase.CARD_SCALE_HOVERED * CardBase.CARD_HEIGHT / 1.5f);
             }
         }
     }
@@ -192,18 +192,19 @@ public abstract class CardBase : MonoBehaviour
         SetTargetPosX(mousePos.x);
         SetTargetPosY(mousePos.y);
 
-        var tmpColor = GetComponent<Image>().color;
+        var tmpColor = transform.GetChild(0).GetComponent<Image>().color;
+        
         if (mousePos.y > CARD_HEIGHT)
         {
             isInField = true;
             tmpColor.a = UtilFunctions.ColorAlphaLerp(tmpColor.a, 0f, 2* cardMoveSpeed);
-            GetComponent<Image>().color = tmpColor;
+            SetColor(tmpColor); 
         }
         else
         {
             isInField = false;
             tmpColor.a = UtilFunctions.ColorAlphaLerp(tmpColor.a, 1f, cardMoveSpeed);
-            GetComponent<Image>().color = tmpColor;
+            SetColor(tmpColor);
         }
 
     }
@@ -230,11 +231,29 @@ public abstract class CardBase : MonoBehaviour
         else
         {
 
-            GetComponent<Image>().color = Color.white;
+            SetColor(Color.white);
             transform.parent.GetComponent<CardInHand>().UpdateCardLayout();
         }
 
     }
+
+    private void SetColor(Color color)
+    {
+        foreach(Transform child in transform)
+        {
+            var img = child.GetComponent<Image>();
+            if (img != null) {
+                img.color = color;
+            }
+
+            var text = child.GetComponent<TextMeshProUGUI>();
+            if(text != null)
+            {
+                text.color = new Color(0,0, 0, color.a);
+            }
+        }
+    }
+
     #endregion
 
 }

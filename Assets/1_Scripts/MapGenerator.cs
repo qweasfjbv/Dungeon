@@ -458,8 +458,8 @@ public class MapGenerator: MonoBehaviour
                 if (map[py - minY, px - minX] == -1 || !rooms[map[py - minY, px - minX]].activeSelf)
                 {
                     map[py - minY, px - minX] = hallwayId;
-                    GameObject grid = Instantiate(GridPrefab, new Vector3(px + 0.5f, py + 0.5f, 0), Quaternion.identity);
-                    grid.GetComponent<SpriteRenderer>().color = Color.black;
+                    //GameObject grid = Instantiate(GridPrefab, new Vector3(px + 0.5f, py + 0.5f, 0), Quaternion.identity);
+                    //grid.GetComponent<SpriteRenderer>().color = Color.black;
                 }
             }
         }
@@ -501,8 +501,7 @@ public class MapGenerator: MonoBehaviour
                 //
                 if (nonWallCount >= n)
                 {
-                    GameObject grid = Instantiate(GridPrefab, new Vector3(x + minX + 0.5f, y + minY + 0.5f, 0), Quaternion.identity);
-                    grid.GetComponent<SpriteRenderer>().color = Color.black;
+                    //grid.GetComponent<SpriteRenderer>().color = Color.black;
                     map[y, x] = cellularId;
                 }
             }
@@ -521,8 +520,8 @@ public class MapGenerator: MonoBehaviour
     {
         if (map[y - minY, x - minX] == -1) // 해당 위치에 이미 그리드가 없는 경우에만 생성
         {
-            GameObject grid = Instantiate(GridPrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
-            grid.GetComponent<SpriteRenderer>().color = Color.black;
+            //GameObject grid = Instantiate(GridPrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
+            //grid.GetComponent<SpriteRenderer>().color = Color.black;
             map[y - minY, x - minX] = hallwayId;
         }
         else if (map[y - minY, x - minX] != hallwayId)
@@ -958,11 +957,13 @@ public class MapGenerator: MonoBehaviour
 
             if (prevPoint.x != 0 || prevPoint.y != 0)
             {
+                /*
                 GameObject line = Instantiate(Line);
                 line.GetComponent<LineRenderer>().SetPosition(0, new Vector3(prevPoint.y, prevPoint.x, -1));
                 line.GetComponent<LineRenderer>().SetPosition(1, new Vector3(point.y, point.x, -1));
                 line.GetComponent<LineRenderer>().startWidth = 0.3f;
                 line.GetComponent<LineRenderer>().endWidth = 0.3f;
+                */
             }
 
             prevPoint = point;

@@ -31,6 +31,7 @@ public class UtilFunctions
 
     }
 
+
     public static float CardRotateLerp(float start, float target, float speed)
     {
         float startR = start;

@@ -161,7 +161,7 @@ public class CardInHand : MonoBehaviour
         {
             if (i == hoverIdx) continue;
 
-            cardsInHand[i].SetTargetPosX(cardsInHand[i].GetTargetPosX() + Mathf.Pow(0.3f, Mathf.Abs(i-hoverIdx)) * CardBase.CARD_WIDTH * Mathf.Sign(i-hoverIdx));
+            cardsInHand[i].SetTargetPosX(cardsInHand[i].GetTargetPosX() + Mathf.Pow(0.86f, Mathf.Abs(i-hoverIdx)) * CardBase.CARD_WIDTH * Mathf.Sign(i-hoverIdx));
         }
     }
 
