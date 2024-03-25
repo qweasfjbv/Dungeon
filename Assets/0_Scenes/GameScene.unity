@@ -1284,7 +1284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cffcd64a8787614eab9d2545b15400c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 5229332580041227260, guid: afcf8cb6a8a43ad4aaf3231aaa213d09,
+  cardPrefab: {fileID: 5229332580041227260, guid: 00bf2efa36a37ae4285f09f82eba1b5e,
     type: 3}
 --- !u!114 &1322043637
 MonoBehaviour:
@@ -1705,8 +1705,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   searchRange: 5
   attackRange: 1
-  moveSpeed: 0.05
-  trackSpeed: 0.05
   mapGenerator: {fileID: 1923759213}
 --- !u!95 &1806366045
 Animator:

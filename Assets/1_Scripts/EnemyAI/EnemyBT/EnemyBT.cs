@@ -14,7 +14,7 @@ namespace EnemyUI.BehaviorTree
         private float hp;
 
         public float MoveSpeed { get=>moveSpeed; set => moveSpeed = value; }
-
+        public float Hp { get => hp; set => hp = value; }
 
         public EnemyStat(float moveSpeed, float attack, float hp)
         {
@@ -38,6 +38,11 @@ namespace EnemyUI.BehaviorTree
         public void SetValues(Vector2Int dest)
         {
             destination = dest;
+        }
+        public void OnDamaged(float damage)
+        {
+            Debug.Log("ENEMY DAMAGED!");
+            enemyStat.Hp -= damage;
         }
 
         public override Node SetupRoot()
