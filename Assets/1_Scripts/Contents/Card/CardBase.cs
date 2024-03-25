@@ -31,7 +31,6 @@ public abstract class CardBase : MonoBehaviour
 
 
 
-
     private float cardMoveSpeed = 6f;
 
     private Vector2 targetPos;
@@ -105,6 +104,8 @@ public abstract class CardBase : MonoBehaviour
 
     // 실제 사용할 때 호출할 함수
     public abstract void ActivateEffect(Vector3 pos);
+    public abstract void PreviewEffect(Vector3 pos);
+    public abstract void UnPreviewEffect();
 
     private void Update()
     {
@@ -123,7 +124,7 @@ public abstract class CardBase : MonoBehaviour
     }
 
     #region LifeCycle
-    private void OnEnable()
+    public virtual void OnEnable()
     {
         parentDeck = this.transform.parent;
         rect = GetComponent<RectTransform>();
@@ -197,6 +198,7 @@ public abstract class CardBase : MonoBehaviour
         if (mousePos.y > CARD_HEIGHT)
         {
             isInField = true;
+            PreviewEffect(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             tmpColor.a = UtilFunctions.ColorAlphaLerp(tmpColor.a, 0f, 2* cardMoveSpeed);
             SetColor(tmpColor); 
         }
@@ -211,7 +213,6 @@ public abstract class CardBase : MonoBehaviour
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-
         CameraController.CanMove = false;
         isDragged = true;
         transform.parent.GetComponent<CardInHand>().UpdateCardLayout();
@@ -230,7 +231,7 @@ public abstract class CardBase : MonoBehaviour
         }
         else
         {
-
+            UnPreviewEffect();
             SetColor(Color.white);
             transform.parent.GetComponent<CardInHand>().UpdateCardLayout();
         }

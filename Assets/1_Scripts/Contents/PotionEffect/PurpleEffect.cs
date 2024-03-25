@@ -3,19 +3,12 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class PurpleEffect : MonoBehaviour
+public class PurpleEffect : PotionEffect
 {
-    private TextMeshPro textMesh;
-    private float duringTime = 5f;
 
-    private void OnEnable()
+    public override void OnEnable()
     {
-        foreach (Transform child in transform)
-            if (child.GetComponent<TextMeshPro>() != null) 
-                textMesh = child.GetComponent<TextMeshPro>();
-
-
-        StartCoroutine(TimerCoroutine());
+        base.OnEnable();
     }
 
 
@@ -32,8 +25,13 @@ public class PurpleEffect : MonoBehaviour
     }
 
 
-    public IEnumerator TimerCoroutine()
+    public IEnumerator TimerCoroutine(float duringTime)
     {
+        EffectGenerator.Instance.ThrowPotion(transform.position, THROWTIME);
+        yield return new WaitForSeconds(THROWTIME);
+        ShowEffect();
+
+
         float elapsedTime = 0f;
         while (elapsedTime < duringTime)
         {
@@ -45,4 +43,8 @@ public class PurpleEffect : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    public override void StartEffect(float duringTime)
+    {
+        StartCoroutine(TimerCoroutine(duringTime));
+    }
 }

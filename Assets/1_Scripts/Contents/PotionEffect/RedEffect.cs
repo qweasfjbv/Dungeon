@@ -4,22 +4,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class RedEffect : MonoBehaviour
+public class RedEffect : PotionEffect
 {
-    private TextMeshPro textMesh;
-    private float duringTime = 5f;
     private float tickTime = 0.5f;
 
     List<EnemyBT> enemies = new List<EnemyBT>();
 
-    private void OnEnable()
+    public override void OnEnable()
     {
-        foreach (Transform child in transform)
-            if (child.GetComponent<TextMeshPro>() != null)
-                textMesh = child.GetComponent<TextMeshPro>();
-
-
-        StartCoroutine(TimerCoroutine());
+        base.OnEnable();
     }
 
 
@@ -37,10 +30,15 @@ public class RedEffect : MonoBehaviour
             enemies.Remove(collision.GetComponent<EnemyBT>());
     }
 
-    public IEnumerator TimerCoroutine()
+    public IEnumerator TimerCoroutine(float duringTime)
     {
         float elapsedTime = 0f;
         float elapsedTickTime = 0f;
+
+        EffectGenerator.Instance.ThrowPotion(transform.position, THROWTIME);
+        yield return new WaitForSeconds(THROWTIME);
+
+        ShowEffect();
 
         while (elapsedTime < duringTime)
         {
@@ -49,7 +47,7 @@ public class RedEffect : MonoBehaviour
             {
                 // µ¥¹ÌÁö¸¦ ÁÜ
                 elapsedTickTime += tickTime;
-                Debug.Log(enemies.Count);
+
                 foreach (EnemyBT enemy in enemies)
                 {
                     enemy.OnDamaged(1);
@@ -62,5 +60,9 @@ public class RedEffect : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    public override void StartEffect(float duringTime)
+    {
+        StartCoroutine(TimerCoroutine(duringTime));
+    }
 
 }

@@ -1,9 +1,4 @@
-using EnemyUI.BehaviorTree;
-using JPS;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UnityEditor;
 using UnityEngine;
 
 namespace EnemyUI.BehaviorTree
@@ -32,7 +27,6 @@ namespace EnemyUI.BehaviorTree
         private EnemyStat enemyStat = new EnemyStat(0.05f, 3, 10);
 
 
-        [SerializeField] private MapGenerator mapGenerator;
 
         private Vector2Int destination;
 
@@ -52,12 +46,12 @@ namespace EnemyUI.BehaviorTree
                     new Sequence(new List<Node>
                     {
                         new IsDead(transform, enemyStat),
-
+                        new Disappear(transform)
                     }) ,
                     new Sequence(new List<Node>
                     {
                         new Search(transform, searchRange),
-                        new Move(transform, mapGenerator, destination, enemyStat)
+                        new Move(transform, destination, enemyStat)
                     }),
                     new Sequence(new List<Node>
                     {
@@ -167,22 +161,20 @@ namespace EnemyUI.BehaviorTree
         private Transform transform;
         private Animator animator;
         private Rigidbody2D rigid;
-        private MapGenerator mapGen;
 
         private List<Vector2> path;
         private Vector2Int dest;
         private int currentPointIndex = 0;
 
         private EnemyStat stat;
-        public Move(Transform transform, MapGenerator mapGenerator, Vector2Int dest, EnemyStat stat)
+        public Move(Transform transform, Vector2Int dest, EnemyStat stat)
         {
             this.stat = stat;
             this.transform = transform;
             this.animator = transform.GetComponent<Animator>();
             this.rigid = transform.GetComponent<Rigidbody2D>();
-            mapGen = mapGenerator;
             this.dest = dest;
-            this.path = mapGen.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
+            this.path = MapGenerator.Instance.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
                 dest);
         }
 
@@ -191,7 +183,7 @@ namespace EnemyUI.BehaviorTree
             if (GetNodeData("pathfindFlag") != null)
             {
                 RemoveNodeData("pathfindFlag"); 
-                path = mapGen.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
+                path = MapGenerator.Instance.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
             dest);
                 currentPointIndex = 0;
             }

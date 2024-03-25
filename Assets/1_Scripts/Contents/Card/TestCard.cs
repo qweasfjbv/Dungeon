@@ -30,4 +30,14 @@ public class TestCard : CardBase
             }
         }
     }
+
+    public override void PreviewEffect(Vector3 pos)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void UnPreviewEffect()
+    {
+        throw new System.NotImplementedException();
+    }
 }

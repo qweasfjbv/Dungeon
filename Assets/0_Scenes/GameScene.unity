@@ -196,7 +196,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -10
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -1097,7 +1097,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -2
+  m_SortingOrder: -11
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -1705,7 +1705,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   searchRange: 5
   attackRange: 1
-  mapGenerator: {fileID: 1923759213}
 --- !u!95 &1806366045
 Animator:
   serializedVersion: 5
@@ -1762,6 +1761,53 @@ CapsuleCollider2D:
   m_Offset: {x: 0.0203574, y: 0.0711793}
   m_Size: {x: 0.5913401, y: 0.84969395}
   m_Direction: 0
+--- !u!1 &1912139049
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1912139051}
+  - component: {fileID: 1912139050}
+  m_Layer: 0
+  m_Name: '@EffectGenerator'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1912139050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912139049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dffd2005dbd0c74c9cbb1279840b724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imagePrefab: {fileID: 5991692751887015882, guid: dd182ffcadd1280408cdf531d67dfb6e,
+    type: 3}
+  potionSprite: {fileID: -1947057841, guid: 91ece539279118a438c900dfb08582ed, type: 3}
+--- !u!4 &1912139051
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912139049}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 219.6079, y: 158.15128, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1923759210
 GameObject:
   m_ObjectHideFlags: 0
@@ -1778,7 +1824,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1923759212
 Transform:
   m_ObjectHideFlags: 0
@@ -2102,3 +2148,4 @@ SceneRoots:
   - {fileID: 1529996237}
   - {fileID: 1606266770}
   - {fileID: 1979443747}
+  - {fileID: 1912139051}

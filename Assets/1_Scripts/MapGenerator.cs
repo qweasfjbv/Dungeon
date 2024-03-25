@@ -736,7 +736,6 @@ public class MapGenerator: MonoBehaviour
         {
             for (int j = map.GetLength(1) - 1; j >= 0; j--)
             {
-                //PlaceShadowTile(j, i);
                  DetermineShodowTile(j, i);
             }
         }
@@ -910,15 +909,19 @@ public class MapGenerator: MonoBehaviour
     private void DetermineShodowTile(int x, int y)
     {
         // 패턴 계산
+
+        Vector3Int pos = new Vector3Int(x, y, 0);
+        if (wallTilemap.GetTile(pos) != null) return;
+
         int pattern = CalculateShadowPattern(x, y);
         Tile shTile = null;
-
+        
 
         if (Matches(pattern, ShadowMask, ShadowMidMatch)) shTile = shadow_Right;
         else if (Matches(pattern, ShadowMask, ShadowTopMatch)) shTile = shadow_Right_Top;
         else if (Matches(pattern, ShadowMask, ShadowBottomMatch)) shTile = shadow_Right_Bottom;
 
-        shadowTilemap.SetTile(new Vector3Int(x, y, 0), shTile);
+        shadowTilemap.SetTile(pos, shTile);
     }
 
     private Tile GetRandomTopTile()
