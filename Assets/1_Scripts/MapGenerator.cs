@@ -628,6 +628,8 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tile shadow_Right;
     [SerializeField] private Tile shadow_Right_Bottom;
 
+    #region bitmasks
+
     const int TopMask = (1 << 1) | (1 << 3) | (1 << 5);
     const int BottomMask = (1 << 3) | (1 << 5) | (1 << 7);
     const int LeftMask = (1 << 1) | (1 << 3) | (1 << 7);
@@ -678,6 +680,15 @@ public class MapGenerator: MonoBehaviour
     const int ExceptionMatch_T2 = (1 << 2) | (1 << 7);
     const int ExceptionMatch_T3 = (1 << 0) | (1 << 2);
 
+
+    const int ShadowMask = (1 << 0) | (1 << 3) | (1 << 6);
+
+    const int ShadowTopMatch = (1 << 0) | (1 << 3);
+    const int ShadowMidMatch = (1 << 0) | (1 << 3) | (1 << 6);
+    const int ShadowBottomMatch = (1 << 3) | (1 << 6);
+
+    #endregion
+
     private void MapArrNormalization()
     {
         for (int i = 0; i < map.GetLength(0); i++)
@@ -725,7 +736,8 @@ public class MapGenerator: MonoBehaviour
         {
             for (int j = map.GetLength(1) - 1; j >= 0; j--)
             {
-                PlaceShadowTile(j, i);
+                //PlaceShadowTile(j, i);
+                 DetermineShodowTile(j, i);
             }
         }
 
@@ -895,6 +907,20 @@ public class MapGenerator: MonoBehaviour
 
     }
 
+    private void DetermineShodowTile(int x, int y)
+    {
+        // 패턴 계산
+        int pattern = CalculateShadowPattern(x, y);
+        Tile shTile = null;
+
+
+        if (Matches(pattern, ShadowMask, ShadowMidMatch)) shTile = shadow_Right;
+        else if (Matches(pattern, ShadowMask, ShadowTopMatch)) shTile = shadow_Right_Top;
+        else if (Matches(pattern, ShadowMask, ShadowBottomMatch)) shTile = shadow_Right_Bottom;
+
+        shadowTilemap.SetTile(new Vector3Int(x, y, 0), shTile);
+    }
+
     private Tile GetRandomTopTile()
     {
         if (Random.Range(0, 7) == 0) return wall_Top_Random;
@@ -917,6 +943,30 @@ public class MapGenerator: MonoBehaviour
             if (checkX >= 0 && checkX < map.GetLength(1) && checkY >= 0 && checkY < map.GetLength(0))
             {
                 if (map[checkY, checkX] != (int) Define.GridType.None)
+                {
+                    pattern |= (1 << bitIndex);
+                }
+            }
+
+            bitIndex++;
+        }
+
+        return pattern;
+    }
+    int CalculateShadowPattern(int x, int y)
+    {
+        int pattern = 0;
+        int bitIndex = 0;
+
+        for (int i = 0; i < surrX.Length; i++)
+        {
+            int checkX = x + surrX[i];
+            int checkY = y + surrY[i];
+
+            // 맵 범위 내에서 검사
+            if (checkX >= 0 && checkX < map.GetLength(1) && checkY >= 0 && checkY < map.GetLength(0))
+            {
+                if (wallTilemap.GetTile(new Vector3Int(checkX, checkY, 0)) != null)
                 {
                     pattern |= (1 << bitIndex);
                 }
