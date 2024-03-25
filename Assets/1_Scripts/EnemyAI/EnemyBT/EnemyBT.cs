@@ -2,8 +2,9 @@ using EnemyUI.BehaviorTree;
 using JPS;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace EnemyUI.BehaviorTree
 {
@@ -13,7 +14,7 @@ namespace EnemyUI.BehaviorTree
         private float attack;
         private float hp;
 
-        public float MoveSpeed { get=>moveSpeed; set => moveSpeed = value; }
+        public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
         public float Hp { get => hp; set => hp = value; }
 
         public EnemyStat(float moveSpeed, float attack, float hp)
@@ -27,8 +28,8 @@ namespace EnemyUI.BehaviorTree
     {
         [SerializeField] private int searchRange;
         [SerializeField] private int attackRange;
-        
-        private EnemyStat enemyStat = new EnemyStat(0.05f, 0, 10);
+
+        private EnemyStat enemyStat = new EnemyStat(0.05f, 3, 10);
 
 
         [SerializeField] private MapGenerator mapGenerator;
@@ -48,6 +49,11 @@ namespace EnemyUI.BehaviorTree
         public override Node SetupRoot()
         {
             Node root = new Selector(new List<Node> {
+                    new Sequence(new List<Node>
+                    {
+                        new IsDead(transform, enemyStat),
+
+                    }) ,
                     new Sequence(new List<Node>
                     {
                         new Search(transform, searchRange),
@@ -75,7 +81,54 @@ namespace EnemyUI.BehaviorTree
         }
     }
 
+    public class IsDead : Node{
 
+        private Transform transform;
+        private EnemyStat stat;
+
+        public IsDead(Transform transform, EnemyStat stat)
+        {
+            this.stat = stat;
+            this.transform = transform;
+        }
+
+        public override NodeState Evaluate()
+        {
+            if (stat.Hp <= 0)
+            {
+
+                if (!transform.GetComponent<Animator>().GetBool("Die"))
+                {
+                    transform.GetComponent<Animator>().SetBool("Walk", false);
+                    transform.GetComponent<Animator>().SetTrigger("Die");
+                }
+                return NodeState.Success;
+            }
+            else
+            {
+                return NodeState.Failure;
+            }
+        }
+    }
+
+    public class Disappear : Node
+    {
+        private Transform transform;
+
+        public Disappear(Transform transform)
+        {
+            this.transform = transform;
+        }
+
+        public override NodeState Evaluate()
+        {
+            if (!transform.GetComponent<Animator>().GetBool("Die"))
+            {
+                GameObject.Destroy(transform.gameObject);
+            }
+            return NodeState.Success;
+        }
+    }
 
     public class Search : Node {
 
@@ -238,7 +291,6 @@ namespace EnemyUI.BehaviorTree
 
     }
 
-
     public class Attack : Node
     {
         private Transform transform;
@@ -260,4 +312,6 @@ namespace EnemyUI.BehaviorTree
         }
 
     }
+
+ 
 }
