@@ -26,7 +26,17 @@ namespace EnemyUI.BehaviorTree
 
         private EnemyStat enemyStat = new EnemyStat(0.05f, 3, 10);
 
+        public static void SetAnimatior(Animator anim, string name)
+        {
+            anim.SetBool("Attack", false);
+            anim.SetBool("Die", false);
+            anim.SetBool("Damage", false);
+            anim.SetBool("Walk", false);
+            anim.SetBool("Idle", false);
 
+                anim.SetBool(name, true);
+
+        }
 
         private Vector2Int destination;
 
@@ -39,11 +49,11 @@ namespace EnemyUI.BehaviorTree
             enemyStat.Hp -= damage;
             if (enemyStat.Hp > 0)
             {
+                var animator = transform.GetComponent<Animator>();
+                Debug.Log("??");
+                SetAnimatior(animator, "Damage");
 
-                transform.GetComponent<Animator>().SetBool("Walk", false);
-
-                Debug.Log(transform.GetComponent<Animator>().GetBool("Walk"));
-                transform.GetComponent<Animator>().SetTrigger("Dmg");
+                return;
             }
         }
 
@@ -87,6 +97,8 @@ namespace EnemyUI.BehaviorTree
         private Transform transform;
         private EnemyStat stat;
 
+        private float damageTrigger = 0f;
+
         public IsDead(Transform transform, EnemyStat stat)
         {
             this.stat = stat;
@@ -95,14 +107,25 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
-            Debug.Log("IsDeadE : " + transform.GetComponent<Animator>().GetBool("Dmg"));
 
+            // damage 받았을떄 success return해서 move는 안가게
+            if (transform.GetComponent<Animator>().GetBool("Damage"))
+            {
+                damageTrigger += Time.deltaTime;
+                if(damageTrigger >= 0.4f)
+                {
+                    damageTrigger = 0f;
+                    EnemyBT.SetAnimatior(transform.GetComponent<Animator>(), "Idle");
+                    return NodeState.Failure;
+                }
+
+                return NodeState.Success;
+            }
             if (stat.Hp <= 0)
             {
                 if (!transform.GetComponent<Animator>().GetBool("Die"))
                 {
-                    transform.GetComponent<Animator>().SetBool("Walk", false);
-                    transform.GetComponent<Animator>().SetTrigger("Die");
+                    EnemyBT.SetAnimatior(transform.GetComponent<Animator>(), "Die");
                 }
                 return NodeState.Success;
             }
@@ -190,8 +213,6 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
-            if (animator.GetBool("Dmg"))
-                return NodeState.Success;
 
             if (GetNodeData("pathfindFlag") != null)
             {
@@ -201,8 +222,9 @@ namespace EnemyUI.BehaviorTree
                 currentPointIndex = 0;
             }
 
-            animator.SetBool("Walk", true);
             if (path == null || path.Count == 0) return NodeState.Success;
+
+            EnemyBT.SetAnimatior(animator, "Walk");
 
             Vector2 currentTarget = path[currentPointIndex];
 
@@ -289,7 +311,7 @@ namespace EnemyUI.BehaviorTree
                 return NodeState.Success; 
             }
 
-            animator.SetBool("Walk", true);
+            EnemyBT.SetAnimatior(animator, "Walk");
             dir.Normalize();
             rigid.MovePosition(transform.position + stat.MoveSpeed * dir);
 
@@ -311,8 +333,7 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
-            if (!animator.GetBool("Attack"))
-                animator.SetTrigger("Attack");
+            EnemyBT.SetAnimatior(animator, "Attack");
 
             var tr = (GameObject)GetNodeData("BossObject");
             return NodeState.Success;

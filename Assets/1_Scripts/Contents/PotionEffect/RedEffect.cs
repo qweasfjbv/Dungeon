@@ -33,7 +33,7 @@ public class RedEffect : PotionEffect
     public IEnumerator TimerCoroutine(float duringTime)
     {
         float elapsedTime = 0f;
-        float elapsedTickTime = 0f;
+        float elapsedTickTime = -tickTime/2;
 
         EffectGenerator.Instance.ThrowPotion(transform.position, THROWTIME);
         yield return new WaitForSeconds(THROWTIME);
@@ -50,7 +50,8 @@ public class RedEffect : PotionEffect
 
                 foreach (EnemyBT enemy in enemies)
                 {
-                    enemy.OnDamaged(1);
+                    // 공격력 구현
+                    enemy.OnDamaged(2);
                 }
             }
             textMesh.text = (duringTime - elapsedTime).ToString("0.0");
