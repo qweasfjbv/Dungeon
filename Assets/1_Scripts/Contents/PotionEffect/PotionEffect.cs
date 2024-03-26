@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class PotionEffect : MonoBehaviour
 {
     protected TextMeshPro textMesh;
-    protected const float THROWTIME = 0.5f;
+    protected const float THROWTIME = 0.7f;
 
     public virtual void OnEnable()
     {

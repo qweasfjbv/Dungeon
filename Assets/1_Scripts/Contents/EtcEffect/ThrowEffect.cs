@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ThrowEffect : MonoBehaviour
 {
+    private float endScale = 0.5f;
+
     public void Throw(Vector3 startPos, Vector3 endPos, float throwTime)
     {
         StartCoroutine(ThrowCoroutine(startPos, endPos, throwTime));
@@ -23,7 +25,7 @@ public class ThrowEffect : MonoBehaviour
 
             transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / throwTime);
             float scale = Mathf.Lerp(startScale, endScale, elapsedTime / throwTime);
-            transform.localScale = new Vector3(scale, scale, 1);
+            transform.localScale = new Vector3(scale, scale, endScale);
             transform.Rotate(0, 0, Time.deltaTime * 720f);
 
             yield return null;

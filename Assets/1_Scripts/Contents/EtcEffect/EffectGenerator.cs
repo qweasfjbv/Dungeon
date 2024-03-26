@@ -43,7 +43,7 @@ public class EffectGenerator : MonoBehaviour
     {
         var tmpPos = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0, 0));
         var go = Instantiate(imagePrefab, tmpPos, Quaternion.identity);
-        go.transform.localScale = go.transform.localScale * (5);
+        go.transform.localScale = go.transform.localScale * (4);
 
         Debug.Log(go.transform.localScale);
         go.GetComponent<SpriteRenderer>().sprite = potionSprite;
