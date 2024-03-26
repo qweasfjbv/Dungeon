@@ -36,8 +36,15 @@ namespace EnemyUI.BehaviorTree
         }
         public void OnDamaged(float damage)
         {
-            Debug.Log("ENEMY DAMAGED!");
             enemyStat.Hp -= damage;
+            if (enemyStat.Hp > 0)
+            {
+
+                transform.GetComponent<Animator>().SetBool("Walk", false);
+
+                Debug.Log(transform.GetComponent<Animator>().GetBool("Walk"));
+                transform.GetComponent<Animator>().SetTrigger("Dmg");
+            }
         }
 
         public override Node SetupRoot()
@@ -46,7 +53,7 @@ namespace EnemyUI.BehaviorTree
                     new Sequence(new List<Node>
                     {
                         new IsDead(transform, enemyStat),
-                        new Disappear(transform)
+                        new Disappear(transform, enemyStat)
                     }) ,
                     new Sequence(new List<Node>
                     {
@@ -88,9 +95,10 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
+            Debug.Log("IsDeadE : " + transform.GetComponent<Animator>().GetBool("Dmg"));
+
             if (stat.Hp <= 0)
             {
-
                 if (!transform.GetComponent<Animator>().GetBool("Die"))
                 {
                     transform.GetComponent<Animator>().SetBool("Walk", false);
@@ -108,15 +116,17 @@ namespace EnemyUI.BehaviorTree
     public class Disappear : Node
     {
         private Transform transform;
+        private EnemyStat stat;
 
-        public Disappear(Transform transform)
+        public Disappear(Transform transform, EnemyStat stat)
         {
             this.transform = transform;
+            this.stat = stat;
         }
 
         public override NodeState Evaluate()
         {
-            if (!transform.GetComponent<Animator>().GetBool("Die"))
+            if (!transform.GetComponent<Animator>().GetBool("Die") && stat.Hp <= 0)
             {
                 GameObject.Destroy(transform.gameObject);
             }
@@ -180,6 +190,9 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
+            if (animator.GetBool("Dmg"))
+                return NodeState.Success;
+
             if (GetNodeData("pathfindFlag") != null)
             {
                 RemoveNodeData("pathfindFlag"); 
@@ -250,6 +263,7 @@ namespace EnemyUI.BehaviorTree
 
         public Track(Transform transform, int attackRange, EnemyStat stat)
         {
+
             this.stat = stat;
             this.transform = transform;
             this.attackRange = attackRange;
@@ -259,6 +273,7 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
+
             // BossObject 변수 받고 따라가기
             var boss = (GameObject)GetNodeData("BossObject");
 

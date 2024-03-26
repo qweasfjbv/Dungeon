@@ -45,7 +45,6 @@ public class EffectGenerator : MonoBehaviour
         var go = Instantiate(imagePrefab, tmpPos, Quaternion.identity);
         go.transform.localScale = go.transform.localScale * (5);
 
-        Debug.Log(go.transform.localScale);
         go.GetComponent<SpriteRenderer>().sprite = potionSprite;
         go.AddComponent<ThrowEffect>();
         go.GetComponent<ThrowEffect>().Throw(tmpPos, dest, throwTime);

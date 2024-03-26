@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class RedEffect : PotionEffect
 {
-    private float tickTime = 0.5f;
+    private float tickTime = 1f;
 
     List<EnemyBT> enemies = new List<EnemyBT>();
 
