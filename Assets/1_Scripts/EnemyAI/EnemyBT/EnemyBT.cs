@@ -50,7 +50,6 @@ namespace EnemyUI.BehaviorTree
             if (enemyStat.Hp > 0)
             {
                 var animator = transform.GetComponent<Animator>();
-                Debug.Log("??");
                 SetAnimatior(animator, "Damage");
 
                 return;
@@ -140,18 +139,23 @@ namespace EnemyUI.BehaviorTree
     {
         private Transform transform;
         private EnemyStat stat;
+        private Animator animator;
 
         public Disappear(Transform transform, EnemyStat stat)
         {
             this.transform = transform;
+            animator = transform.GetComponent<Animator>();
             this.stat = stat;
         }
 
         public override NodeState Evaluate()
         {
-            if (!transform.GetComponent<Animator>().GetBool("Die") && stat.Hp <= 0)
+            if (animator.GetBool("Die") && stat.Hp <= 0)
             {
-                GameObject.Destroy(transform.gameObject);
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Die Blend Tree") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                {
+                    GameObject.Destroy(transform.gameObject);
+                }
             }
             return NodeState.Success;
         }
@@ -265,6 +269,11 @@ namespace EnemyUI.BehaviorTree
             var isAtt= animator.GetBool("Attack");
             if (isAtt)
             {
+
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack Blend Tree") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                {
+                    EnemyBT.SetAnimatior(animator, "Idle");
+                }
                 return NodeState.Failure;
             }
             else { 
@@ -333,7 +342,10 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
-            EnemyBT.SetAnimatior(animator, "Attack");
+            if (!animator.GetBool("Attack"))
+            {
+                EnemyBT.SetAnimatior(animator, "Attack");
+            }
 
             var tr = (GameObject)GetNodeData("BossObject");
             return NodeState.Success;
