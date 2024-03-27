@@ -370,7 +370,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1017,8 +1017,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1111008272}
   - {fileID: 33452811}
+  - {fileID: 1111008272}
   - {fileID: 828546660}
   - {fileID: 1998584184}
   - {fileID: 836484626}
@@ -1097,7 +1097,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -11
+  m_SortingOrder: 2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -1234,6 +1234,107 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 5229332580041227260, guid: afcf8cb6a8a43ad4aaf3231aaa213d09,
     type: 3}
+--- !u!1 &1212156684
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1212156688}
+  - component: {fileID: 1212156687}
+  - component: {fileID: 1212156686}
+  - component: {fileID: 1212156685}
+  m_Layer: 5
+  m_Name: Canvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1212156685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212156684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &1212156686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212156684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!223 &1212156687
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212156684}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 1
+  m_Camera: {fileID: 519420031}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 10
+  m_TargetDisplay: 0
+--- !u!224 &1212156688
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212156684}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &1322043634
 GameObject:
   m_ObjectHideFlags: 0
@@ -1486,7 +1587,7 @@ GameObject:
   - component: {fileID: 1606266768}
   - component: {fileID: 1606266767}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: CardCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1755,11 +1856,11 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0027630627, y: 0.15328622}
-  m_Size: {x: 0.7438243, y: 1.0139077}
+  m_Offset: {x: -0.0065775216, y: 0.1252645}
+  m_Size: {x: 0.61305624, y: 0.62160355}
   m_Direction: 0
 --- !u!1 &1912139049
 GameObject:
@@ -1792,7 +1893,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imagePrefab: {fileID: 5991692751887015882, guid: dd182ffcadd1280408cdf531d67dfb6e,
     type: 3}
-  potionSprite: {fileID: -1947057841, guid: 91ece539279118a438c900dfb08582ed, type: 3}
+  potionSprite: {fileID: 21300000, guid: 301247a24ce0a534797cc7e8351f42a5, type: 3}
 --- !u!4 &1912139051
 Transform:
   m_ObjectHideFlags: 0
@@ -1856,7 +1957,7 @@ MonoBehaviour:
   generateRoomCnt: 65
   selectRoomCnt: 6
   minRoomSize: 6
-  maxRoomSize: 8
+  maxRoomSize: 1
   smallMinRoomSize: 2
   smallMaxRoomSize: 4
   overlapOffset: 3
@@ -1891,6 +1992,7 @@ MonoBehaviour:
   shadow_Right: {fileID: 11400000, guid: 90bcedba8e809fb4eb8ecd060bd02219, type: 2}
   shadow_Right_Bottom: {fileID: 11400000, guid: 57fc72d196d79a943a53140b7129801b,
     type: 2}
+  black_Tile: {fileID: 11400000, guid: 8d7fd29abb9183745b1fb44a81165333, type: 2}
   Line: {fileID: 6887163925364720780, guid: 3563ff7aa77c5ec4bb62e79d2051791e, type: 3}
   PathTest: {fileID: 1806366043}
 --- !u!1 &1979443744
@@ -2149,3 +2251,4 @@ SceneRoots:
   - {fileID: 1979443747}
   - {fileID: 1923759212}
   - {fileID: 1912139051}
+  - {fileID: 1212156688}

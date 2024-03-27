@@ -222,8 +222,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.9117647, g: 0.026816579, b: 0.30145553, a: 0.653}
-      maxColor: {r: 0.7941176, g: 0.08758645, b: 0.27761912, a: 0.841}
+      minColor: {r: 0.6415094, g: 0.04678231, b: 0.021181926, a: 0.653}
+      maxColor: {r: 0.6132076, g: 0.026032386, b: 0.026032386, a: 0.841}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5001,7 +5001,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 618b93980ca509643bca22184276f6be, type: 3}
-  m_Color: {r: 0.8705883, g: 0.058823533, b: 0.4039216, a: 1}
+  m_Color: {r: 0.745283, g: 0.050356958, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5028,7 +5028,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4653161631656110
 Transform:
   m_ObjectHideFlags: 0
@@ -5233,8 +5233,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.9705882, g: 0, b: 0.50202847, a: 0.641}
-      maxColor: {r: 0.87058824, g: 0.05882353, b: 0.40392157, a: 0.647}
+      minColor: {r: 0.5943396, g: 0, b: 0.04286842, a: 0.641}
+      maxColor: {r: 0.6886792, g: 0, b: 0, a: 0.647}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -9962,8 +9962,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4285680291
-  m_fontColor: {r: 0.6392157, g: 0.2901961, b: 0.44705886, a: 1}
+    rgba: 4278911120
+  m_fontColor: {r: 0.5660378, g: 0, b: 0.04425166, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

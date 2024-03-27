@@ -4,7 +4,6 @@ using JPS;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -107,7 +106,7 @@ public class MapGenerator: MonoBehaviour
             rooms.Add(Instantiate(GridPrefab, GetRandomPointInCircle(10), Quaternion.identity));
             if (i > selectRoomCnt)
             {
-                rooms[i].transform.localScale = GetRandomScale(smallMinRoomSize, smallMaxRoomSize);
+                rooms[i].transform.localScale = GetRandomScale(minRoomSize, maxRoomSize);
             }
             else
             {
@@ -628,6 +627,8 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tile shadow_Right;
     [SerializeField] private Tile shadow_Right_Bottom;
 
+    [SerializeField] private Tile black_Tile;
+
     #region bitmasks
 
     const int TopMask = (1 << 1) | (1 << 3) | (1 << 5);
@@ -706,6 +707,7 @@ public class MapGenerator: MonoBehaviour
         }
     }
 
+    // Floor->Wall->Exception->Cliff->Shadow
     private void AutoTiling()
     {
         for (int i = map.GetLength(0)-1; i>=0; i--)
@@ -732,13 +734,24 @@ public class MapGenerator: MonoBehaviour
             }
         }
 
-        for (int i = map.GetLength(0) - 1; i >= 0; i--)
+        for (int i = 0; i < map.GetLength(0); i++)
         {
-            for (int j = map.GetLength(1) - 1; j >= 0; j--)
+            for (int j = 0; j < map.GetLength(1); j++)
             {
-                 DetermineShodowTile(j, i);
+
+                PlaceShadowTile(j, i);
+                PlaceCliffTile(j, i);
             }
         }
+
+        for (int i = 0; i < map.GetLength(0); i++)
+        {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                PlaceBlackTile(j, i);
+            }
+        }
+
 
     }
 
@@ -779,8 +792,6 @@ public class MapGenerator: MonoBehaviour
 
                     if (tile == wall_Bottom_Left || tile == wall_Bottom_Right || tile == wall_Bottom)
                     {
-                        cliffTilemap.SetTile(tilePos - new Vector3Int(0, 1, 0), cliff_0);
-                        cliffTilemap.SetTile(tilePos - new Vector3Int(0, 2, 0), cliff_1);
                         if (tile == wall_Bottom_Left)
                         {
                             wallTilemap.SetTile(tilePos, wall_Center_Left);
@@ -807,25 +818,50 @@ public class MapGenerator: MonoBehaviour
 
     private void PlaceShadowTile(int x, int y)
     {
+
+        Vector3Int pos = new Vector3Int(x, y, 0);
+        if (wallTilemap.GetTile(pos) != null) return;
+
+        int pattern = CalculateShadowPattern(x, y);
+        Tile shTile = null;
+
+
+        if (Matches(pattern, ShadowMask, ShadowMidMatch)) shTile = shadow_Right;
+        else if (Matches(pattern, ShadowMask, ShadowTopMatch)) shTile = shadow_Right_Top;
+        else if (Matches(pattern, ShadowMask, ShadowBottomMatch)) shTile = shadow_Right_Bottom;
+
+        shadowTilemap.SetTile(pos, shTile);
+
+    }
+
+    private void PlaceCliffTile(int x, int y)
+    {
         Vector3Int tilePos = new Vector3Int(x, y, 0);
 
         Tile wallTile = wallTilemap.GetTile<Tile>(tilePos);
 
-        if (wallTile == null) return;
-        if (wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(1, 0)) != null) return;
-
-        if (wallTile == wall_Right || wallTile == wall_Left)
-            shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right);
-        else if (wallTile == wall_Top_Left || wallTile == wall_Top_Center)
-            shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right_Top);
-        else if (wallTile == wall_Bottom_Left)
-            shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right);
-        else if (wallTile == wall_Center_Center || wallTile == wall_Center_Left)
-            shadowTilemap.SetTile(tilePos - new Vector3Int(1, 0), shadow_Right_Bottom);
-
+        if (wallTile == wall_Center_Left || wallTile == wall_Center_Right || wallTile == wall_Center)
+        {
+            if (wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null && floorTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null)
+                cliffTilemap.SetTile(tilePos - new Vector3Int(0, 1, 0), cliff_0);
+            if (wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null && floorTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null)
+                cliffTilemap.SetTile(tilePos - new Vector3Int(0, 2, 0), cliff_1);
+        }
 
 
     }
+
+    private void PlaceBlackTile(int x, int y)
+    {
+        Vector3Int tilePos = new Vector3Int(x, y, 0);
+
+
+        if (wallTilemap.GetTile<Tile>(tilePos) == null && floorTilemap.GetTile<Tile>(tilePos) == null && cliffTilemap.GetTile<Tile>(tilePos) == null)
+        {
+            wallTilemap.SetTile(tilePos, black_Tile);
+        }
+    }
+
 
     private void PlaceExceptionTiles(int x, int y)
     {
@@ -904,24 +940,6 @@ public class MapGenerator: MonoBehaviour
                 return floor;
         }
 
-    }
-
-    private void DetermineShodowTile(int x, int y)
-    {
-        // 패턴 계산
-
-        Vector3Int pos = new Vector3Int(x, y, 0);
-        if (wallTilemap.GetTile(pos) != null) return;
-
-        int pattern = CalculateShadowPattern(x, y);
-        Tile shTile = null;
-        
-
-        if (Matches(pattern, ShadowMask, ShadowMidMatch)) shTile = shadow_Right;
-        else if (Matches(pattern, ShadowMask, ShadowTopMatch)) shTile = shadow_Right_Top;
-        else if (Matches(pattern, ShadowMask, ShadowBottomMatch)) shTile = shadow_Right_Bottom;
-
-        shadowTilemap.SetTile(pos, shTile);
     }
 
     private Tile GetRandomTopTile()
@@ -1010,13 +1028,13 @@ public class MapGenerator: MonoBehaviour
 
             if (prevPoint.x != 0 || prevPoint.y != 0)
             {
-                /*
+                
                 GameObject line = Instantiate(Line);
                 line.GetComponent<LineRenderer>().SetPosition(0, new Vector3(prevPoint.y, prevPoint.x, -1));
                 line.GetComponent<LineRenderer>().SetPosition(1, new Vector3(point.y, point.x, -1));
                 line.GetComponent<LineRenderer>().startWidth = 0.3f;
                 line.GetComponent<LineRenderer>().endWidth = 0.3f;
-                */
+                
             }
 
             prevPoint = point;

@@ -161,6 +161,7 @@ namespace JPS
 
                 case JPSDir.UpRight:
                     SecondarySearch(parentNode, pos, JPSDir.Up, JPSDir.Right);
+                    if (AvoidWall(parentNode, pos, dir)) return true;
                     for (int i = 1; ; i++)
                     {
                         checkPoint = pos + new Vector2Int(i, i);
@@ -189,6 +190,7 @@ namespace JPS
                 case JPSDir.UpLeft:
 
                     SecondarySearch(parentNode, pos, JPSDir.Up, JPSDir.Left);
+                    if (AvoidWall(parentNode, pos, dir)) return true;
                     for (int i = 1; ; i++)
                     {
                         checkPoint = pos + new Vector2Int(-i, i);
@@ -215,6 +217,7 @@ namespace JPS
 
                 case JPSDir.DownRight:
                     SecondarySearch(parentNode, pos, JPSDir.Down, JPSDir.Right);
+                    if (AvoidWall(parentNode, pos, dir)) return true;
                     for (int i = 1; ; i++)
                     {
                         checkPoint = pos + new Vector2Int(i, -i);
@@ -240,6 +243,7 @@ namespace JPS
                     return found;
                 case JPSDir.DownLeft:
                     SecondarySearch(parentNode, pos, JPSDir.Down, JPSDir.Left);
+                    if (AvoidWall(parentNode, pos, dir)) return true;
                     for (int i = 1; ; i++)
                     {
                         checkPoint = pos + new Vector2Int(-i, -i);
