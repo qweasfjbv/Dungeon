@@ -11,7 +11,6 @@ public class EffectGenerator : MonoBehaviour
 
     [SerializeField] private GameObject imagePrefab;
 
-    [SerializeField] private Sprite potionSprite;
 
 
     private void Awake()
@@ -39,14 +38,14 @@ public class EffectGenerator : MonoBehaviour
 
     }
 
-    public void ThrowPotion(Vector3 dest, float throwTime)
+    public void ThrowPotion(Vector3 dest, float throwTime, Sprite potionSprite)
     {
         var tmpPos = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0, 0));
         var go = Instantiate(imagePrefab, tmpPos, Quaternion.identity);
-        go.transform.localScale = go.transform.localScale * (4);
+
+        go.transform.localScale = go.transform.localScale * (2);
 
         go.GetComponent<SpriteRenderer>().sprite = potionSprite;
-        go.AddComponent<ThrowEffect>();
         go.GetComponent<ThrowEffect>().Throw(tmpPos, dest, throwTime);
     }
 

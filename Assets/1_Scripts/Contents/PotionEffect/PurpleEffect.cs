@@ -27,8 +27,7 @@ public class PurpleEffect : PotionEffect
 
     public IEnumerator TimerCoroutine(float duringTime)
     {
-        EffectGenerator.Instance.ThrowPotion(transform.position, THROWTIME);
-        yield return new WaitForSeconds(THROWTIME);
+        yield return new WaitForSeconds(PotionCard.THROWTIME);
         ShowEffect();
 
 

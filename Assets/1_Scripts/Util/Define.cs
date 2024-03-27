@@ -12,7 +12,7 @@ public class Define
 
     public enum CardType
     {
-        Summon,
+        Summon = 0,
         Buff,
         Trap,
         None

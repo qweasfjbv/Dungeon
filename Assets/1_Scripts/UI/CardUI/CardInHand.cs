@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class CardInHand : MonoBehaviour
 {
-    [SerializeField] private GameObject cardPrefab;
 
     private List<CardBase> cardsInHand = new List<CardBase>();
 
@@ -25,7 +24,7 @@ public class CardInHand : MonoBehaviour
     #endregion
 
 
-    public bool AddCardInHand()
+    public bool AddCardInHand(int cardId)
     {
 
         if (cardsInHand.Count >= 8)
@@ -34,7 +33,8 @@ public class CardInHand : MonoBehaviour
             return false;
         }
 
-        var tmpCard = Instantiate(cardPrefab, transform.TransformPoint(new Vector3(0, Settings.HEIGHT/2, 0)), Quaternion.identity, transform);
+        var tmpCard = Instantiate(Managers.Resource.GetCardPrefab(cardId), transform.TransformPoint(new Vector3(0, Settings.HEIGHT/2, 0)), Quaternion.identity, transform);
+        tmpCard.GetComponent<CardBase>().SetCard(cardId);
         UpdateCardLayout();
         return true;
     }

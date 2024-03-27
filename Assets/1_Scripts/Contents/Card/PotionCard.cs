@@ -7,9 +7,14 @@ public class PotionCard : CardBase
 
     private GameObject effect = null;
 
+    public const float THROWTIME = 1f;
+
+
     public override void ActivateEffect(Vector3 pos)
     {
-        effect.GetComponent<PotionEffect>().StartEffect(5f);
+        pos.z = 0;
+        EffectGenerator.Instance.ThrowPotion(pos, THROWTIME, itemSprite);
+        effect.GetComponent<PotionEffect>().StartEffect(Managers.Resource.GetCardInfo(cardId).duration);
     }
 
     public override void PreviewEffect(Vector3 pos)

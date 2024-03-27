@@ -8,7 +8,6 @@ public class RedEffect : PotionEffect
 {
     private float tickTime = 1f;
 
-    List<EnemyBT> enemies = new List<EnemyBT>();
 
     public override void OnEnable()
     {
@@ -35,8 +34,7 @@ public class RedEffect : PotionEffect
         float elapsedTime = 0f;
         float elapsedTickTime = -tickTime/2;
 
-        EffectGenerator.Instance.ThrowPotion(transform.position, THROWTIME);
-        yield return new WaitForSeconds(THROWTIME);
+        yield return new WaitForSeconds(PotionCard.THROWTIME);
 
         ShowEffect();
 

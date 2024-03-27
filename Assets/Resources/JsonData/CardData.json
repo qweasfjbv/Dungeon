@@ -1,13 +1,22 @@
 {
     "cardInfo" :[
-        {
-            "cardId" : 11,
-            "cardCost" : 5,
-            "cardType" : 1,
-            "duration" : 2.5,
-            "value" : 3,
-            "spriteName" : "",
-            "effectName" : ""
-        }
+      {
+        "cardId": 11,
+        "cardType": 1,
+        "cardCost": 3,
+        "duration": 5,
+        "value": 2,
+        "cardName": "curse potion",
+        "cardDesc":  "It's possible to slow down moving enemies."
+      },
+      {
+        "cardId": 12,
+        "cardType": 1,
+        "cardCost": 5,
+        "duration": 4,
+        "value": 1,
+        "cardName": "blood potion",
+        "cardDesc": "spread blood. it can hurt enemies."
+      }
     ]
 }

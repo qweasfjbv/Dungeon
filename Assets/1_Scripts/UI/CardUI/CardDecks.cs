@@ -27,7 +27,8 @@ public class CardDecks : MonoBehaviour
             ShowCardDeck(2);
         }
 
-        if (Input.GetKeyDown(KeyCode.D)) AddCardInDeck(showingDeckIndex);
+        if (Input.GetKeyDown(KeyCode.D)) AddCardInDeck(11);
+        if (Input.GetKeyDown(KeyCode.F)) AddCardInDeck(12);
     }
 
     private void ShowCardDeck(int deckIdx)
@@ -47,7 +48,7 @@ public class CardDecks : MonoBehaviour
     {
         if (cardId == -1) return;
 
-        cardDecks[cardId].AddCardInHand();
+        cardDecks[(int)Managers.Resource.GetCardInfo(cardId).cardType].AddCardInHand(cardId);
     }
 
 

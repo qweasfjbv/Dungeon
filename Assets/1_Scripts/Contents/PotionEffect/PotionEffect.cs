@@ -1,3 +1,4 @@
+using EnemyUI.BehaviorTree;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,7 +7,7 @@ using UnityEngine;
 public abstract class PotionEffect : MonoBehaviour
 {
     protected TextMeshPro textMesh;
-    protected const float THROWTIME = 0.65f;
+    protected List<EnemyBT> enemies = new List<EnemyBT>();
 
     public virtual void OnEnable()
     {
