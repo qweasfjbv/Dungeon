@@ -55,6 +55,13 @@ namespace EnemyUI.BehaviorTree
                 return;
             }
         }
+        public void OnRecover(float damage)
+        {
+            if (enemyStat.Hp > 0)
+            {
+                enemyStat.Hp += damage;
+            }
+        }
 
         public override Node SetupRoot()
         {

@@ -28,6 +28,7 @@ public class CardDecks : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.D)) AddCardInDeck(11);
+        if (Input.GetKeyDown(KeyCode.F)) AddCardInDeck(13);
     }
 
     private void ShowCardDeck(int deckIdx)

@@ -56,6 +56,7 @@ public class MonsterCard : CardBase
 
     public override bool PayCardCost()
     {
-        return false;
+        if (GameManagerEx.Instance.UseBlood(cardCost)) return true;
+        else return false;
     }
 }

@@ -71,7 +71,7 @@ public class GameManagerEx : MonoBehaviour
     }
 
     public bool UseCrystal(int num)
-    {   if (currentCrystal > num)
+    {   if (currentCrystal >= num)
         {
             currentCrystal -= num;
             crystalSlider.value = currentCrystal;
@@ -86,7 +86,9 @@ public class GameManagerEx : MonoBehaviour
         int destNum = num + currentCrystal;
         if (destNum >= MaxCrystal) destNum = MaxCrystal;
 
-        crystalSlider.value = destNum;
+        currentCrystal = destNum;
+        crystalSlider.value = currentCrystal;
+
     }
 
     public void RestoreBlood(int num)
@@ -94,11 +96,19 @@ public class GameManagerEx : MonoBehaviour
         int destNum = num + currentBlood;
         if (destNum >= MaxBlood) destNum = MaxBlood;
 
-        bloodSlider.value = destNum;
+        currentBlood = destNum;
+        bloodSlider.value = currentBlood;
     }
 
     public bool UseBlood(int num)
     {
+        if (currentBlood >= num)
+        {
+            currentBlood -= num;
+            bloodSlider.value = currentBlood;
+            return true;
+        }
+
         return false;
     }
 
