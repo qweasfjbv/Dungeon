@@ -8,6 +8,8 @@ public class CardInHand : MonoBehaviour
 
     private Vector3 targetPos = new Vector3(0, CardDecks.HIDDEN_DECK_POS_Y, 0);
 
+    [SerializeField] private GameObject monsterPrefab;
+
     public void SetTargetPosY(float y)
     {
         targetPos.y = y;
@@ -62,6 +64,12 @@ public class CardInHand : MonoBehaviour
         var targetV = UtilFunctions.CardLerp(GetComponent<RectTransform>().anchoredPosition, targetPos, 6f);
         this.GetComponent<RectTransform>().anchoredPosition = new Vector3(targetV.x, targetV.y);
 
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+
+            var tmpCard = Instantiate(monsterPrefab, transform.TransformPoint(new Vector3(0, Settings.HEIGHT / 2, 0)), Quaternion.identity, transform);
+            UpdateCardLayout();
+        }
 
     }
 
