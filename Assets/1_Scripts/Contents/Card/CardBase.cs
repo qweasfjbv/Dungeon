@@ -20,7 +20,7 @@ public abstract class CardBase : MonoBehaviour
     public static string effectPath = "Sprites/Effect/";
 
     protected int cardId;
-    protected int cardCost;
+    private int cardCost;
     private Define.CardType cardType;
 
     private float duration;
@@ -110,7 +110,6 @@ public abstract class CardBase : MonoBehaviour
     public abstract void ActivateEffect(Vector3 pos);
     public abstract void PreviewEffect(Vector3 pos);
     public abstract void UnPreviewEffect();
-    public abstract bool PayCardCost();
 
     private void Update()
     {
@@ -205,7 +204,7 @@ public abstract class CardBase : MonoBehaviour
             isInField = true;
             PreviewEffect(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             tmpColor.a = UtilFunctions.ColorAlphaLerp(tmpColor.a, 0f, 2* cardMoveSpeed);
-            SetColor(tmpColor);
+            SetColor(tmpColor); 
         }
         else
         {
@@ -227,12 +226,9 @@ public abstract class CardBase : MonoBehaviour
     {
         CameraController.CanMove = true;
         isDragged = false;
-        Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        if (isInField && MapGenerator.Instance.GetGridType(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y)) != Define.GridType.None
-            && PayCardCost())
+        if (isInField)
         {
-            
             // TODO : EFFECT ÇÊ¿ä
             ActivateEffect(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             transform.parent.GetComponent<CardInHand>().RemoveCardInHand(transform.GetSiblingIndex());

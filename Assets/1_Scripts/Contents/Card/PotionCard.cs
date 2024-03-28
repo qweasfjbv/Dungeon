@@ -44,10 +44,4 @@ public class PotionCard : CardBase
     {
         effect.SetActive(false);
     }
-
-    public override bool PayCardCost()
-    {
-        if (GameManagerEx.Instance.UseCrystal(cardCost)) return true;
-        else return false;
-    }
 }
