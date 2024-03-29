@@ -27,6 +27,15 @@
       "value": 1,
       "cardName": "heal potion",
       "cardDesc": "It heals allies."
+    },
+    {
+      "cardId": 14,
+      "cardType": 0,
+      "cardCost": 3,
+      "duration": 1,
+      "value": 1,
+      "cardName": "goblin",
+      "cardDesc": "it's so cute. Goblins are quite small, but that doesn't mean they are weak."
     }
   ]
 }

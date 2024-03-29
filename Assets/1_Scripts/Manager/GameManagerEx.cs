@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManagerEx : MonoBehaviour
 {
 
-    [SerializeField] private Slider crystalSlider;
-    [SerializeField] private Slider bloodSlider;
+    [SerializeField] private Image crystalFill;
+    [SerializeField] private Image bloodFill;
 
     static GameManagerEx s_instance;
     public static GameManagerEx Instance { get { return s_instance; } }
@@ -55,17 +56,27 @@ public class GameManagerEx : MonoBehaviour
         GameStart();
     }
 
+    private void SetBloodFill(int dest)
+    {
+        currentBlood = dest;
 
+        bloodFill.fillAmount = (float)dest / MaxBlood;
+
+    }
+
+    private void SetCrysatlFill(int dest)
+    {
+
+        currentCrystal = dest;
+
+        crystalFill.fillAmount = (float)dest / MaxCrystal;
+
+    }
     public void GameStart()
     {
-        crystalSlider.maxValue = MaxCrystal;
-        bloodSlider.maxValue = MaxBlood;
 
-        currentCrystal = MaxCrystal;
-        currentBlood = MaxBlood;
-
-        crystalSlider.value = currentCrystal;
-        bloodSlider.value = currentBlood;
+        SetCrysatlFill(MaxCrystal);
+        SetBloodFill(MaxBlood);
 
         StartCoroutine(CrystalRestore());
     }
@@ -73,8 +84,7 @@ public class GameManagerEx : MonoBehaviour
     public bool UseCrystal(int num)
     {   if (currentCrystal >= num)
         {
-            currentCrystal -= num;
-            crystalSlider.value = currentCrystal;
+            SetCrysatlFill(currentCrystal - num);
             return true;
         }
 
@@ -85,9 +95,7 @@ public class GameManagerEx : MonoBehaviour
     {
         int destNum = num + currentCrystal;
         if (destNum >= MaxCrystal) destNum = MaxCrystal;
-
-        currentCrystal = destNum;
-        crystalSlider.value = currentCrystal;
+        SetCrysatlFill(destNum); 
 
     }
 
@@ -95,17 +103,14 @@ public class GameManagerEx : MonoBehaviour
     {
         int destNum = num + currentBlood;
         if (destNum >= MaxBlood) destNum = MaxBlood;
-
-        currentBlood = destNum;
-        bloodSlider.value = currentBlood;
+        SetBloodFill(destNum);
     }
 
     public bool UseBlood(int num)
     {
         if (currentBlood >= num)
         {
-            currentBlood -= num;
-            bloodSlider.value = currentBlood;
+            SetBloodFill(currentBlood - num);
             return true;
         }
 

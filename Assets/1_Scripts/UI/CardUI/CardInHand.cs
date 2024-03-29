@@ -64,12 +64,6 @@ public class CardInHand : MonoBehaviour
         var targetV = UtilFunctions.CardLerp(GetComponent<RectTransform>().anchoredPosition, targetPos, 6f);
         this.GetComponent<RectTransform>().anchoredPosition = new Vector3(targetV.x, targetV.y);
 
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-
-            var tmpCard = Instantiate(monsterPrefab, transform.TransformPoint(new Vector3(0, Settings.HEIGHT / 2, 0)), Quaternion.identity, transform);
-            UpdateCardLayout();
-        }
 
     }
 
