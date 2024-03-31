@@ -7,20 +7,19 @@ using UnityEngine.UI;
 public class GameManagerEx : MonoBehaviour
 {
 
-    [SerializeField] private Image crystalFill;
-    [SerializeField] private Image bloodFill;
+    [SerializeField] private SliderMove crystalFill;
+    [SerializeField] private SliderMove bloodFill;
 
     static GameManagerEx s_instance;
     public static GameManagerEx Instance { get { return s_instance; } }
 
-    public readonly int MaxCrystal = 10;
-    public readonly int MaxBlood = 10;
-    private int currentCrystal;
-    private int currentBlood;
+    public readonly float MaxCrystal = 10;
+    public readonly float MaxBlood = 10;
+    private float currentCrystal;
+    private float currentBlood;
 
     private float progressTimer = 0f;
-
-    private float restoreTime = 1f;
+    private float restoreSpeed = 1f;
 
     public void Init()
     {
@@ -56,20 +55,20 @@ public class GameManagerEx : MonoBehaviour
         GameStart();
     }
 
-    private void SetBloodFill(int dest)
+    private void SetBloodFill(float dest)
     {
         currentBlood = dest;
 
-        bloodFill.fillAmount = (float)dest / MaxBlood;
+        bloodFill.SetTargetV((float)dest / MaxBlood);
 
     }
 
-    private void SetCrysatlFill(int dest)
+    private void SetCrysatlFill(float dest)
     {
 
         currentCrystal = dest;
 
-        crystalFill.fillAmount = (float)dest / MaxCrystal;
+        crystalFill.SetTargetV((float)dest / MaxCrystal);
 
     }
     public void GameStart()
@@ -81,7 +80,7 @@ public class GameManagerEx : MonoBehaviour
         StartCoroutine(CrystalRestore());
     }
 
-    public bool UseCrystal(int num)
+    public bool UseCrystal(float num)
     {   if (currentCrystal >= num)
         {
             SetCrysatlFill(currentCrystal - num);
@@ -91,22 +90,22 @@ public class GameManagerEx : MonoBehaviour
         return false;
     }
 
-    public void RestoreCrystal(int num)
+    public void RestoreCrystal(float num)
     {
-        int destNum = num + currentCrystal;
+        float destNum = num + currentCrystal;
         if (destNum >= MaxCrystal) destNum = MaxCrystal;
         SetCrysatlFill(destNum); 
 
     }
 
-    public void RestoreBlood(int num)
+    public void RestoreBlood(float num)
     {
-        int destNum = num + currentBlood;
+        float destNum = num + currentBlood;
         if (destNum >= MaxBlood) destNum = MaxBlood;
         SetBloodFill(destNum);
     }
 
-    public bool UseBlood(int num)
+    public bool UseBlood(float num)
     {
         if (currentBlood >= num)
         {
@@ -123,13 +122,7 @@ public class GameManagerEx : MonoBehaviour
 
         while (true)
         {
-            progressTimer += Time.deltaTime;
-
-            if (progressTimer > restoreTime)
-            {
-                RestoreCrystal(1);
-                progressTimer -= restoreTime;
-            }
+            RestoreCrystal(Time.deltaTime * restoreSpeed);
 
             yield return new WaitForSeconds(Time.deltaTime);
 

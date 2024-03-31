@@ -46,6 +46,11 @@ namespace Delaunay
                 this.b = a;
             }
         }
+
+        public override string ToString()
+        {
+            return "(" + a + ", " + b + ")";
+        }
         public override bool Equals(object obj)
         {
             return obj is Edge e && a == e.a && b == e.b;

@@ -46,13 +46,13 @@ public class UtilFunctions
         return startR;
     }
 
-    public static float ColorAlphaLerp(float start, float target, float speed)
+    public static float ColorAlphaLerp(float start, float target, float speed, float slighter = 1f)
     {
         float startA = start;
         if (start != target)
         {
             startA = Mathf.Lerp(start, target, speed * Time.deltaTime);
-            if (Mathf.Abs(start - target) <= APPROXMATE * 3)
+            if (Mathf.Abs(start - target) <= APPROXMATE * 2 * slighter)
                 startA = target;
         }
 

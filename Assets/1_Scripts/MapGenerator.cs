@@ -106,7 +106,7 @@ public class MapGenerator: MonoBehaviour
             rooms.Add(Instantiate(GridPrefab, GetRandomPointInCircle(10), Quaternion.identity));
             if (i > selectRoomCnt)
             {
-                rooms[i].transform.localScale = GetRandomScale(minRoomSize, maxRoomSize);
+                rooms[i].transform.localScale = GetRandomScale(smallMinRoomSize, smallMaxRoomSize);
             }
             else
             {
@@ -266,7 +266,9 @@ public class MapGenerator: MonoBehaviour
     private void ConnectRooms()
     {
 
+
         var triangles = DelaunayTriangulation.Triangulate(points);
+
 
         var graph = new HashSet<Delaunay.Edge>();
         foreach (var triangle in triangles)

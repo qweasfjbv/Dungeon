@@ -27,9 +27,9 @@ namespace Delaunay
 
             int dx = (maxX - minX + 1);
 
-            Vertex v1 = new Vertex(minX - dx - 1, minY - 1);
-            Vertex v2 = new Vertex((minX + maxX)/2, maxY + (maxY - minY) + 1);
-            Vertex v3 = new Vertex(maxX + dx + 1, minY - 1);
+            Vertex v1 = new Vertex((minX - dx - 1) *2, minY - 1 - (maxY + (maxY - minY) + 1));
+            Vertex v2 = new Vertex((minX + maxX)/2, (maxY + (maxY - minY) + 1)*2);
+            Vertex v3 = new Vertex((maxX + dx + 1)* 2, minY - 1 - (maxY + (maxY - minY) + 1));
 
             return new Triangle(v1, v2, v3);
         }
@@ -62,7 +62,9 @@ namespace Delaunay
                             if (badTriangle == otherTriangle)
                                 continue;
                             if (otherTriangle.HasEdge(edge))
+                            {
                                 isShared = true;
+                            }
                         }
                         if (!isShared)
                             polygon.Add(edge);
@@ -76,6 +78,8 @@ namespace Delaunay
                     triangulation.Add(new Triangle(vertex, edge.a, edge.b));
                 }
             }
+
+
 
             triangulation.RemoveWhere((Triangle t) => t.HasSameVertex(superTriangle));
 

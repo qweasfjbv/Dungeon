@@ -21,6 +21,11 @@ namespace Delaunay
             return obj is Vertex v && v.x == x && v.y == y;
         }
 
+        public override string ToString()
+        {
+            return "( " + x + ", " + y + ")";   
+        }
+
         public override int GetHashCode()
         {
             return HashCode.Combine(x, y);
