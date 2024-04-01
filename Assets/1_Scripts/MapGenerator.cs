@@ -33,6 +33,8 @@ public class MapGenerator: MonoBehaviour
     private HashSet<Delaunay.Vertex> points = new HashSet<Delaunay.Vertex>();
     private HashSet<GameObject> lines = new HashSet<GameObject>();
 
+    private List<Edge> hallwayEdges;
+
     private int[,] map; // 2Â÷¿ø ¹è¿­ ¸Ê
 
 
@@ -130,11 +132,13 @@ public class MapGenerator: MonoBehaviour
 
         MainRoomFraming();
         ConnectRooms();
-
+        GenerateHallways(hallwayEdges);
         //CellularAutomata(5);
 
         MapArrNormalization();
         AutoTiling();
+
+        SelectEntrances();
 
     }
 
@@ -274,9 +278,8 @@ public class MapGenerator: MonoBehaviour
         foreach (var triangle in triangles)
             graph.UnionWith(triangle.edges);
 
-        var tree = Kruskal.MinimumSpanningTree(graph);
+        hallwayEdges = Kruskal.MinimumSpanningTree(graph);
 
-        GenerateHallways(tree);
     }
 
     private void GenerateHallways(IEnumerable<Delaunay.Edge> tree)
@@ -1007,6 +1010,18 @@ public class MapGenerator: MonoBehaviour
     }
 
     #endregion
+
+
+    #region SELECT ENTRANCE
+
+    private void SelectEntrances()
+    {
+        var tmp = FloydWarshall.GetEntrance(points, hallwayEdges);
+        Debug.Log(tmp.Item1 + ", " + tmp.Item2);
+    }
+
+    #endregion
+
 
     #region PATH FINDING
 
