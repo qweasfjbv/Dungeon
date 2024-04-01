@@ -18,7 +18,7 @@ public class FloydWarshall
         {
             for (int j = 0; j < cnt; j++)
             {
-                dist[i, j] = (i == j) ? 0 : int.MaxValue;
+                dist[i, j] = (i == j) ? 0 : 1000000;
             }
         }
 
@@ -49,6 +49,7 @@ public class FloydWarshall
         {
             for (int j = i + 1; j < cnt; j++)
             {
+                Debug.Log("point : " + points.ToList()[i] + ", " + points.ToList()[j] + " : " + dist[i, j]);
                 if (dist[i, j] > maxDist)
                 {
                     maxDist = dist[i, j];

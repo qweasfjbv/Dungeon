@@ -1,5 +1,6 @@
 using Delaunay;
 using EnemyUI.BehaviorTree;
+using JetBrains.Annotations;
 using JPS;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ public class MapGenerator: MonoBehaviour
     private int[,] map; // 2Â÷¿ø ¹è¿­ ¸Ê
 
 
+    private JumpPointSearch jpm;
     int minX = int.MaxValue, minY = int.MaxValue;
     int maxX = int.MinValue, maxY = int.MinValue;
 
@@ -73,7 +75,7 @@ public class MapGenerator: MonoBehaviour
     }
 
     private void Start()
-    {
+    { 
         StartCoroutine(MapGenerateCoroutine());
     }
 
@@ -137,6 +139,9 @@ public class MapGenerator: MonoBehaviour
 
         MapArrNormalization();
         AutoTiling();
+
+
+        jpm = new JumpPointSearch(map);
 
         SelectEntrances();
 
@@ -1014,10 +1019,36 @@ public class MapGenerator: MonoBehaviour
 
     #region SELECT ENTRANCE
 
+    [Header("ENTRACE")]
+    [SerializeField] private GameObject floorEntrance;
+    [SerializeField] private GameObject floorExit;
+
     private void SelectEntrances()
     {
-        var tmp = FloydWarshall.GetEntrance(points, hallwayEdges);
-        Debug.Log(tmp.Item1 + ", " + tmp.Item2);
+        Vector2Int start = new Vector2Int(0, 0);
+        Vector2Int end = new Vector2Int(0, 0);
+
+        int maxDis = -1;
+        foreach (var point1 in points)
+        {
+            foreach(var point2 in points)
+            {
+                if (point1 == point2) continue;
+                var tmpDis = jpm.GetPathDistance(new Vector2Int(point1.y - minY, point1.x - minX), new Vector2Int(point2.y - minY, point2.x - minX));
+                if (maxDis < tmpDis)
+                {
+                    maxDis = tmpDis;
+                    start = new Vector2Int(point1.x - minX, point1.y - minY);
+                    end = new Vector2Int(point2.x - minX, point2.y - minY);
+                }
+
+
+            }
+        }
+
+        floorEntrance.transform.position = new Vector3(start.x, start.y, 0);
+        floorExit.transform.position = new Vector3(end.x, end.y, 0);
+        
     }
 
     #endregion
@@ -1025,13 +1056,12 @@ public class MapGenerator: MonoBehaviour
 
     #region PATH FINDING
 
-
+    [Header("DEBUG")]
     [SerializeField] GameObject Line;
     [SerializeField] Transform PathTest;
     public List<Vector2> PreprocessPath(Vector2Int startPoint, Vector2Int endPoint)
     {
 
-        JumpPointSearch jpm = new JumpPointSearch(map);
         var pathList = (jpm.PathFind(startPoint, endPoint));
         
         var retList = new List<Vector2>();

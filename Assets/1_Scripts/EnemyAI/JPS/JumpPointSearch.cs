@@ -32,6 +32,60 @@ namespace JPS
             closedList = new List<JPSNode>();
         }
 
+        public int GetPathDistance(Vector2Int sp, Vector2Int ep)
+        {
+
+            // 초기화
+
+            this.startPoint = sp;
+            this.endPoint = ep;
+
+            if (map[endPoint.x, endPoint.y] == (int)Define.GridType.None || map[startPoint.x, startPoint.y] == (int)Define.GridType.None)
+            {
+                return -1;
+            }
+
+            List<Vector2Int> ans = new List<Vector2Int>();
+            openList.Clear();
+            closedList.Clear();
+
+            AddToOpenList(new JPSNode(null, startPoint, JPSDir.None, 0, CalcHeuri(startPoint, endPoint)));
+
+            while (openList.Count > 0)
+            {
+
+                JPSNode curNode = openList.First();
+                closedList.Add(curNode);
+                openList.Remove(curNode);
+
+                if (curNode.pos.x == endPoint.x && curNode.pos.y == endPoint.y)
+                {
+                    return curNode.GetPassedCost();
+                }
+
+                if (curNode.dir == JPSDir.None)
+                {
+                    SearchLine(curNode, curNode.pos, JPSDir.Up);
+                    SearchLine(curNode, curNode.pos, JPSDir.Right);
+                    SearchLine(curNode, curNode.pos, JPSDir.Left);
+                    SearchLine(curNode, curNode.pos, JPSDir.Down);
+                    SearchLine(curNode, curNode.pos, JPSDir.UpRight);
+                    SearchLine(curNode, curNode.pos, JPSDir.UpLeft);
+                    SearchLine(curNode, curNode.pos, JPSDir.DownRight);
+                    SearchLine(curNode, curNode.pos, JPSDir.DownLeft);
+
+                }
+                else
+                    SearchLine(curNode, curNode.pos, curNode.dir);
+
+
+
+            }
+
+
+            return -1;
+        }
+
         public List<Vector2Int> PathFind(Vector2Int sp, Vector2Int ep)
         {
             // 초기화
@@ -303,7 +357,7 @@ namespace JPS
             if (pos.x == endPoint.x && pos.y == endPoint.y)
             {
                 destDir = dir;
-                AddToOpenList(new JPSNode(node, pos, dir, 0, 0));
+                AddToOpenList(new JPSNode(node, pos, dir, node.GetPassedCost() + CalcHeuri(node.pos, pos), 0));
                 return 1;
             }
 
