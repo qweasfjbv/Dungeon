@@ -78,7 +78,7 @@ namespace EnemyUI.BehaviorTree
 
             Node cur = this.parent;
 
-            while (cur.parent != null)
+            while (cur != null)
             {
                 if (cur.RemoveNodeData(key)) return true;
                 cur = cur.parent;

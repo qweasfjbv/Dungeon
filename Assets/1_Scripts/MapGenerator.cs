@@ -1092,7 +1092,7 @@ public class MapGenerator: MonoBehaviour
 
     private void PathFindDebug()
     {
-
+        /*
         // 마우스 왼쪽 버튼이 클릭되었을 때
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
@@ -1126,6 +1126,15 @@ public class MapGenerator: MonoBehaviour
             PathTest.GetComponent<EnemyBT>().SetValues(endV);
             PathTest.gameObject.SetActive(true);
             
+        }*/
+
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            var tmpEnemy = Instantiate(PathTest);
+            tmpEnemy.transform.position = new Vector3(floorEntrance.transform.position.x, floorEntrance.transform.position.y, 0);
+            tmpEnemy.GetComponent<EnemyBT>().SetValues(new Vector2Int(Mathf.FloorToInt(floorExit.transform.position.x), Mathf.FloorToInt( floorExit.transform.position.y)));
+            tmpEnemy.gameObject.SetActive(true);
         }
     }
 

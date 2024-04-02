@@ -193,7 +193,10 @@ namespace EnemyUI.BehaviorTree
                     return NodeState.Failure;
                 }
             }
+
+            if (GetNodeData("isTracked") != null) { Debug.Log(GetNodeData("isTracked")); return NodeState.Failure; }
             //
+
             return NodeState.Success;
         }
 
@@ -219,7 +222,8 @@ namespace EnemyUI.BehaviorTree
             this.rigid = transform.GetComponent<Rigidbody2D>();
             this.dest = dest;
             this.path = MapGenerator.Instance.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
-                dest);
+                new Vector2Int((int)dest.y, (int)dest.x));
+
         }
 
         public override NodeState Evaluate()
@@ -227,11 +231,14 @@ namespace EnemyUI.BehaviorTree
 
             if (GetNodeData("pathfindFlag") != null)
             {
+
                 RemoveNodeData("pathfindFlag"); 
                 path = MapGenerator.Instance.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
-            dest);
+            new Vector2Int((int)dest.y, (int)dest.x));
                 currentPointIndex = 0;
             }
+
+
 
             if (path == null || path.Count == 0) return NodeState.Success;
 
@@ -246,7 +253,7 @@ namespace EnemyUI.BehaviorTree
             animator.SetFloat("X", step.x);
             animator.SetFloat("Y", step.y);
 
-            if (Vector2.Distance(transform.position, currentTarget) < 0.1f)
+            if (Vector2.Distance(transform.position, currentTarget) < 0.2f)
             {
                 currentPointIndex++;
                 if (currentPointIndex >= path.Count)
@@ -298,6 +305,9 @@ namespace EnemyUI.BehaviorTree
         private Animator animator;
         private Rigidbody2D rigid;
         private EnemyStat stat;
+        private List<Vector2> path;
+
+        private int currentPointIndex = 0;
 
         public Track(Transform transform, int attackRange, EnemyStat stat)
         {
@@ -314,13 +324,24 @@ namespace EnemyUI.BehaviorTree
 
             // BossObject 변수 받고 따라가기
             var boss = (GameObject)GetNodeData("BossObject");
-
+            if(boss == null)
+            {
+                // 보스를 처치한 경우
+                // 다시 가던길 가면됨
+                RemoveNodeData("isTracked");
+                return NodeState.Failure;
+            }
             Vector3 dir = boss.transform.position - transform.position;
             float dis2 = dir.x * dir.x + dir.y * dir.y;
 
-            animator.SetFloat("X", dir.x);
-            animator.SetFloat("Y", dir.y);
-
+            if (GetNodeData("isTracked") == null)
+            {
+                path = MapGenerator.Instance.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
+            new Vector2Int((int)boss.transform.position.y, (int)boss.transform.position.x));
+                currentPointIndex = 0;
+                Debug.Log("Construct");
+                parent.parent.SetNodeData("isTracked", true);
+            }
             // 성공 -> Seq의 다음노드 실행
             if (dis2 < attackRange * attackRange) {
                 animator.SetBool("Walk", false);
@@ -328,8 +349,33 @@ namespace EnemyUI.BehaviorTree
             }
 
             EnemyBT.SetAnimatior(animator, "Walk");
-            dir.Normalize();
-            rigid.MovePosition(transform.position + stat.MoveSpeed * dir);
+
+            if (currentPointIndex >= path.Count) {
+
+                RemoveNodeData("isTracked");
+                return NodeState.Failure; }
+
+            Vector2 currentTarget = path[currentPointIndex];
+
+            var step = stat.MoveSpeed * new Vector3(currentTarget.x - transform.position.x, currentTarget.y - transform.position.y, 0).normalized;
+
+
+            rigid.MovePosition(transform.position + new Vector3(step.x, step.y, 0));
+
+
+            animator.SetFloat("X", step.x);
+            animator.SetFloat("Y", step.y);
+
+            if (Vector2.Distance(transform.position, currentTarget) < 0.2f)
+            {
+                currentPointIndex++;
+                if (currentPointIndex >= path.Count)
+                {
+                    // 도착
+                    RemoveNodeData("isTracked");
+                    return NodeState.Failure;
+                }
+            }
 
             return NodeState.Running;
         }
@@ -352,9 +398,25 @@ namespace EnemyUI.BehaviorTree
             if (!animator.GetBool("Attack"))
             {
                 EnemyBT.SetAnimatior(animator, "Attack");
+                // 죽으면 지워야됨
+
+                var tr = (GameObject)GetNodeData("BossObject");
+
+                if (tr == null)
+                {
+                    RemoveNodeData("BossObject");
+                    return NodeState.Failure;
+                }
+
+                // 떄리는 로직
+                // 때리고 죽었으면
+                if (true)
+                {
+                    GameObject.Destroy(tr);
+                    RemoveNodeData("BossObject");
+                }
             }
 
-            var tr = (GameObject)GetNodeData("BossObject");
             return NodeState.Success;
         }
 

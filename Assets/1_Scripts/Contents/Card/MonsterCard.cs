@@ -14,6 +14,7 @@ public class MonsterCard : CardBase
     {
 
         pos.z = 0;
+        monster.GetComponent<Collider2D>().enabled = true;
         monster.transform.position = pos;
         monster.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
         // 움직이는 스크립트 (BT) 켜줘야함
@@ -25,6 +26,7 @@ public class MonsterCard : CardBase
         pos.z = 0;
 
         monster.transform.position = pos;
+        monster.GetComponent<Collider2D>().enabled = false;
         Color tmpC = monster.transform.GetChild(0).GetComponent<SpriteRenderer>().color;
         tmpC.a = 0.5f;
         monster.transform.GetChild(0).GetComponent<SpriteRenderer>().color = tmpC;
