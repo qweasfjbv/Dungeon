@@ -11,6 +11,7 @@ namespace EnemyUI.BehaviorTree
 
         public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
         public float Hp { get => hp; set => hp = value; }
+        public float Attack { get => attack; set => attack = value; }
 
         public EnemyStat(float moveSpeed, float attack, float hp)
         {
@@ -44,7 +45,7 @@ namespace EnemyUI.BehaviorTree
         {
             destination = dest;
         }
-        public void OnDamaged(float damage)
+        public bool OnDamaged(float damage)
         {
             enemyStat.Hp -= damage;
             if (enemyStat.Hp > 0)
@@ -52,8 +53,9 @@ namespace EnemyUI.BehaviorTree
                 var animator = transform.GetComponent<Animator>();
                 SetAnimatior(animator, "Damage");
 
-                return;
+                return false;
             }
+            else return true;
         }
         public void OnRecover(float damage)
         {
@@ -73,14 +75,14 @@ namespace EnemyUI.BehaviorTree
                     }) ,
                     new Sequence(new List<Node>
                     {
-                        new Search(transform, searchRange),
+                        new Search(transform, searchRange, "Monster"),
                         new Move(transform, destination, enemyStat)
                     }),
                     new Sequence(new List<Node>
                     {
                         new IsAttacking(transform),
                         new Track(transform, attackRange, enemyStat),
-                        new Attack(transform)
+                        new Attack(transform, enemyStat)
                     })
                 });
 
@@ -172,12 +174,16 @@ namespace EnemyUI.BehaviorTree
 
         private Transform transform;
         private int searchRange;
+        string tagName;
+        Animator animator;
 
-        public Search(Transform transform, int searchRange)
+        public Search(Transform transform, int searchRange, string tagName)
         {
             // 필요한 초기화
             this.transform = transform;
             this.searchRange = searchRange;
+            this.tagName = tagName;
+            animator = transform.GetComponent<Animator>();
         }
 
         public override NodeState Evaluate()
@@ -186,7 +192,7 @@ namespace EnemyUI.BehaviorTree
             var cols = Physics2D.OverlapCircleAll(transform.position, searchRange);
             foreach (var col in cols)
             {
-                if (col.CompareTag("Monster"))
+                if (col.CompareTag(tagName))
                 {
                     parent.parent.SetNodeData("BossObject", col.gameObject);
                     parent.SetNodeData("pathfindFlag", true);
@@ -194,9 +200,13 @@ namespace EnemyUI.BehaviorTree
                 }
             }
 
-            if (GetNodeData("isTracked") != null) { Debug.Log(GetNodeData("isTracked")); return NodeState.Failure; }
+            if (GetNodeData("isTracked") != null)
+            { return NodeState.Failure; }
             //
-
+            if (animator.GetBool("Attack"))
+            {
+                GoblinBT.SetAnimatior(animator, "Idle");
+            }
             return NodeState.Success;
         }
 
@@ -339,7 +349,6 @@ namespace EnemyUI.BehaviorTree
                 path = MapGenerator.Instance.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
             new Vector2Int((int)boss.transform.position.y, (int)boss.transform.position.x));
                 currentPointIndex = 0;
-                Debug.Log("Construct");
                 parent.parent.SetNodeData("isTracked", true);
             }
             // 성공 -> Seq의 다음노드 실행
@@ -386,10 +395,12 @@ namespace EnemyUI.BehaviorTree
     {
         private Transform transform;
         private Animator animator;
-        public Attack(Transform transform)
+        private EnemyStat stat;
+        public Attack(Transform transform, EnemyStat stat)
         {
             this.transform = transform;
             this.animator = transform.GetComponent<Animator>();
+            this.stat = stat;
         }
 
 
@@ -410,7 +421,12 @@ namespace EnemyUI.BehaviorTree
 
                 // 떄리는 로직
                 // 때리고 죽었으면
-                if (true)
+                if (tr.GetComponent<GoblinBT>() != null && tr.GetComponent<GoblinBT>().OnDamaged(stat.Attack))
+                {
+                    GameObject.Destroy(tr);
+                    RemoveNodeData("BossObject");
+                }
+                if (tr.GetComponent<EnemyBT>() != null && tr.GetComponent<EnemyBT>().OnDamaged(stat.Attack))
                 {
                     GameObject.Destroy(tr);
                     RemoveNodeData("BossObject");

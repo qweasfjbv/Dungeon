@@ -1075,13 +1075,13 @@ public class MapGenerator: MonoBehaviour
 
             if (prevPoint.x != 0 || prevPoint.y != 0)
             {
-                
+                /*
                 GameObject line = Instantiate(Line);
                 line.GetComponent<LineRenderer>().SetPosition(0, new Vector3(prevPoint.y, prevPoint.x, -1));
                 line.GetComponent<LineRenderer>().SetPosition(1, new Vector3(point.y, point.x, -1));
                 line.GetComponent<LineRenderer>().startWidth = 0.3f;
                 line.GetComponent<LineRenderer>().endWidth = 0.3f;
-                
+                */
             }
 
             prevPoint = point;
