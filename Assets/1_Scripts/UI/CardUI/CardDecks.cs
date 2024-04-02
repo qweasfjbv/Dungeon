@@ -27,10 +27,11 @@ public class CardDecks : MonoBehaviour
             ShowCardDeck(2);
         }
 
-        if (Input.GetKeyDown(KeyCode.D)) AddCardInDeck(11);
-        if (Input.GetKeyDown(KeyCode.F)) AddCardInDeck(12);
-        if (Input.GetKeyDown(KeyCode.G)) AddCardInDeck(13);
-        if (Input.GetKeyDown(KeyCode.H)) AddCardInDeck(14);
+        if (Input.GetKeyDown(KeyCode.A)) AddCardInDeck(11);
+        if (Input.GetKeyDown(KeyCode.S)) AddCardInDeck(12);
+        if (Input.GetKeyDown(KeyCode.D)) AddCardInDeck(13);
+        if (Input.GetKeyDown(KeyCode.F)) AddCardInDeck(14);
+        if (Input.GetKeyDown(KeyCode.G)) AddCardInDeck(15);
     }
 
     private void ShowCardDeck(int deckIdx)
