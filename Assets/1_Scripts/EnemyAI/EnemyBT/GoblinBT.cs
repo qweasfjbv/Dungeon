@@ -30,7 +30,6 @@ namespace EnemyUI.BehaviorTree
         }
         public bool OnDamaged(float damage)
         {
-            Debug.Log("DAMAGED");
             enemyStat.Hp -= damage;
             if (enemyStat.Hp > 0)
             {

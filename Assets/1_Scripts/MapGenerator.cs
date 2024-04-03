@@ -1046,6 +1046,8 @@ public class MapGenerator: MonoBehaviour
             }
         }
 
+        // TODO : Instantiate으로 변경
+
         floorEntrance.transform.position = new Vector3(start.x, start.y, 0);
         floorExit.transform.position = new Vector3(end.x, end.y, 0);
         
@@ -1092,42 +1094,6 @@ public class MapGenerator: MonoBehaviour
 
     private void PathFindDebug()
     {
-        /*
-        // 마우스 왼쪽 버튼이 클릭되었을 때
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            // 마우스 클릭 지점의 스크린 좌표를 가져옵니다.
-            Vector3 mousePosition = Input.mousePosition;
-
-            // 스크린 좌표를 월드 좌표로 변환합니다.
-            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-
-
-            if (count == 0) { startV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x); }
-            if (count ==1)
-            {
-                endV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x);
-                again = true;
-            }
-            else if (count >=2)
-            {
-                startV = endV;
-                endV = new Vector2Int((int)worldPosition.y, (int)worldPosition.x);
-                again = true;
-            }
-            count++;
-        }
-
-        if (count >= 1 && again)
-        {
-            again = false;
-
-            PathTest.transform.position = new Vector3(startV.y, startV.x, 0);
-            PathTest.GetComponent<EnemyBT>().SetValues(endV);
-            PathTest.gameObject.SetActive(true);
-            
-        }*/
-
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {

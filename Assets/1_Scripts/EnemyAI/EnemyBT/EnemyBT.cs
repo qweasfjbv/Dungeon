@@ -334,6 +334,7 @@ namespace EnemyUI.BehaviorTree
 
             // BossObject 변수 받고 따라가기
             var boss = (GameObject)GetNodeData("BossObject");
+
             if(boss == null)
             {
                 // 보스를 처치한 경우
@@ -344,6 +345,7 @@ namespace EnemyUI.BehaviorTree
             Vector3 dir = boss.transform.position - transform.position;
             float dis2 = dir.x * dir.x + dir.y * dir.y;
 
+            //
             if (GetNodeData("isTracked") == null)
             {
                 path = MapGenerator.Instance.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
@@ -351,6 +353,8 @@ namespace EnemyUI.BehaviorTree
                 currentPointIndex = 0;
                 parent.parent.SetNodeData("isTracked", true);
             }
+
+
             // 성공 -> Seq의 다음노드 실행
             if (dis2 < attackRange * attackRange) {
                 animator.SetBool("Walk", false);
@@ -359,10 +363,14 @@ namespace EnemyUI.BehaviorTree
 
             EnemyBT.SetAnimatior(animator, "Walk");
 
+
+
+            // 실제 이동 구현부분
             if (currentPointIndex >= path.Count) {
 
                 RemoveNodeData("isTracked");
                 return NodeState.Failure; }
+
 
             Vector2 currentTarget = path[currentPointIndex];
 

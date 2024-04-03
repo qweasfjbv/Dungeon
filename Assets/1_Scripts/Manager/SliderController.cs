@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SliderController : MonoBehaviour
 {
@@ -51,7 +48,7 @@ public class SliderController : MonoBehaviour
         SetManaFill(MaxMana);
         SetBloodFill(MaxBlood);
 
-        StartCoroutine(ManaRestore());
+        StartCoroutine(ManaRestoreCoroutine());
     }
 
     public bool UseCrystal(float num)
@@ -90,7 +87,7 @@ public class SliderController : MonoBehaviour
         return false;
     }
 
-    private IEnumerator ManaRestore()
+    private IEnumerator ManaRestoreCoroutine()
     {
         progressTimer = 0f;
 

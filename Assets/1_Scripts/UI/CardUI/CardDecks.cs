@@ -54,5 +54,21 @@ public class CardDecks : MonoBehaviour
         cardDecks[(int)Managers.Resource.GetCardInfo(cardId).cardType].AddCardInHand(cardId);
     }
 
+    public void OnDeckChangeClicked()
+    {
+        if (showingDeckIndex == -1)
+        {
+            ShowCardDeck(0);
+        }
+        else if (showingDeckIndex == cardDecks.Count - 1)
+        {
+            ShowCardDeck(showingDeckIndex);
+        }
+        else
+        {
+            ShowCardDeck(showingDeckIndex + 1);
+        }
+    }
+
 
 }
