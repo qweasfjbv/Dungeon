@@ -4,23 +4,28 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Localization.Settings;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class DialogManager : MonoBehaviour
 {
     [SerializeField] private GameObject dialogBox;
     [SerializeField] private TextMeshProUGUI dialogActorName;
     [SerializeField] private Image dialogActorSprite;
-
     [SerializeField] private TextMeshProUGUI dialogText;
 
-    private bool dialogInProgress = false;
+    private DialogEventInfo eventInfo;
 
-    private List<string> dialogTexts = new List<string>();
+    private bool dialogInProgress = false;
+    private bool isTyping = false;
+
+    private List<string> dialogKeys = new List<string>();
     private string prevDialogue = "";
 
     private int curDialogueIndex = 0;
     private int curLineIndex = 0;
-    private bool isTyping = false;
+
+
 
     private float dialogHidePosY = -1000;
     private float dialogRevealPosY = 0;
@@ -28,9 +33,7 @@ public class DialogManager : MonoBehaviour
 
     private void Start()
     {
-        dialogTexts.Add("Welcome to \n\"K-pler project\"!!  \n (space)");
-        dialogTexts.Add("HIHIHIIHHIHIIHIHIHHIHIHIIHHIHHIH");
-        dialogTexts.Add("QWEQWEWQEQWEWQEQWEQWEWQEQWE");
+
 
         dialogBox.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, dialogHidePosY, 0);
     }
@@ -40,8 +43,7 @@ public class DialogManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (!dialogInProgress) SetEvent(0);
-            else UnsetEvent();
+            if (!dialogInProgress) SetEvent(1);
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && dialogInProgress)
@@ -55,8 +57,8 @@ public class DialogManager : MonoBehaviour
             }
             else
             {
-                if (curLineIndex < dialogTexts.Count) {
-                    prevDialogue = dialogTexts[curLineIndex];
+                if (curLineIndex < dialogKeys.Count) {
+                    prevDialogue = LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", dialogKeys[curLineIndex]);
                     ShowNextLine();
                 }
                 else
@@ -68,21 +70,32 @@ public class DialogManager : MonoBehaviour
     }
 
 
-    private void SetActor(Define.ActorID actorId)
-    {
-        return;
-    }
 
     private void SetEvent(int id)
     {
-        var test = Managers.Resource.GetEventInfo(id);
-        // List<string> 으로 대화 받아옴
+
+
+        // dialog Text table에서 받아오기
+        eventInfo = Managers.Resource.GetEventInfo(id);
+
+
+        // 대사 키 저장
+        dialogKeys.Clear();
+        for (int i = 0; i < eventInfo.eventDialogCnt; i++)
+        {
+            dialogKeys.Add(eventInfo.eventName + "_D" + i.ToString());
+        }
+
+
+        // Init
         dialogInProgress = true;
         dialogText.text = "";
+        dialogActorName.text = LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", eventInfo.eventName);
+
 
         dialogBox.GetComponent<RectTransform>().DOAnchorPosY(dialogRevealPosY, 0.6f).SetEase(Ease.OutBounce);
 
-        prevDialogue = dialogTexts[curLineIndex];
+        prevDialogue = LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", dialogKeys[curLineIndex]);
         ShowNextLine();
     }
 
@@ -96,19 +109,19 @@ public class DialogManager : MonoBehaviour
     {
 
 
-        if (curDialogueIndex < dialogTexts.Count &&
-            curLineIndex < dialogTexts[curDialogueIndex].Length)
+        if (curDialogueIndex < dialogKeys.Count &&
+            curLineIndex < dialogKeys[curDialogueIndex].Length)
         {
-            StartCoroutine(TypeDialogue(dialogTexts[curLineIndex]));
+            StartCoroutine(TypeDialogue(LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", dialogKeys[curLineIndex])));
         }
         else
         {
             curDialogueIndex++;
             curLineIndex = 0;
 
-            if (curDialogueIndex < dialogTexts.Count)
+            if (curDialogueIndex < dialogKeys.Count)
             {
-                StartCoroutine(TypeDialogue(dialogTexts[curLineIndex]));
+                StartCoroutine(TypeDialogue(LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", dialogKeys[curLineIndex])));
             }
             else
             {

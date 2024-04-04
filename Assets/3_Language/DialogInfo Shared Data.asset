@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: DialogInfo Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: DialogInfo
+  m_TableCollectionNameGuidString: bab9137bb25711641bbe5cb8cc8cc06b
+  m_Entries:
+  - m_Id: 49234382848
+    m_Key: GG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5433416290304
+    m_Key: GG_D0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6370314752000
+    m_Key: GG_D1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11157970161664
+    m_Key: GG_S0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11181395349504
+    m_Key: GG_S1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15724950654976
+    m_Key: TE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15762573561856
+    m_Key: TE_D0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15764179980288
+    m_Key: TE_D1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15765006258176
+    m_Key: TE_D2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16064932548608
+    m_Key: TE_S0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16065943375872
+    m_Key: TE_S1
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 1100060388963909656
+  references:
+    version: 2
+    RefIds:
+    - rid: 1100060388963909656
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
+        asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1712243363271
