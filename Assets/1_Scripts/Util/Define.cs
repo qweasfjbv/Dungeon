@@ -17,6 +17,13 @@ public class Define
         Trap,
         None
     }
-    
+
+    public enum ActorID { 
+        Player = 0,
+        Merchant,
+
+    }
+
+
 
 }

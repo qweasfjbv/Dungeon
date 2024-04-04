@@ -15,27 +15,7 @@ public class EffectGenerator : MonoBehaviour
 
     private void Awake()
     {
-
-        if (s_instance == null)
-        {
-            GameObject go = GameObject.Find("@EffectGenerator");
-            if (go == null)
-            {
-                go = new GameObject { name = "@EffectGenerator" };
-                go.AddComponent<EffectGenerator>();
-            }
-
-            DontDestroyOnLoad(go);
-            s_instance = go.GetComponent<EffectGenerator>();
-
-        }
-        else
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-
-
+        s_instance = gameObject.GetComponent<EffectGenerator>();
     }
 
     public void ThrowPotion(Vector3 dest, float throwTime, Sprite potionSprite)

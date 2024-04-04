@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using UnityEngine;
 
@@ -20,6 +21,12 @@ public class CardInfo
 public class CardInfos
 {
     public CardInfo[] cardInfo;
+}
+
+
+[Serializable]
+public class EventInfo {
+    public int eventId;
 }
 
 public class ResourceManager
@@ -51,5 +58,9 @@ public class ResourceManager
         return cardPrefabs[id - CARDOFFSET];
     }
 
+    public EventInfo GetEventInfo(int id)
+    {
+        return null;
+    }
     
 }

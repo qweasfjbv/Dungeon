@@ -377,6 +377,7 @@ GameObject:
   - component: {fileID: 326316414}
   - component: {fileID: 326316413}
   - component: {fileID: 326316412}
+  - component: {fileID: 326316416}
   m_Layer: 5
   m_Name: DialogCanvas
   m_TagString: Untagged
@@ -433,8 +434,8 @@ Canvas:
   m_GameObject: {fileID: 326316411}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -445,7 +446,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 15
   m_TargetDisplay: 0
 --- !u!224 &326316415
 RectTransform:
@@ -467,6 +468,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &326316416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326316411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b3a49e300aa4742ad6640eaf4c6adf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogBox: {fileID: 72730977}
+  dialogActorName: {fileID: 931857814}
+  dialogActorSprite: {fileID: 775671870}
+  dialogText: {fileID: 1806275696}
 --- !u!1 &362790614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,7 +1085,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -369, y: 0}
+  m_AnchoredPosition: {x: -369, y: -54}
   m_SizeDelta: {x: 320.75, y: 315.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &775671870
@@ -1944,7 +1961,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 171.70001, y: 7.3999634}
+  m_AnchoredPosition: {x: 171.69995, y: 7.3999023}
   m_SizeDelta: {x: 251.3, y: 48.3}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1131123225
@@ -2421,7 +2438,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -370, y: -118.73999}
+  m_AnchoredPosition: {x: -370, y: -172.73999}
   m_SizeDelta: {x: 300, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1424694530
@@ -2497,7 +2514,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -433}
+  m_AnchoredPosition: {x: 0, y: -487}
   m_SizeDelta: {x: 1160.8, y: 352.52}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1558715114

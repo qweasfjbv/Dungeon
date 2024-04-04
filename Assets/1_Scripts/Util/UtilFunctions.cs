@@ -1,6 +1,8 @@
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 
-public class UtilFunctions
+public static class UtilFunctions
 {
     const float APPROXMATE = 0.05f;
 
@@ -58,6 +60,4 @@ public class UtilFunctions
 
         return startA;
     }
-
-
 }
