@@ -2,49 +2,39 @@
 {
   "cardInfo": [
     {
-      "cardId": 11,
+      "cardId": 1,
       "cardType": 1,
       "cardCost": 2,
       "duration": 5,
-      "value": 2,
-      "cardName": "curse potion",
-      "cardDesc": "It's possible to slow down moving enemies."
+      "value": 2
     },
     {
-      "cardId": 12,
+      "cardId": 2,
       "cardType": 1,
       "cardCost": 1,
       "duration": 4,
-      "value": 1,
-      "cardName": "blood potion",
-      "cardDesc": "spread blood. it can hurt enemies."
+      "value": 1
     },
     {
-      "cardId": 13,
+      "cardId": 3,
       "cardType": 1,
       "cardCost": 1,
       "duration": 4.5,
-      "value": 1,
-      "cardName": "heal potion",
-      "cardDesc": "It heals allies."
+      "value": 1
     },
     {
-      "cardId": 14,
+      "cardId": 4,
       "cardType": 0,
       "cardCost": 1,
       "duration": 1,
-      "value": 1,
-      "cardName": "goblin worrier",
-      "cardDesc": "it's so cute.\nGoblins are quite small, but that doesn't mean they are weak."
+      "value": 1
     },
     {
-      "cardId": 15,
+      "cardId": 5,
       "cardType": 0,
       "cardCost": 1,
       "duration": 1,
-      "value": 1,
-      "cardName": "goblin archer",
-      "cardDesc": "goblin with bow.\nyou can attack beyond the wall."
+      "value": 1
     }
   ]
 }

@@ -8,49 +8,6 @@ namespace EnemyUI.BehaviorTree
         [SerializeField] private int searchRange;
         [SerializeField] private int attackRange;
 
-        private EnemyStat enemyStat = new EnemyStat(0.05f, 3, 10);
-
-        public static void SetAnimatior(Animator anim, string name)
-        {
-            anim.SetBool("Attack", false);
-            anim.SetBool("Die", false);
-            anim.SetBool("Damage", false);
-            anim.SetBool("Walk", false);
-            anim.SetBool("Idle", false);
-
-            anim.SetBool(name, true);
-
-        }
-
-        private Vector2Int destination;
-
-        public void SetValues(Vector2Int dest)
-        {
-            destination = dest;
-        }
-        public bool OnDamaged(float damage)
-        {
-            enemyStat.Hp -= damage;
-            if (enemyStat.Hp > 0)
-            {
-                var animator = transform.GetComponent<Animator>();
-                SetAnimatior(animator, "Damage");
-
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        public void OnRecover(float damage)
-        {
-            if (enemyStat.Hp > 0)
-            {
-                enemyStat.Hp += damage;
-            }
-        }
-
         public override Node SetupRoot()
         {
             Node root = new Selector(new List<Node> {
@@ -66,7 +23,7 @@ namespace EnemyUI.BehaviorTree
                     new Sequence(new List<Node>
                     {
                         new IsAttacking(transform),
-                        new LinearTrack(transform, attackRange, enemyStat),
+                        new Track(transform, attackRange, enemyStat),
                         new Attack(transform, enemyStat)
                     })
                 });
@@ -75,14 +32,6 @@ namespace EnemyUI.BehaviorTree
             return root;
         }
 
-        public void MoveDebuff(float w)
-        {
-            enemyStat.MoveSpeed /= w;
-        }
-        public void MoveBuff(float w)
-        {
-            enemyStat.MoveSpeed *= w;
-        }
     }
 
 

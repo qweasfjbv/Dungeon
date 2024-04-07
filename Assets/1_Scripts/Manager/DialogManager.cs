@@ -27,11 +27,11 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private GameObject selectorImage;
 
     private DialogEventInfo eventInfo;
-    private List<GameObject> selects;
+    private List<GameObject> selects = new List<GameObject>();
 
     private const float SELECTEHEIGHT = 50f;
     private const float SELECTEDOFFSET = 30f;
-
+    private const int EVENTKEYOFFSET = 1000;
 
     private bool dialogInProgress = false;
     private bool selectinProgress = false;
@@ -40,7 +40,6 @@ public class DialogManager : MonoBehaviour
     private List<string> dialogKeys = new List<string>();
     private string prevDialogue = "";
 
-    private int curDialogueIndex = 0;
     private int curLineIndex = 0;
 
     private int curSelectedIndex = 0;
@@ -61,7 +60,7 @@ public class DialogManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (!dialogInProgress) SetEvent(0);
+            if (!dialogInProgress) SetEvent(1);
             else UnsetEvent();
         }
 
@@ -105,6 +104,7 @@ public class DialogManager : MonoBehaviour
     private void SetEvent(int id)
     {
 
+        DeleteSelection();
 
         // dialog Text table에서 받아오기
         eventInfo = Managers.Resource.GetEventInfo(id);
@@ -114,14 +114,14 @@ public class DialogManager : MonoBehaviour
         dialogKeys.Clear();
         for (int i = 0; i < eventInfo.eventDialogCnt; i++)
         {
-            dialogKeys.Add(eventInfo.eventName + "_D" + i.ToString());
+            dialogKeys.Add((EVENTKEYOFFSET + eventInfo.eventID * 100 + 10 + i).ToString());
         }
 
 
         // Init
         dialogInProgress = true;
         dialogText.text = "";
-        dialogActorName.text = LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", eventInfo.eventName);
+        dialogActorName.text = LocalizationSettings.StringDatabase.GetLocalizedString("ActorTable", eventInfo.eventActor.ToString());
 
 
         dialogBox.GetComponent<RectTransform>().DOAnchorPosY(dialogRevealPosY, 0.6f).SetEase(Ease.OutBounce);
@@ -134,30 +134,22 @@ public class DialogManager : MonoBehaviour
     {
         dialogBox.GetComponent<RectTransform>().DOAnchorPosY(dialogHidePosY, 0.6f).SetEase(Ease.InOutElastic);
         dialogInProgress = false;
+
+        dialogKeys.Clear();
+        curLineIndex = 0;
+
+        prevDialogue = ""; 
+        selectinProgress = false;
+
     }
 
     private void ShowNextLine()
     {
 
 
-        if (curDialogueIndex < dialogKeys.Count &&
-            curLineIndex < dialogKeys[curDialogueIndex].Length)
+        if (curLineIndex < dialogKeys.Count)
         {
             StartCoroutine(TypeDialogue(LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", dialogKeys[curLineIndex])));
-        }
-        else
-        {
-            curDialogueIndex++;
-            curLineIndex = 0;
-
-            if (curDialogueIndex < dialogKeys.Count)
-            {
-                StartCoroutine(TypeDialogue(LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", dialogKeys[curLineIndex])));
-            }
-            else
-            {
-                dialogText.text = "";
-            }
         }
 
         curLineIndex++;
@@ -191,13 +183,24 @@ public class DialogManager : MonoBehaviour
             selects.Add(Instantiate(selectTextPrefab, selectsParent.transform));
             selects[i].GetComponent<RectTransform>().anchoredPosition = new Vector3(0, SELECTEHEIGHT * (eventInfo.eventSelectCnt - i - 1), 0);
             selects[i].GetComponent<TextMeshProUGUI>().text = LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", 
-                 eventInfo.eventName + "_S" + i.ToString());
+                 (EVENTKEYOFFSET + 100 * eventInfo.eventID + 20 + i).ToString());
         }
         
         curSelectedIndex = 0;
         SelectIndex(0);
         // 자동으로 첫번째 선택
 
+    }
+
+    private void DeleteSelection()
+    {
+        for (int i = 0; i < selects.Count; i++) Destroy(selects[i]);
+        selects.Clear();
+
+        selectorImage.SetActive(false);
+        curSelectedIndex = 0;
+
+        return;
     }
 
     private void OnUpArrow()

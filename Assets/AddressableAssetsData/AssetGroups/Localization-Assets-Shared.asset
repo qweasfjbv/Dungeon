@@ -22,6 +22,16 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3bb95b98d9538a34790f6b6995a4289b
+    m_Address: Assets/3_Language/CardInfoTable Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e1195ab9462cdc4f9b52209cfe95b3a
+    m_Address: Assets/3_Language/ActorTable Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 13fbaace33802564fb53cc903db6f939, type: 2}
   m_SchemaSet:

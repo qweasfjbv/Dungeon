@@ -13,9 +13,6 @@ public class CardInfo
 
     public float duration;
     public float value;
-
-    public string cardName;
-    public string cardDesc;
 }
 
 [Serializable]
@@ -27,8 +24,8 @@ public class CardInfos
 
 [Serializable]
 public class DialogEventInfo {
-    public int eventId;
-    public string eventName;
+    public int eventID;
+    public int eventActor;
     public int eventDialogCnt;
     public int eventSelectCnt;
 }
@@ -49,7 +46,7 @@ public class ResourceManager
     private EventInfos eventInfos = new EventInfos();
     private GameObject[] cardPrefabs;
 
-    const int CARDOFFSET = 11;
+    const int CARDOFFSET = 1;
 
     public void Init()
     {

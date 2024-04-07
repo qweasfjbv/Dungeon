@@ -1,14 +1,14 @@
 {
   "eventInfo": [
     {
-      "eventID" :  0,
-      "eventName": "GG",
+      "eventID": 0,
+      "eventActor" : 1,
       "eventDialogCnt": 2,
-      "eventSelectCnt": 2
+      "eventSelectCnt": 3
     },
     {
       "eventID": 1,
-      "eventName": "TE",
+      "eventActor": 2,
       "eventDialogCnt": 3,
       "eventSelectCnt": 2
     }

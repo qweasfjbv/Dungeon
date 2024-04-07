@@ -19,8 +19,9 @@ public class Define
     }
 
     public enum ActorID { 
-        Player = 0,
-        Merchant,
+        Unknown = 0,
+        GoldenGoblin,
+        Witch,
 
     }
 

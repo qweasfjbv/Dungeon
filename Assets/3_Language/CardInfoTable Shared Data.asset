@@ -10,68 +10,60 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: DialogInfo Shared Data
+  m_Name: CardInfoTable Shared Data
   m_EditorClassIdentifier: 
-  m_TableCollectionName: DialogInfo
-  m_TableCollectionNameGuidString: bab9137bb25711641bbe5cb8cc8cc06b
+  m_TableCollectionName: CardInfoTable
+  m_TableCollectionNameGuidString: 3bb95b98d9538a34790f6b6995a4289b
   m_Entries:
-  - m_Id: 49234382848
-    m_Key: 1000
+  - m_Id: 37335142400
+    m_Key: 100
     m_Metadata:
       m_Items: []
-  - m_Id: 5433416290304
-    m_Key: 1010
+  - m_Id: 63335632896
+    m_Key: 101
     m_Metadata:
       m_Items: []
-  - m_Id: 6370314752000
-    m_Key: 1011
+  - m_Id: 408321028329472
+    m_Key: 200
     m_Metadata:
       m_Items: []
-  - m_Id: 11157970161664
-    m_Key: 1020
+  - m_Id: 408321053495296
+    m_Key: 201
     m_Metadata:
       m_Items: []
-  - m_Id: 11181395349504
-    m_Key: 1021
+  - m_Id: 408321053495297
+    m_Key: 300
     m_Metadata:
       m_Items: []
-  - m_Id: 280085686456320
-    m_Key: 1022
+  - m_Id: 408321053495298
+    m_Key: 301
     m_Metadata:
       m_Items: []
-  - m_Id: 15724950654976
-    m_Key: 1100
+  - m_Id: 408321053495299
+    m_Key: 400
     m_Metadata:
       m_Items: []
-  - m_Id: 15762573561856
-    m_Key: 1110
+  - m_Id: 408321057689600
+    m_Key: 401
     m_Metadata:
       m_Items: []
-  - m_Id: 15764179980288
-    m_Key: 1111
+  - m_Id: 408321057689601
+    m_Key: 500
     m_Metadata:
       m_Items: []
-  - m_Id: 15765006258176
-    m_Key: 1112
-    m_Metadata:
-      m_Items: []
-  - m_Id: 16064932548608
-    m_Key: 1120
-    m_Metadata:
-      m_Items: []
-  - m_Id: 16065943375872
-    m_Key: 1121
+  - m_Id: 408321057689602
+    m_Key: 501
     m_Metadata:
       m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    rid: 1100060388963909656
+    rid: 1100060420850319362
   references:
     version: 2
     RefIds:
-    - rid: 1100060388963909656
+    - rid: 1100060420850319362
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
         asm: Unity.Localization}
       data:
-        m_CustomEpoch: 1712243363271
+        m_CustomEpoch: 1712391992696

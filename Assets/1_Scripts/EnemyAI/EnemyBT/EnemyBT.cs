@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace EnemyUI.BehaviorTree
 {
+    [Serializable]
     public class EnemyStat
     {
         private float moveSpeed;
@@ -25,46 +27,12 @@ namespace EnemyUI.BehaviorTree
         [SerializeField] private int searchRange;
         [SerializeField] private int attackRange;
 
-        private EnemyStat enemyStat = new EnemyStat(0.05f, 3, 10);
-
-        public static void SetAnimatior(Animator anim, string name)
-        {
-            anim.SetBool("Attack", false);
-            anim.SetBool("Die", false);
-            anim.SetBool("Damage", false);
-            anim.SetBool("Walk", false);
-            anim.SetBool("Idle", false);
-
-                anim.SetBool(name, true);
-
-        }
-
         private Vector2Int destination;
 
         public void SetValues(Vector2Int dest)
         {
             destination = dest;
         }
-        public bool OnDamaged(float damage)
-        {
-            enemyStat.Hp -= damage;
-            if (enemyStat.Hp > 0)
-            {
-                var animator = transform.GetComponent<Animator>();
-                SetAnimatior(animator, "Damage");
-
-                return false;
-            }
-            else return true;
-        }
-        public void OnRecover(float damage)
-        {
-            if (enemyStat.Hp > 0)
-            {
-                enemyStat.Hp += damage;
-            }
-        }
-
         public override Node SetupRoot()
         {
             Node root = new Selector(new List<Node> {
@@ -90,14 +58,6 @@ namespace EnemyUI.BehaviorTree
             return root;
         }
 
-        public void MoveDebuff(float w)
-        {
-            enemyStat.MoveSpeed /= w;
-        }
-        public void MoveBuff(float w)
-        {
-            enemyStat.MoveSpeed *= w;
-        }
     }
 
     public class IsDead : Node{
@@ -133,6 +93,7 @@ namespace EnemyUI.BehaviorTree
             {
                 if (!transform.GetComponent<Animator>().GetBool("Die"))
                 {
+                    this.transform.gameObject.tag = "Dying";
                     EnemyBT.SetAnimatior(transform.GetComponent<Animator>(), "Die");
                 }
                 return NodeState.Success;
@@ -335,7 +296,7 @@ namespace EnemyUI.BehaviorTree
             // BossObject 변수 받고 따라가기
             var boss = (GameObject)GetNodeData("BossObject");
 
-            if(boss == null)
+            if(boss == null || boss.CompareTag("Dying"))
             {
                 // 보스를 처치한 경우
                 // 다시 가던길 가면됨
@@ -431,12 +392,10 @@ namespace EnemyUI.BehaviorTree
                 // 때리고 죽었으면
                 if (tr.GetComponent<GoblinBT>() != null && tr.GetComponent<GoblinBT>().OnDamaged(stat.Attack))
                 {
-                    GameObject.Destroy(tr);
                     RemoveNodeData("BossObject");
                 }
                 if (tr.GetComponent<EnemyBT>() != null && tr.GetComponent<EnemyBT>().OnDamaged(stat.Attack))
                 {
-                    GameObject.Destroy(tr);
                     RemoveNodeData("BossObject");
                 }
             }

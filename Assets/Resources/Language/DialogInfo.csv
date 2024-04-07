@@ -1,8 +1,26 @@
 ﻿Key,Id,Shared Comments,English(en),English(en) Comments,Korean(ko),Korean(ko) Comments
-GoldenGoblin,49234382848,,GoldenGoblin,,황금 고블린,
-GoldenGoblin_Dialog_1,5.43342E+12,,"Nice to meet you.
+1000,49234382848,,GoldenGoblin,,황금 고블린,
+1010,5.43342E+12,,"Nice to meet you.
 Are you interested in ""rare"" items?
 then, show me the money!",,"안녕하십니까!
 ""레어""한 아이템들에 관심이 있나요?
 돈.. 돈이면 살 수 있습니다!",
-GoldenGoblin_Dialog_2,,,May I show you some items?,,물건 좀 보여드릴까요?,
+1011,6.37031E+12,,May I show you some items?,,물건 좀 보여드릴까요?,
+1020,1.1158E+13,,YES,,예,
+1021,1.11814E+13,,NO,,아니오,
+1022,2.80086E+14,,Don't know,,몰라,
+1100,1.5725E+13,,TEST,,테스트이름,
+1110,1.57626E+13,,"TEST DIALOG 0
+TESETESTESTETST
+GOODGOODGOODGOOD",,"테스트용입니다.
+테스트 테스트용 테스 트용.
+테스트 테스트트",
+1111,1.57642E+13,,"TEST DIALOG 0
+TESETESTESTETSTTESTSET",,"테스트용입니다.
+테스트 테스트용 테스 트용.",
+1112,1.5765E+13,,"TEST DIALOG 0
+GOODGOODGOODGOOD
+GOGOOGO",,"테스트용입니다.
+테스트 테스트트",
+1120,1.60649E+13,,TEST SELECTOR 0,,테스트 선택지 0,
+1121,1.60659E+13,,TEST SELECTOR 1,,테스트 선택지 1,

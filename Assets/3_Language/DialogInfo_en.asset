@@ -77,6 +77,10 @@ MonoBehaviour:
     m_Localized: TEST SELECTOR 1
     m_Metadata:
       m_Items: []
+  - m_Id: 280085686456320
+    m_Localized: Don't know
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
