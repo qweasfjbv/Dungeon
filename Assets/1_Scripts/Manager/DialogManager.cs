@@ -16,7 +16,7 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogActorName;
     [SerializeField] private Image dialogActorSprite;
     [SerializeField] private TextMeshProUGUI dialogText;
-
+    [SerializeField] private GameObject blockPanel;
 
     [Header("Select")]
     [SerializeField] private GameObject selectsParent;
@@ -50,7 +50,7 @@ public class DialogManager : MonoBehaviour
 
     private void Start()
     {
-
+        blockPanel.SetActive(false);
         selectorImage.SetActive(false);
         dialogBox.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, dialogHidePosY, 0);
     }
@@ -100,9 +100,25 @@ public class DialogManager : MonoBehaviour
     }
 
 
+    private IEnumerator FadeIn()
+    {
+        blockPanel.SetActive(true);
+        Tween tween = blockPanel.GetComponent<Image>().DOFade(0.8f, 1.5f);
+        yield return tween.WaitForCompletion();
+
+    }
+
+    private IEnumerator FadeOut()
+    {
+        Tween tween = blockPanel.GetComponent<Image>().DOFade(0f, 0.5f);
+        yield return tween.WaitForCompletion();
+        blockPanel.SetActive(false);
+    }
 
     private void SetEvent(int id)
     {
+        if (!blockPanel.activeSelf) StartCoroutine(FadeIn());
+        
 
         DeleteSelection();
 
@@ -132,6 +148,7 @@ public class DialogManager : MonoBehaviour
 
     private void UnsetEvent()
     {
+        if (blockPanel.activeSelf) StartCoroutine(FadeOut());
         dialogBox.GetComponent<RectTransform>().DOAnchorPosY(dialogHidePosY, 0.6f).SetEase(Ease.InOutElastic);
         dialogInProgress = false;
 

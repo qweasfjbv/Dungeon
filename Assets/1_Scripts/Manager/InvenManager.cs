@@ -20,6 +20,11 @@ public class InvenManager
         summonCardList.Add(5);
         summonCardList.Add(4);
         summonCardList.Add(5);
+        summonCardList.Add(4);
+        summonCardList.Add(5);
+        summonCardList.Add(4);
+        summonCardList.Add(5);
+
 
         magicCardList.Add(1);
         magicCardList.Add(2);
