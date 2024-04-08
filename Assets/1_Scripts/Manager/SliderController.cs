@@ -51,7 +51,7 @@ public class SliderController : MonoBehaviour
         StartCoroutine(ManaRestoreCoroutine());
     }
 
-    public bool UseCrystal(float num)
+    public bool UseMana(float num)
     {   if (currentMana >= num)
         {
             SetManaFill(currentMana - num);

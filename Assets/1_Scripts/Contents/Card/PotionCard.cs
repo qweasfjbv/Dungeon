@@ -47,7 +47,7 @@ public class PotionCard : CardBase
 
     public override bool PayCardCost()
     {
-        if (SliderController.Instance.UseCrystal(cardCost)) return true;
+        if (SliderController.Instance.UseMana(cardCost)) return true;
         else return false;
     }
 }

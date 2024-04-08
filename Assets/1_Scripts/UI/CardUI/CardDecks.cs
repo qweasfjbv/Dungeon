@@ -1,17 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardDecks : MonoBehaviour
 {
     [SerializeField]
     private List<CardInHand> cardDecks = new List<CardInHand>();
+
+    [SerializeField]
+    private Button cardDrawButton;
     private int showingDeckIndex = -1;
 
     public static float HIDDEN_DECK_POS_Y = -500f;
 
 
-
+    private void Start()
+    {
+        cardDrawButton.onClick.RemoveListener(OnCardDraw);
+        cardDrawButton.onClick.AddListener(OnCardDraw);
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -27,11 +35,27 @@ public class CardDecks : MonoBehaviour
             ShowCardDeck(2);
         }
 
-        if (Input.GetKeyDown(KeyCode.A)) AddCardInDeck(1);
-        if (Input.GetKeyDown(KeyCode.S)) AddCardInDeck(2);
-        if (Input.GetKeyDown(KeyCode.D)) AddCardInDeck(3);
-        if (Input.GetKeyDown(KeyCode.F)) AddCardInDeck(4);
-        if (Input.GetKeyDown(KeyCode.G)) AddCardInDeck(5);
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            OnCardDraw();
+        }
+    }
+
+    private void OnCardDraw()
+    {
+        int tmpId = Managers.Inven.DrawCard();
+
+        if (tmpId == -1)
+        {
+            Managers.Inven.MoveUsedtoUnused();
+        }
+        else if (tmpId == -2)
+        {
+            Debug.Log("mana ∫Œ¡∑"); return;
+        }
+
+        AddCardInDeck(tmpId);
+
     }
 
     private void ShowCardDeck(int deckIdx)

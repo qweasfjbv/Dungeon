@@ -12,11 +12,13 @@ public class Managers : MonoBehaviour
     ResourceManager _resource = new ResourceManager();
     SceneManagerEx _scene = new SceneManagerEx();
     DataManager _data = new DataManager();
+    InvenManager _inven = new InvenManager();
 
     public static ResourceManager Resource { get { return Instance._resource; } }
     public static SceneManagerEx Scene { get { return Instance._scene; } }
     public static DataManager Data { get { return Instance._data; } }
 
+    public static InvenManager Inven { get { return Instance._inven; } }
     void Awake()
     {
         Init();
@@ -57,7 +59,7 @@ public class Managers : MonoBehaviour
         }
 
         s_instance._resource.Init();
-
+        s_instance._inven.Init();
 
     }
 

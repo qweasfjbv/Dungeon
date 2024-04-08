@@ -55,6 +55,8 @@ public abstract class CardBase : MonoBehaviour
     private RectTransform rect;
 
     #region Getter/Setter
+
+    public int CardID { get => cardId; }
     public void SetTargetPosX(float x)
     {
         targetPos.x = x;

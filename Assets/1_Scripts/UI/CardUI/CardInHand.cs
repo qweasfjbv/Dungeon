@@ -43,6 +43,7 @@ public class CardInHand : MonoBehaviour
 
     public bool RemoveCardInHand(int id)
     {
+
         UpdateCardList();
         if (cardsInHand.Count == 0)
         {
@@ -52,8 +53,9 @@ public class CardInHand : MonoBehaviour
 
 
         cardsInHand[id].transform.SetParent(null);
-        Destroy(cardsInHand[id].gameObject);
 
+        Managers.Inven.OnUseCard(cardsInHand[id].GetComponent<CardBase>().CardID);
+        Destroy(cardsInHand[id].gameObject);
 
 
         return true;
