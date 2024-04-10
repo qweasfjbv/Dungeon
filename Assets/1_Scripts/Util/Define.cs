@@ -25,6 +25,26 @@ public class Define
 
     }
 
+    public enum SFXSoundType
+    {
+        Paper,
+        Coin,
+        Throw,
+        Fragile,
+        Place,
+    }
 
+    public enum BgmType
+    {
+        Main,
+        Game,
+        NPC1
+    }
+
+    public enum ButtonSoundType
+    {
+        ClickButton,
+        ShowButton
+    }
 
 }

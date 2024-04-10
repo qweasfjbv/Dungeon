@@ -156,6 +156,7 @@ public class CardInHand : MonoBehaviour
     }
     private void UpdateWhenHovered()
     {
+        SoundManager.Instance.PlaySfxSound(Define.SFXSoundType.Paper);
         var hoverIdx = HasAnyHovoeredCard();
         if (hoverIdx == -1) return;
 

@@ -134,6 +134,7 @@ public abstract class CardBase : MonoBehaviour
     #region LifeCycle
     public virtual void OnEnable()
     {
+        SoundManager.Instance.PlaySfxSound(Define.SFXSoundType.Paper);
         parentDeck = this.transform.parent;
         rect = GetComponent<RectTransform>();
         targetPos.x = 0;
@@ -182,6 +183,7 @@ public abstract class CardBase : MonoBehaviour
         {
             transform.parent.GetComponent<CardInHand>().OnHover();
         }
+
     }
 
 
@@ -221,6 +223,7 @@ public abstract class CardBase : MonoBehaviour
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        SoundManager.Instance.PlaySfxSound(Define.SFXSoundType.Paper);
         CameraController.CanMove = false;
         isDragged = true;
         transform.parent.GetComponent<CardInHand>().UpdateCardLayout();

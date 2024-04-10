@@ -60,6 +60,7 @@ public class CardDecks : MonoBehaviour
 
     private void ShowCardDeck(int deckIdx)
     {
+        SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ShowButton);
         if (showingDeckIndex != -1) cardDecks[showingDeckIndex].SetTargetPosY(HIDDEN_DECK_POS_Y);
 
         if (showingDeckIndex == deckIdx) {

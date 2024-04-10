@@ -12,6 +12,7 @@ public class PotionCard : CardBase
 
     public override void ActivateEffect(Vector3 pos)
     {
+        SoundManager.Instance.PlaySfxSound(Define.SFXSoundType.Throw);
         pos.z = 0;
         EffectGenerator.Instance.ThrowPotion(pos, THROWTIME, itemSprite);
         effect.GetComponent<PotionEffect>().StartEffect(Managers.Resource.GetCardInfo(cardId).duration);

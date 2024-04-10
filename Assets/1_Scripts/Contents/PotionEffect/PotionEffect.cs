@@ -19,7 +19,7 @@ public abstract class PotionEffect : MonoBehaviour
 
     protected void ShowEffect()
     {
-
+        SoundManager.Instance.PlaySfxSound(Define.SFXSoundType.Fragile);
         this.GetComponent<CircleCollider2D>().enabled = true;
         foreach (Transform child in transform)
         {

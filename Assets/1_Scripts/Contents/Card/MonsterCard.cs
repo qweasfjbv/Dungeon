@@ -13,7 +13,7 @@ public class MonsterCard : CardBase
 
     public override void ActivateEffect(Vector3 pos)
     {
-
+        SoundManager.Instance.PlaySfxSound(Define.SFXSoundType.Place);
         pos.z = 0;
         monster.GetComponent<Collider2D>().enabled = true;
         monster.GetComponent<GoblinBT>().enabled = true;
