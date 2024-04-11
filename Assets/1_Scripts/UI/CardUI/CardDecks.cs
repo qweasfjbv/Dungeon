@@ -19,9 +19,14 @@ public class CardDecks : MonoBehaviour
     {
         cardDrawButton.onClick.RemoveListener(OnCardDraw);
         cardDrawButton.onClick.AddListener(OnCardDraw);
+
+        Managers.Input.cardAction -= OnKeyboard;
+        Managers.Input.cardAction += OnKeyboard;
     }
-    private void Update()
+
+    private void OnKeyboard()
     {
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             ShowCardDeck(0);

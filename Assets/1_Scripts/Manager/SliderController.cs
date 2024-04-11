@@ -1,9 +1,11 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
 public class SliderController : MonoBehaviour
 {
 
+    [SerializeField] private GameObject costUI;
     [SerializeField] private SliderMove manaFill;
     [SerializeField] private SliderMove bloodFill;
 
@@ -18,10 +20,22 @@ public class SliderController : MonoBehaviour
     private float progressTimer = 0f;
     private float restoreSpeed = 1f;
 
+    private Vector2 hidePos = new Vector2(-300, 20);
+    private Vector2 showPos = new Vector2(70, 20);
+
+    public void Hide()
+    {
+        costUI.GetComponent<RectTransform>().DOAnchorPos(hidePos, 0.7f).SetEase(Ease.OutCubic);
+    }
+
+    public void Show()
+    {
+        costUI.GetComponent<RectTransform>().DOAnchorPos(showPos, 0.7f).SetEase(Ease.OutBounce);
+    }
+
     private void Awake()
     {
         s_instance = this;
-
         // 게임 시작시로 바꿔야함
         GameStart();
     }
@@ -44,7 +58,7 @@ public class SliderController : MonoBehaviour
     }
     public void GameStart()
     {
-
+        Show();
         SetManaFill(MaxMana);
         SetBloodFill(MaxBlood);
 

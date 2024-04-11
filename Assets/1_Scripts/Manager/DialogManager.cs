@@ -5,9 +5,6 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Localization.Settings;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using System.Runtime.InteropServices;
-using Unity.VisualScripting;
 
 public class DialogManager : MonoBehaviour
 {
@@ -16,7 +13,6 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogActorName;
     [SerializeField] private Image dialogActorSprite;
     [SerializeField] private TextMeshProUGUI dialogText;
-    [SerializeField] private GameObject blockPanel;
 
     [Header("Select")]
     [SerializeField] private GameObject selectsParent;
@@ -50,18 +46,28 @@ public class DialogManager : MonoBehaviour
 
     private void Start()
     {
-        blockPanel.SetActive(false);
         selectorImage.SetActive(false);
         dialogBox.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, dialogHidePosY, 0);
+
+        Managers.Input.dialogAction -= OnKeyboard;
+        Managers.Input.dialogAction += OnKeyboard;
     }
 
-    private void Update()
+
+
+    private void OnKeyboard()
     {
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (!dialogInProgress) SetEvent(1);
-            else UnsetEvent();
+            if (!dialogInProgress)
+            {
+                SetEvent(1);
+            }
+            else
+            {
+                UnsetEvent();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && dialogInProgress)
@@ -75,7 +81,8 @@ public class DialogManager : MonoBehaviour
             }
             else
             {
-                if (curLineIndex < dialogKeys.Count) {
+                if (curLineIndex < dialogKeys.Count)
+                {
                     prevDialogue = LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", dialogKeys[curLineIndex]);
                     ShowNextLine();
                 }
@@ -94,32 +101,19 @@ public class DialogManager : MonoBehaviour
         {
             OnUpArrow();
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) && selectinProgress) {
+        else if (Input.GetKeyDown(KeyCode.DownArrow) && selectinProgress)
+        {
             OnDownArrow();
         }
     }
 
 
-    private IEnumerator FadeIn()
-    {
-        blockPanel.SetActive(true);
-        Tween tween = blockPanel.GetComponent<Image>().DOFade(0.8f, 1.5f);
-        yield return tween.WaitForCompletion();
-
-    }
-
-    private IEnumerator FadeOut()
-    {
-        Tween tween = blockPanel.GetComponent<Image>().DOFade(0f, 0.5f);
-        yield return tween.WaitForCompletion();
-        blockPanel.SetActive(false);
-    }
-
     private void SetEvent(int id)
     {
-        if (!blockPanel.activeSelf) StartCoroutine(FadeIn());
-        
+        Managers.Input.DialogBlock = true;
+        GetComponent<BlockPanelController>().OnBlock();
 
+        SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ClickButton);
         DeleteSelection();
 
         // dialog Text table에서 받아오기
@@ -148,7 +142,10 @@ public class DialogManager : MonoBehaviour
 
     private void UnsetEvent()
     {
-        if (blockPanel.activeSelf) StartCoroutine(FadeOut());
+        Managers.Input.DialogBlock = false;
+
+        GetComponent<BlockPanelController>().OffBlock();
+        SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ShowButton);
         dialogBox.GetComponent<RectTransform>().DOAnchorPosY(dialogHidePosY, 0.6f).SetEase(Ease.InOutElastic);
         dialogInProgress = false;
 

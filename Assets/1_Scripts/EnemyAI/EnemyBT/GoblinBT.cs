@@ -23,7 +23,7 @@ namespace EnemyUI.BehaviorTree
                     new Sequence(new List<Node>
                     {
                         new IsAttacking(transform),
-                        new Track(transform, attackRange, enemyStat),
+                        new LinearTrack(transform, attackRange, enemyStat),
                         new Attack(transform, enemyStat)
                     })
                 });

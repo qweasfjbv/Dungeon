@@ -1,6 +1,7 @@
 using UnityEditor.EditorTools;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEditor;
 
 public class Managers : MonoBehaviour
 {
@@ -13,12 +14,14 @@ public class Managers : MonoBehaviour
     SceneManagerEx _scene = new SceneManagerEx();
     DataManager _data = new DataManager();
     InvenManager _inven = new InvenManager();
+    InputManager _input = new InputManager();
 
     public static ResourceManager Resource { get { return Instance._resource; } }
     public static SceneManagerEx Scene { get { return Instance._scene; } }
     public static DataManager Data { get { return Instance._data; } }
-
     public static InvenManager Inven { get { return Instance._inven; } }
+    public static InputManager Input { get { return Instance._input; } }
+
     void Awake()
     {
         Init();
@@ -61,6 +64,11 @@ public class Managers : MonoBehaviour
         s_instance._resource.Init();
         s_instance._inven.Init();
 
+    }
+
+    private void Update()
+    {
+        s_instance._input.OnUpdate();
     }
 
     public static void Clear()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -32,6 +33,7 @@ public class CameraController : MonoBehaviour
     void MoveCamera()
     {
         if (!canMove) return;
+        if (EventSystem.current.IsPointerOverGameObject()) return;
 
         if (Input.GetMouseButtonDown(0))
         {
