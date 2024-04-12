@@ -25,6 +25,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip[] bgmClips;
     [SerializeField]
     public AudioClip[] buttonClips;
+    [SerializeField]
+    private AudioClip[] dialogClips;
 
 
     private bool isFadeIn = false;
@@ -143,8 +145,6 @@ public class SoundManager : MonoBehaviour
         buttonPlayer.Play();
     }
 
-
-
     public void ChangeBGM(Define.BgmType type)
     {
         int idx = -1;
@@ -167,6 +167,35 @@ public class SoundManager : MonoBehaviour
         bgmPlayer.clip = bgmClips[idx];
         StartCoroutine(BGMFadeInCoroutine(bgmPlayer, 3.0f));
     }
+
+    public void PlayWriteSound(Define.DialogSoundType type)
+    {
+        int idx = 0;
+        switch (type)
+        {
+            case Define.DialogSoundType.LongWrite:
+                idx = 0;
+                break;
+            case Define.DialogSoundType.MediumWrite:
+                idx = 1; 
+                break;
+            case Define.DialogSoundType.ShortWrite:
+                idx = 2;
+                break;
+            case Define.DialogSoundType.SelectChange:
+                idx = 3;
+                break;
+        }
+
+        NPCPlayer.clip = dialogClips[idx];
+        NPCPlayer.Play();
+    }
+
+    public bool IsWritePlaying()
+    {
+        return NPCPlayer.isPlaying;
+    }
+
 
     private IEnumerator SoundFadeInCoroutine(AudioSource player, float fadeTime)
     {
@@ -212,5 +241,7 @@ public class SoundManager : MonoBehaviour
 
         isFadeOut = false;
     }
+
+    
 
 }

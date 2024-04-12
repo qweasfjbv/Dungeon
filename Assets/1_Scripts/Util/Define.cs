@@ -46,5 +46,13 @@ public class Define
         ClickButton,
         ShowButton
     }
+    
+    public enum DialogSoundType
+    {
+        LongWrite,
+        MediumWrite,
+        ShortWrite,
+        SelectChange
+    }
 
 }

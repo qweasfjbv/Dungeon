@@ -62,7 +62,7 @@ public class DialogManager : MonoBehaviour
         {
             if (!dialogInProgress)
             {
-                SetEvent(1);
+                SetEvent(0);
             }
             else
             {
@@ -84,6 +84,7 @@ public class DialogManager : MonoBehaviour
                 if (curLineIndex < dialogKeys.Count)
                 {
                     prevDialogue = LocalizationSettings.StringDatabase.GetLocalizedString("DialogInfo", dialogKeys[curLineIndex]);
+                    
                     ShowNextLine();
                 }
                 else
@@ -99,10 +100,12 @@ public class DialogManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow) && selectinProgress)
         {
+            SoundManager.Instance.PlayWriteSound(Define.DialogSoundType.SelectChange);
             OnUpArrow();
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow) && selectinProgress)
         {
+            SoundManager.Instance.PlayWriteSound(Define.DialogSoundType.SelectChange);
             OnDownArrow();
         }
     }
@@ -159,7 +162,12 @@ public class DialogManager : MonoBehaviour
 
     private void ShowNextLine()
     {
-
+        if (prevDialogue.Length < 10)
+            SoundManager.Instance.PlayWriteSound(Define.DialogSoundType.ShortWrite);
+        else if (prevDialogue.Length < 50)
+            SoundManager.Instance.PlayWriteSound(Define.DialogSoundType.MediumWrite);
+        else
+            SoundManager.Instance.PlayWriteSound(Define.DialogSoundType.LongWrite);
 
         if (curLineIndex < dialogKeys.Count)
         {
@@ -177,7 +185,7 @@ public class DialogManager : MonoBehaviour
         foreach (char letter in line.ToCharArray())
         {
             dialogText.text += letter;
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.02f);
         }
 
         isTyping = false;
