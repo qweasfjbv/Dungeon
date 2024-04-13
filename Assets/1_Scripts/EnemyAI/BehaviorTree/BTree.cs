@@ -25,8 +25,9 @@ namespace EnemyUI.BehaviorTree
 
 
         // Contents
+        // TODO : 각 Tree로 옮겨야함
         [SerializeField]
-        protected EnemyStat enemyStat = new EnemyStat(0.05f, 3, 10);
+        protected EnemyStat enemyStat = new EnemyStat(0.05f, 3, 10, 2.0f);
 
         public static void SetAnimatior(Animator anim, string name)
         {

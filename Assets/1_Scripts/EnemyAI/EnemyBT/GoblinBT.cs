@@ -18,7 +18,7 @@ namespace EnemyUI.BehaviorTree
                     }) ,
                     new Sequence(new List<Node>
                     {
-                        new Search(transform, searchRange, "Human")
+                        new Search(transform, searchRange, "Human", enemyStat)
                     }),
                     new Sequence(new List<Node>
                     {
@@ -56,9 +56,11 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
-
+            
             // BossObject 변수 받고 따라가기
             var boss = (GameObject)GetNodeData("BossObject");
+            if (boss == null) return NodeState.Failure;
+            
 
             Vector3 dir = boss.transform.position - transform.position;
             float dis2 = dir.x * dir.x + dir.y * dir.y;

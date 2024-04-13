@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization.PropertyVariants.TrackedProperties;
 
 namespace EnemyUI.BehaviorTree
 {
@@ -10,16 +11,19 @@ namespace EnemyUI.BehaviorTree
         private float moveSpeed;
         private float attack;
         private float hp;
+        private float attackCooltime;
 
         public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
         public float Hp { get => hp; set => hp = value; }
         public float Attack { get => attack; set => attack = value; }
+        public float Cooltime { get => attackCooltime; }
 
-        public EnemyStat(float moveSpeed, float attack, float hp)
+        public EnemyStat(float moveSpeed, float attack, float hp, float attackCooltime)
         {
             this.moveSpeed = moveSpeed;
             this.attack = attack;
             this.hp = hp;
+            this.attackCooltime = attackCooltime;
         }
     }
     public class EnemyBT : BTree
@@ -43,7 +47,7 @@ namespace EnemyUI.BehaviorTree
                     }) ,
                     new Sequence(new List<Node>
                     {
-                        new Search(transform, searchRange, "Monster"),
+                        new Search(transform, searchRange, "Monster", enemyStat),
                         new Move(transform, destination, enemyStat)
                     }),
                     new Sequence(new List<Node>
@@ -93,7 +97,6 @@ namespace EnemyUI.BehaviorTree
             {
                 if (!transform.GetComponent<Animator>().GetBool("Die"))
                 {
-                    this.transform.gameObject.tag = "Dying";
                     EnemyBT.SetAnimatior(transform.GetComponent<Animator>(), "Die");
                 }
                 return NodeState.Success;
@@ -136,19 +139,34 @@ namespace EnemyUI.BehaviorTree
         private Transform transform;
         private int searchRange;
         string tagName;
-        Animator animator;
+        private Animator animator;
+        private EnemyStat stat;
+        private float coolTime = 0f;
 
-        public Search(Transform transform, int searchRange, string tagName)
+        public Search(Transform transform, int searchRange, string tagName, EnemyStat stat)
         {
             // 필요한 초기화
             this.transform = transform;
             this.searchRange = searchRange;
             this.tagName = tagName;
+            this.stat = stat;
             animator = transform.GetComponent<Animator>();
         }
 
         public override NodeState Evaluate()
         {
+            if (GetNodeData("attackFlag") != null)
+            {
+                coolTime += Time.deltaTime;
+
+            }
+
+            if (coolTime >= stat.Cooltime)
+            {
+                coolTime = 0;
+                EnemyBT.SetAnimatior(animator, "Idle");
+                RemoveNodeData("attackFlag");
+            }
 
             var cols = Physics2D.OverlapCircleAll(transform.position, searchRange);
             foreach (var col in cols)
@@ -161,13 +179,10 @@ namespace EnemyUI.BehaviorTree
                 }
             }
 
-            if (GetNodeData("isTracked") != null)
+            if (GetNodeData("isTracked") != null || GetNodeData("attackFlag") != null)
             { return NodeState.Failure; }
             //
-            if (animator.GetBool("Attack"))
-            {
-                GoblinBT.SetAnimatior(animator, "Idle");
-            }
+
             return NodeState.Success;
         }
 
@@ -375,8 +390,10 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
-            if (!animator.GetBool("Attack"))
+            if (GetNodeData("attackFlag") == null)
             {
+                parent.parent.SetNodeData("attackFlag", true);
+
                 EnemyBT.SetAnimatior(animator, "Attack");
                 // 죽으면 지워야됨
 
@@ -388,14 +405,17 @@ namespace EnemyUI.BehaviorTree
                     return NodeState.Failure;
                 }
 
+                
                 // 떄리는 로직
                 // 때리고 죽었으면
                 if (tr.GetComponent<GoblinBT>() != null && tr.GetComponent<GoblinBT>().OnDamaged(stat.Attack))
                 {
+                    tr.tag = "Dying";
                     RemoveNodeData("BossObject");
                 }
                 if (tr.GetComponent<EnemyBT>() != null && tr.GetComponent<EnemyBT>().OnDamaged(stat.Attack))
                 {
+                    tr.tag = "Dying";
                     RemoveNodeData("BossObject");
                 }
             }
