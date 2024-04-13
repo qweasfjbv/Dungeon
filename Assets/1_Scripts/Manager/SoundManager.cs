@@ -185,6 +185,9 @@ public class SoundManager : MonoBehaviour
             case Define.DialogSoundType.SelectChange:
                 idx = 3;
                 break;
+            case Define.DialogSoundType.SelectChoose:
+                idx = 4;
+                break;
         }
 
         NPCPlayer.clip = dialogClips[idx];

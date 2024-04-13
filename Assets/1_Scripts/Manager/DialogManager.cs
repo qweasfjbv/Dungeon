@@ -49,6 +49,8 @@ public class DialogManager : MonoBehaviour
         selectorImage.SetActive(false);
         dialogBox.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, dialogHidePosY, 0);
 
+        Managers.Game.dialogDelegate = SetEvent;
+
         Managers.Input.dialogAction -= OnKeyboard;
         Managers.Input.dialogAction += OnKeyboard;
     }
@@ -57,18 +59,6 @@ public class DialogManager : MonoBehaviour
 
     private void OnKeyboard()
     {
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if (!dialogInProgress)
-            {
-                SetEvent(0);
-            }
-            else
-            {
-                UnsetEvent();
-            }
-        }
 
         if (Input.GetKeyDown(KeyCode.Space) && dialogInProgress)
         {
@@ -98,22 +88,28 @@ public class DialogManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) && selectinProgress)
+        if (Input.GetKeyDown(KeyCode.W) && selectinProgress)
         {
             SoundManager.Instance.PlayWriteSound(Define.DialogSoundType.SelectChange);
             OnUpArrow();
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) && selectinProgress)
+        else if (Input.GetKeyDown(KeyCode.S) && selectinProgress)
         {
             SoundManager.Instance.PlayWriteSound(Define.DialogSoundType.SelectChange);
             OnDownArrow();
         }
+        else if (Input.GetKeyDown(KeyCode.F) && selectinProgress)
+        {
+            OnChooseSelect();
+        }
     }
 
 
-    private void SetEvent(int id)
+    public void SetEvent(int id)
     {
-        Managers.Input.DialogBlock = true;
+        if (dialogInProgress) return;
+
+            Managers.Input.DialogBlock = true;
         GetComponent<BlockPanelController>().OnBlock();
 
         SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ClickButton);
@@ -243,4 +239,12 @@ public class DialogManager : MonoBehaviour
 
         curSelectedIndex = ind;
     }
+
+    private void OnChooseSelect()
+    {
+        SoundManager.Instance.PlayWriteSound(Define.DialogSoundType.SelectChoose);
+        UnsetEvent();
+        return;
+    }
+
 }

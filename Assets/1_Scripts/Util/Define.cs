@@ -52,7 +52,8 @@ public class Define
         LongWrite,
         MediumWrite,
         ShortWrite,
-        SelectChange
+        SelectChange,
+        SelectChoose
     }
 
 }
