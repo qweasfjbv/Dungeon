@@ -244,6 +244,9 @@ public class DialogManager : MonoBehaviour
     {
         SoundManager.Instance.PlayWriteSound(Define.DialogSoundType.SelectChoose);
         UnsetEvent();
+
+        EventManager.Instance.EventSelectTrigger(eventInfo.eventID, curSelectedIndex);
+
         return;
     }
 

@@ -6,11 +6,13 @@ using UnityEngine.EventSystems;
 public class OnHover : MonoBehaviour
     , IPointerEnterHandler
     , IPointerExitHandler
+    , IPointerUpHandler
+    , IPointerDownHandler
 {
 
     Vector3 originScale;
 
-    private const float PADDING = 10f;
+    private const float PADDING = 30f;
 
     [SerializeField]
     private GameObject tooltip;
@@ -32,6 +34,7 @@ public class OnHover : MonoBehaviour
         }
     }
 
+
     public void OnPointerExit(PointerEventData eventData)
     {
         transform.GetComponent<RectTransform>().localScale = originScale;
@@ -40,5 +43,17 @@ public class OnHover : MonoBehaviour
         {
             tooltip.SetActive(false);
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ClickButton);
+        transform.GetComponent<RectTransform>().localScale = originScale * 0.7f;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+
+        transform.GetComponent<RectTransform>().localScale = originScale * 1.3f;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,8 +9,8 @@ public class CardDecks : MonoBehaviour
     [SerializeField]
     private List<CardInHand> cardDecks = new List<CardInHand>();
 
-    [SerializeField]
-    private Button cardDrawButton;
+    [SerializeField] private Button cardDrawButton;
+    [SerializeField] private TextMeshProUGUI showingDeckText;
     private int showingDeckIndex = -1;
 
     public static float HIDDEN_DECK_POS_Y = -500f;
@@ -19,6 +20,8 @@ public class CardDecks : MonoBehaviour
     {
         cardDrawButton.onClick.RemoveListener(OnCardDraw);
         cardDrawButton.onClick.AddListener(OnCardDraw);
+
+        showingDeckText.text = "";
 
         Managers.Input.cardAction -= OnKeyboard;
         Managers.Input.cardAction += OnKeyboard;
@@ -40,7 +43,11 @@ public class CardDecks : MonoBehaviour
             ShowCardDeck(2);
         }
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            OnDeckChangeClicked();
+        }
+        else if (Input.GetKeyDown(KeyCode.A))
         {
             OnCardDraw();
         }
@@ -70,10 +77,12 @@ public class CardDecks : MonoBehaviour
 
         if (showingDeckIndex == deckIdx) {
             showingDeckIndex = -1;
+            showingDeckText.text = "";
             return; 
         }
 
         showingDeckIndex = deckIdx;
+        showingDeckText.text = (showingDeckIndex+1).ToString();
         cardDecks[showingDeckIndex].SetTargetPosY(0);
     }
 
