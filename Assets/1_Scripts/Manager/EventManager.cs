@@ -1,3 +1,5 @@
+using EnemyUI.BehaviorTree;
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,8 +46,7 @@ public class EventManager : MonoBehaviour
     private void GG_S0()
     {
         Debug.Log("GG_S0");
-
-        Managers.Game.OnEventEnd();
+        StartCoroutine(EnemyAppearEvent(3));
     }
 
     private void GG_S1()
@@ -71,4 +72,32 @@ public class EventManager : MonoBehaviour
         Managers.Game.OnEventEnd();
     }
 
+    private IEnumerator EnemyAppearEvent(int cnt)
+    {
+        List<EnemyBT> enemyBTs = new List<EnemyBT>();
+
+        for (int i = 0; i < cnt; i++)
+        {
+            enemyBTs.Add(MapGenerator.Instance.SummonEnemy());
+            yield return new WaitForSeconds(0.3f);
+        }
+
+        bool once;
+        while (true)
+        {
+            once = false;
+            for (int i = 0; i < cnt; i++)
+            {
+                if (enemyBTs[i] != null) once = true;
+            }
+
+            yield return new WaitForSeconds(1.0f);
+
+            if (!once) break;
+        }
+
+
+        Managers.Game.OnEventEnd();
+        enemyBTs.Clear();
+    }
 }

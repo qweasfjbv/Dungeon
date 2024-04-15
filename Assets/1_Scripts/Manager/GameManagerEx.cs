@@ -1,3 +1,4 @@
+using EnemyUI.BehaviorTree;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ public class GameManagerEx
     public Action onEventStart = null;
     public Action onEventEnd = null;
 
+    private Dictionary<int, int> buffs = new Dictionary<int, int>();
+    private List<BTree> goblins = new List<BTree>();
 
     public void Init()
     {
@@ -34,6 +37,7 @@ public class GameManagerEx
     public void OnEventEnd()
     {
         onEventEnd.Invoke();
+        RemoveAllGoblin();
     }
 
     private void OnKeyboard()
@@ -47,5 +51,20 @@ public class GameManagerEx
         return;
     }
 
+    public void AddGoblin(BTree bt)
+    {
+        goblins.Add(bt);
+    }
+
+    private void RemoveAllGoblin()
+    {
+        for (int i = 0; i < goblins.Count; i++)
+        {
+            if (goblins[i] != null)
+                GameObject.Destroy(goblins[i].gameObject);
+        }
+
+        goblins.Clear();
+    }
 
 }

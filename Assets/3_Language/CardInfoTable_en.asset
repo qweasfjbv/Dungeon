@@ -47,8 +47,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 408321057689600
-    m_Localized: It's so cute.\nGoblins are quite small, but that doesn't mean they
-      are weak.
+    m_Localized: 'It''s so cute.
+
+      Goblins are quite small, but that doesn''t
+      mean they are weak.'
     m_Metadata:
       m_Items: []
   - m_Id: 408321057689601
@@ -56,7 +58,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 408321057689602
-    m_Localized: Goblin with bow.\nHe can attack beyond the wall.
+    m_Localized: 'Goblin with bow.
+
+      He can attack beyond the wall.'
     m_Metadata:
       m_Items: []
   references:

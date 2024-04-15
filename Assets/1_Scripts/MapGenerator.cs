@@ -83,10 +83,6 @@ public class MapGenerator: MonoBehaviour
     int count = 0;
     bool again = false;
     
-    void Update()
-    {
-        PathFindDebug();
-    }
 
     #region PROCEDURE MAP GENERATE
 
@@ -1092,16 +1088,14 @@ public class MapGenerator: MonoBehaviour
         return retList;
     }
 
-    private void PathFindDebug()
+    public EnemyBT SummonEnemy()
     {
+        var tmpEnemy = Instantiate(PathTest);
+        tmpEnemy.transform.position = new Vector3(floorEntrance.transform.position.x, floorEntrance.transform.position.y, 0);
+        tmpEnemy.GetComponent<EnemyBT>().SetValues(new Vector2Int(Mathf.FloorToInt(floorExit.transform.position.x), Mathf.FloorToInt( floorExit.transform.position.y)));
+        tmpEnemy.gameObject.SetActive(true);
 
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            var tmpEnemy = Instantiate(PathTest);
-            tmpEnemy.transform.position = new Vector3(floorEntrance.transform.position.x, floorEntrance.transform.position.y, 0);
-            tmpEnemy.GetComponent<EnemyBT>().SetValues(new Vector2Int(Mathf.FloorToInt(floorExit.transform.position.x), Mathf.FloorToInt( floorExit.transform.position.y)));
-            tmpEnemy.gameObject.SetActive(true);
-        }
+        return tmpEnemy.GetComponent<EnemyBT>();
     }
 
     #endregion

@@ -20,6 +20,8 @@ public class MonsterCard : CardBase
         monster.GetComponent<Animator>().SetBool("Idle", true);
         monster.transform.position = pos;
         monster.transform.GetComponent<SpriteRenderer>().color = Color.white;
+
+        Managers.Game.AddGoblin(monster.GetComponent<GoblinBT>());
         // 움직이는 스크립트 (BT) 켜줘야함
     }
 

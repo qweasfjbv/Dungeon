@@ -2,6 +2,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 //using UnityEngine.UIElements;
@@ -103,9 +104,8 @@ public abstract class CardBase : MonoBehaviour
         this.cardType = cardInfo.cardType;
 
         cardCostText.text = cardInfo.cardCost.ToString();
-        cardName.text = LocalizationSettings.StringDatabase.GetLocalizedString("CardInfoTable", (cardInfo.cardId * 100 + 0).ToString());
-        cardDesc.text = LocalizationSettings.StringDatabase.GetLocalizedString("CardInfoTable", (cardInfo.cardId * 100 + 1).ToString());
-        // Description µµ Ãß°¡
+        cardName.GetComponent<LocalizeStringEvent>().StringReference.SetReference("CardInfoTable", (cardInfo.cardId * 100 + 0).ToString());
+        cardDesc.GetComponent<LocalizeStringEvent>().StringReference.SetReference("CardInfoTable", (cardInfo.cardId * 100 + 1).ToString());
 
     }
 
