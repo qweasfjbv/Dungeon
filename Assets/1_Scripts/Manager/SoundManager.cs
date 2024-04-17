@@ -18,6 +18,9 @@ public class SoundManager : MonoBehaviour
     public AudioSource enemyPlayer;
     [SerializeField]
     public AudioSource cardPlayer;
+    [SerializeField]
+    public AudioSource effectPlayer;
+
 
     [SerializeField]
     public AudioClip[] audioClips;
@@ -27,6 +30,10 @@ public class SoundManager : MonoBehaviour
     public AudioClip[] buttonClips;
     [SerializeField]
     private AudioClip[] dialogClips;
+    [SerializeField]
+    private AudioClip[] effectClips;
+
+
 
 
     private bool isFadeIn = false;
@@ -66,7 +73,7 @@ public class SoundManager : MonoBehaviour
     private void Awake()
     {
         Init();
-        ChangeBGM(Define.BgmType.Game);
+        ChangeBGM(Define.BgmType.Main);
     }
 
     public void SetBGMVolume(float volume)
@@ -163,6 +170,7 @@ public class SoundManager : MonoBehaviour
                 idx = -1;
                 break;
         }
+        if (bgmPlayer.clip == bgmClips[idx]) return;
 
         bgmPlayer.clip = bgmClips[idx];
         StartCoroutine(BGMFadeInCoroutine(bgmPlayer, 3.0f));
@@ -197,6 +205,31 @@ public class SoundManager : MonoBehaviour
     public bool IsWritePlaying()
     {
         return NPCPlayer.isPlaying;
+    }
+
+
+    public void PlayEffectSound(Define.EffectSoundType type)
+    {
+
+        int idx;
+        switch (type)
+        {
+            case Define.EffectSoundType.Hit:
+                idx = 0;
+                break;
+            case Define.EffectSoundType.Fire:
+                idx = 1;
+                break;
+
+            default:
+                idx = -1;
+                break;
+        }
+
+        if (idx == -1) return;
+
+        effectPlayer.clip = effectClips[idx];
+        effectPlayer.Play();
     }
 
 

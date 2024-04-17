@@ -3472,6 +3472,7 @@ MonoBehaviour:
   NPCPlayer: {fileID: 658884171}
   enemyPlayer: {fileID: 1035284999}
   cardPlayer: {fileID: 1459933811}
+  effectPlayer: {fileID: 59485907}
   audioClips:
   - {fileID: 8300000, guid: 6481881acbc96584d85af54be344f8d1, type: 3}
   - {fileID: 8300000, guid: 9694c299f3797b24ba0797b7711c0b17, type: 3}
@@ -3479,8 +3480,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 36a8b7193377acf44a5c6ba0dbae1779, type: 3}
   - {fileID: 8300000, guid: c482530677117b14d93b1ec08bb758fd, type: 3}
   bgmClips:
-  - {fileID: 8300000, guid: 73191bc6490440842ad69b2958a8bbe2, type: 3}
-  - {fileID: 8300000, guid: 2ee0e3be4a3e73b4b9bc0f9a473806fd, type: 3}
+  - {fileID: 8300000, guid: 9ff2b0ea52c055e4882dabcd3260a885, type: 3}
+  - {fileID: 8300000, guid: f72d90ef98a16ed4b9269cfb10250f5f, type: 3}
   buttonClips:
   - {fileID: 8300000, guid: 7f53801c970441545ad378281b75cd2c, type: 3}
   - {fileID: 8300000, guid: e919a34842fc6a04c92948c97d507703, type: 3}
@@ -3490,6 +3491,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fc63538facb229b429566543b6e4d9bc, type: 3}
   - {fileID: 8300000, guid: 28a7c8690d978c249ad78e3ac04b66f9, type: 3}
   - {fileID: 8300000, guid: 1e2c8596df56dbd4c86515d40f167905, type: 3}
+  effectClips:
+  - {fileID: 8300000, guid: a3ca386ea04b81a48a24a9c0eeddf3a4, type: 3}
+  - {fileID: 0}
 --- !u!4 &1329788510
 Transform:
   m_ObjectHideFlags: 0

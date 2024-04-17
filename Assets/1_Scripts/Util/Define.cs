@@ -56,4 +56,11 @@ public class Define
         SelectChoose
     }
 
+    public enum EffectSoundType
+    {
+        Hit,
+        Fire,
+
+    }
+
 }

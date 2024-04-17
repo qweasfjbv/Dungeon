@@ -43,6 +43,7 @@ namespace EnemyUI.BehaviorTree
 
         public bool OnDamaged(float damage)
         {
+            SoundManager.Instance.PlayEffectSound(Define.EffectSoundType.Hit);
             enemyStat.Hp -= damage;
             if (enemyStat.Hp > 0)
             {

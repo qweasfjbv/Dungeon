@@ -24,6 +24,9 @@ public class GameManagerEx
 
     public void NextEvent()
     {
+        if (isInEvent) return;
+        isInEvent = true;
+
 
         int eventIdx = 1;
 
@@ -37,6 +40,8 @@ public class GameManagerEx
     public void OnEventEnd()
     {
         onEventEnd.Invoke();
+        isInEvent = false;
+        SoundManager.Instance.ChangeBGM(Define.BgmType.Main);
         RemoveAllGoblin();
     }
 

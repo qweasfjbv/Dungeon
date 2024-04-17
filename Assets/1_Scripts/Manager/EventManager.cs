@@ -74,6 +74,8 @@ public class EventManager : MonoBehaviour
 
     private IEnumerator EnemyAppearEvent(int cnt)
     {
+
+        SoundManager.Instance.ChangeBGM(Define.BgmType.Game);
         List<EnemyBT> enemyBTs = new List<EnemyBT>();
 
         for (int i = 0; i < cnt; i++)
