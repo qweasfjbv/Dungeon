@@ -109,6 +109,8 @@ public class DialogManager : MonoBehaviour
     {
         if (dialogInProgress) return;
 
+        SoundManager.Instance.PlayNPCSound((Define.NpcSoundType)id);
+
             Managers.Input.DialogBlock = true;
         GetComponent<BlockPanelController>().OnBlock();
 

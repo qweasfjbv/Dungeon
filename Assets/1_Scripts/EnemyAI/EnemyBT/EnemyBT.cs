@@ -395,7 +395,6 @@ namespace EnemyUI.BehaviorTree
                 parent.parent.SetNodeData("attackFlag", true);
 
                 EnemyBT.SetAnimatior(animator, "Attack");
-                SoundManager.Instance.PlayEffectSound(Define.EffectSoundType.Hit);
                 // Á×À¸¸é Áö¿ö¾ßµÊ
 
                 var tr = (GameObject)GetNodeData("BossObject");

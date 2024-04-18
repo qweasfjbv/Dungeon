@@ -13,13 +13,15 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     public AudioSource buttonPlayer;
     [SerializeField]
-    public AudioSource NPCPlayer;
+    public AudioSource dialogPlayer;
     [SerializeField]
     public AudioSource enemyPlayer;
     [SerializeField]
     public AudioSource cardPlayer;
     [SerializeField]
     public AudioSource effectPlayer;
+    [SerializeField]
+    public AudioSource npcPlayer;
 
 
     [SerializeField]
@@ -32,7 +34,8 @@ public class SoundManager : MonoBehaviour
     private AudioClip[] dialogClips;
     [SerializeField]
     private AudioClip[] effectClips;
-
+    [SerializeField]
+    private AudioClip[] npcClips; 
 
 
 
@@ -85,7 +88,7 @@ public class SoundManager : MonoBehaviour
     public void SetSFXVolume(float volume)
     {
         buttonPlayer.volume = volume;
-        NPCPlayer.volume = volume;
+        dialogPlayer.volume = volume;
         enemyPlayer.volume = volume;
         cardPlayer.volume = volume;
 
@@ -198,13 +201,13 @@ public class SoundManager : MonoBehaviour
                 break;
         }
 
-        NPCPlayer.clip = dialogClips[idx];
-        NPCPlayer.Play();
+        dialogPlayer.clip = dialogClips[idx];
+        dialogPlayer.Play();
     }
 
     public bool IsWritePlaying()
     {
-        return NPCPlayer.isPlaying;
+        return dialogPlayer.isPlaying;
     }
 
 
@@ -231,6 +234,21 @@ public class SoundManager : MonoBehaviour
         effectPlayer.clip = effectClips[idx];
         effectPlayer.Play();
     }
+
+
+    public void PlayNPCSound(Define.NpcSoundType type)
+    {
+        int idx = 0;
+        switch (type)
+        {
+            case Define.NpcSoundType.Goblin: idx = 0; break;
+            case Define.NpcSoundType.Witch: idx = 1; break;
+        }
+
+        npcPlayer.clip = npcClips[idx];
+        npcPlayer.Play();
+    }
+
 
 
     private IEnumerator SoundFadeInCoroutine(AudioSource player, float fadeTime)

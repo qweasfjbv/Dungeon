@@ -18,7 +18,7 @@ public class MonsterCard : CardBase
         monster.GetComponent<Collider2D>().enabled = true;
         monster.GetComponent<GoblinBT>().enabled = true;
         monster.GetComponent<Animator>().SetBool("Idle", true);
-        monster.transform.position = pos;
+        monster.transform.position = new Vector3(Mathf.Floor(pos.x) + 0.5f, Mathf.Floor(pos.y) + 0.5f, 0);
         monster.transform.GetComponent<SpriteRenderer>().color = Color.white;
 
         Managers.Game.AddGoblin(monster.GetComponent<GoblinBT>());

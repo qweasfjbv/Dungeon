@@ -63,4 +63,9 @@ public class Define
 
     }
 
+    public enum NpcSoundType
+    {
+        Goblin = 0,
+        Witch
+    }
 }
