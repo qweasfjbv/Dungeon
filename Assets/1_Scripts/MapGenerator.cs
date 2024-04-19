@@ -1059,10 +1059,9 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] Transform PathTest;
     public List<Vector2> PreprocessPath(Vector2Int startPoint, Vector2Int endPoint)
     {
-
         var pathList = (jpm.PathFind(startPoint, endPoint));
-        
-        var retList = new List<Vector2>();
+
+        List<Vector2> retList = new List<Vector2>();
 
         Vector2Int prevPoint = new Vector2Int(0, 0);
         foreach (var point in pathList)
@@ -1085,6 +1084,7 @@ public class MapGenerator: MonoBehaviour
             prevPoint = point;
         }
 
+
         return retList;
     }
 
@@ -1092,7 +1092,7 @@ public class MapGenerator: MonoBehaviour
     {
         var tmpEnemy = Instantiate(PathTest);
         tmpEnemy.transform.position = new Vector3(floorEntrance.transform.position.x, floorEntrance.transform.position.y, 0);
-        tmpEnemy.GetComponent<EnemyBT>().SetValues(new Vector2Int(Mathf.FloorToInt(floorExit.transform.position.x), Mathf.FloorToInt( floorExit.transform.position.y)));
+        tmpEnemy.GetComponent<EnemyBT>().SetValues(new Vector2Int(Mathf.FloorToInt(floorExit.transform.position.x), Mathf.FloorToInt(floorExit.transform.position.y)));
         tmpEnemy.gameObject.SetActive(true);
 
         return tmpEnemy.GetComponent<EnemyBT>();

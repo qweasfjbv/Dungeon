@@ -31,6 +31,7 @@ namespace EnemyUI.BehaviorTree
 
         public static void SetAnimatior(Animator anim, string name)
         {
+            Debug.Log(name);
             anim.SetBool("Attack", false);
             anim.SetBool("Die", false);
             anim.SetBool("Damage", false);

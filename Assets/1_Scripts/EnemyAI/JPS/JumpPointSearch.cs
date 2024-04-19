@@ -143,7 +143,7 @@ namespace JPS
             }
 
 
-            return new List<Vector2Int>(); ;
+            return new List<Vector2Int>();
         }
         /// <summary>
         /// 현재 위치에서 한 방향으로 Jump Point 탐색

@@ -28,6 +28,11 @@ namespace EnemyUI.BehaviorTree
     }
     public class EnemyBT : BTree
     {
+        private void DONE()
+        {
+            Debug.Log("DONE");
+        }
+
         [SerializeField] private int searchRange;
         [SerializeField] private int attackRange;
 
@@ -39,6 +44,7 @@ namespace EnemyUI.BehaviorTree
         }
         public override Node SetupRoot()
         {
+            
             Node root = new Selector(new List<Node> {
                     new Sequence(new List<Node>
                     {
@@ -228,7 +234,8 @@ namespace EnemyUI.BehaviorTree
 
             if (path == null || path.Count == 0) return NodeState.Success;
 
-            EnemyBT.SetAnimatior(animator, "Walk");
+            if (!animator.GetBool("Walk"))
+                EnemyBT.SetAnimatior(animator, "Walk");
 
             Vector2 currentTarget = path[currentPointIndex];
 

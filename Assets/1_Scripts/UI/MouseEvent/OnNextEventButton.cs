@@ -21,13 +21,11 @@ public class OnNextEventButton : MonoBehaviour
 
     private void OnEventStart()
     {
-        Debug.Log("ENABLED:FALSE");
         GetComponent<Button>().enabled = false;
     }
 
     private void OnEventEnd()
     {
-        Debug.Log("ENABLED:TRUE");
         GetComponent<Button>().enabled = true;
     }
 
