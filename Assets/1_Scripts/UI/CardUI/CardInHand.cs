@@ -25,6 +25,13 @@ public class CardInHand : MonoBehaviour
     const float CARD_POS_Y_OFFSET = 20f;
     #endregion
 
+    public void RemoveAllCard()
+    {
+        while (GetComponentInChildren<CardBase>() != null)
+        {
+            RemoveCardInHand(0);
+        }
+    }
 
     public bool AddCardInHand(int cardId)
     {
@@ -35,7 +42,7 @@ public class CardInHand : MonoBehaviour
             return false;
         }
 
-        var tmpCard = Instantiate(Managers.Resource.GetCardPrefab(cardId), transform.TransformPoint(new Vector3(0, Settings.HEIGHT/2, 0)), Quaternion.identity, transform);
+        var tmpCard = Instantiate(Managers.Resource.GetCardPrefab(cardId), transform.TransformPoint(new Vector3(Settings.WIDTH/2, Settings.HEIGHT/2, 0)), Quaternion.identity, transform);
         tmpCard.GetComponent<CardBase>().SetCard(cardId);
         UpdateCardLayout();
         return true;

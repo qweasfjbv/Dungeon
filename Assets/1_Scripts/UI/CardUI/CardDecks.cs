@@ -25,6 +25,19 @@ public class CardDecks : MonoBehaviour
 
         Managers.Input.cardAction -= OnKeyboard;
         Managers.Input.cardAction += OnKeyboard;
+
+        Managers.Inven.onGameEnd -= OnGameEnd;
+        Managers.Inven.onGameEnd += OnGameEnd;
+    }
+
+    private void OnGameEnd()
+    {
+        ShowCardDeck(-1);
+        for (int i = 0; i < cardDecks.Count; i++)
+        {
+            cardDecks[i].RemoveAllCard();
+        }
+
     }
 
     private void OnKeyboard()
@@ -37,10 +50,6 @@ public class CardDecks : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             ShowCardDeck(1);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            ShowCardDeck(2);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -75,15 +84,27 @@ public class CardDecks : MonoBehaviour
         SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ShowButton);
         if (showingDeckIndex != -1) cardDecks[showingDeckIndex].SetTargetPosY(HIDDEN_DECK_POS_Y);
 
-        if (showingDeckIndex == deckIdx) {
-            showingDeckIndex = -1;
-            showingDeckText.text = "";
-            return; 
+
+
+        if (showingDeckIndex == deckIdx) deckIdx = -1;
+        showingDeckIndex = deckIdx;
+
+        switch (deckIdx)
+        {
+            case -1:
+                SliderController.Instance.NothingSelected();
+                return;
+            case 0:
+                SliderController.Instance.BloodDeckSelected();
+                break;
+            case 1:
+                SliderController.Instance.ManaDeckSelected();
+                break;
         }
 
-        showingDeckIndex = deckIdx;
-        showingDeckText.text = (showingDeckIndex+1).ToString();
         cardDecks[showingDeckIndex].SetTargetPosY(0);
+
+
     }
 
     public void AddCardInDeck(int cardId)
@@ -99,13 +120,9 @@ public class CardDecks : MonoBehaviour
         {
             ShowCardDeck(0);
         }
-        else if (showingDeckIndex == cardDecks.Count - 1)
-        {
-            ShowCardDeck(showingDeckIndex);
-        }
         else
         {
-            ShowCardDeck(showingDeckIndex + 1);
+            ShowCardDeck((showingDeckIndex + 1) % cardDecks.Count);
         }
     }
 

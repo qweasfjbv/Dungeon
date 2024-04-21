@@ -131,6 +131,16 @@ public abstract class CardBase : MonoBehaviour
 
     }
 
+    public void OnUsable()
+    {
+
+    }
+    
+    public void OnUnusable()
+    {
+
+    }
+
     #region LifeCycle
     public virtual void OnEnable()
     {

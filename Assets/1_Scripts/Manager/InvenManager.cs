@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,8 +15,14 @@ public class InvenManager
 
     private const float DRAWCOST = 1;
 
+    public Action onGameEnd;
+
     public void Init()
     {
+        Managers.Game.onEventEnd -= OnGameEnd;
+        Managers.Game.onEventEnd += OnGameEnd;
+
+
         summonCardList.Add(4);
         summonCardList.Add(5);
         summonCardList.Add(4);
@@ -55,7 +62,7 @@ public class InvenManager
         if (unusedCardList.Count == 0) return -1;
         if (!SliderController.Instance.UseMana(DRAWCOST)) return -2;
 
-        int cardIdx = Random.Range(0, unusedCardList.Count - 1);
+        int cardIdx = UnityEngine.Random.Range(0, unusedCardList.Count - 1);
         int retid = unusedCardList[cardIdx];
         unusedCardList.RemoveAt(cardIdx);
 
@@ -79,6 +86,7 @@ public class InvenManager
 
     public void OnGameEnd()
     {
+        onGameEnd.Invoke();
         unusedCardList.Clear();
         usedCardList.Clear();
     }

@@ -23,6 +23,22 @@ public class SliderController : MonoBehaviour
     private Vector2 hidePos = new Vector2(-300, 20);
     private Vector2 showPos = new Vector2(70, 20);
 
+    public void BloodDeckSelected()
+    {
+        bloodFill.OnSelected();
+        manaFill.OnUnselected();
+    }
+    public void ManaDeckSelected()
+    {
+        bloodFill.OnUnselected();
+        manaFill.OnSelected();
+    }
+    public void NothingSelected()
+    {
+        bloodFill.OnNothingSelected();
+        manaFill.OnNothingSelected();
+    }
+
     public void Hide()
     {
         costUI.GetComponent<RectTransform>().DOAnchorPos(hidePos, 0.7f).SetEase(Ease.OutCubic);
