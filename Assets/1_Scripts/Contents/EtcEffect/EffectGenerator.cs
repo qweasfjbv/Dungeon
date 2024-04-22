@@ -29,5 +29,10 @@ public class EffectGenerator : MonoBehaviour
         go.GetComponent<ThrowEffect>().Throw(tmpPos, dest, throwTime);
     }
 
+    public GameObject InstanceEffect(GameObject go, Vector3 pos, Quaternion quat)
+    {
+        var eff = Instantiate(go, pos, quat);
+        return eff;
+    }
 
 }

@@ -16,12 +16,12 @@ public class MonsterCard : CardBase
         SoundManager.Instance.PlaySfxSound(Define.SFXSoundType.Place);
         pos.z = 0;
         monster.GetComponent<Collider2D>().enabled = true;
-        monster.GetComponent<GoblinBT>().enabled = true;
+        monster.GetComponent<BTree>().enabled = true;
         monster.GetComponent<Animator>().SetBool("Idle", true);
         monster.transform.position = new Vector3(Mathf.Floor(pos.x) + 0.5f, Mathf.Floor(pos.y) + 0.5f, 0);
         monster.transform.GetComponent<SpriteRenderer>().color = Color.white;
 
-        Managers.Game.AddGoblin(monster.GetComponent<GoblinBT>());
+        Managers.Game.AddGoblin(monster.GetComponent<BTree>());
         // 움직이는 스크립트 (BT) 켜줘야함
     }
 
@@ -32,7 +32,7 @@ public class MonsterCard : CardBase
 
         monster.transform.position = pos;
         monster.GetComponent<Collider2D>().enabled = false;
-        monster.GetComponent<GoblinBT>().enabled = false;
+        monster.GetComponent<BTree>().enabled = false;
         Color tmpC = monster.transform.GetComponent<SpriteRenderer>().color;
         tmpC.a = 0.5f;
         monster.transform.GetComponent<SpriteRenderer>().color = tmpC;

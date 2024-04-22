@@ -360,7 +360,7 @@ MonoBehaviour:
   cardName: {fileID: 4160523905414090299}
   cardDesc: {fileID: 7722342433210776473}
   cardCostText: {fileID: 1748515683212324226}
-  monsterPrefab: {fileID: 5720277353491606258, guid: 84d8942eedbd297489efbde063abf6ce,
+  monsterPrefab: {fileID: 5720277353491606258, guid: 4f2647fffb7bf4d4eab19b6d57691493,
     type: 3}
 --- !u!1 &5585158347348839934
 GameObject:
