@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class InvenManager
 {
     List<int> summonCardList = new List<int>();
     List<int> magicCardList = new List<int>();
-    List<int> buffCardList = new List<int>();
     List<int> treasureList = new List<int>();
 
     List<int> unusedCardList = new List<int>();
@@ -43,7 +43,8 @@ public class InvenManager
         magicCardList.Add(2);
         magicCardList.Add(3);
 
-        OnGameStart();
+        Managers.Game.OnEventStart -= OnGameStart;
+        Managers.Game.OnEventStart += OnGameStart;
         return;
     }
     
@@ -52,8 +53,6 @@ public class InvenManager
         foreach (var card in summonCardList)
             unusedCardList.Add(card);
         foreach (var card in magicCardList)
-            unusedCardList.Add(card);
-        foreach (var card in buffCardList)
             unusedCardList.Add(card);
     }
 
@@ -64,7 +63,9 @@ public class InvenManager
 
         int cardIdx = UnityEngine.Random.Range(0, unusedCardList.Count - 1);
         int retid = unusedCardList[cardIdx];
+
         unusedCardList.RemoveAt(cardIdx);
+
 
         return retid;
     }

@@ -10,7 +10,9 @@ public class GameManagerEx
 
     public delegate void EventDelegate<T1>(T1 a);
     public EventDelegate<int> dialogDelegate;
-    public Action onEventStart = null;
+    private Action onEventStart = null;
+
+    public Action OnEventStart { get => onEventStart; set => onEventStart = value; }    
     public Action onEventEnd = null;
 
     private Dictionary<int, int> buffs = new Dictionary<int, int>();
@@ -39,6 +41,7 @@ public class GameManagerEx
     // Event끝나면 호출
     public void OnEventEnd()
     {
+        Debug.Log("ON END");
         onEventEnd.Invoke();
         isInEvent = false;
         SoundManager.Instance.ChangeBGM(Define.BgmType.Main);

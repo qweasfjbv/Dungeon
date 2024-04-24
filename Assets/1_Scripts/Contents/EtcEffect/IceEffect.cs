@@ -7,7 +7,7 @@ public class IceEffect : MonoBehaviour
 {
 
     private float damage;
-    private string animName = "IceCrystal";
+    private string animName = "ThunderFall";
 
     private bool isSet = false;
 
@@ -35,10 +35,10 @@ public class IceEffect : MonoBehaviour
     {
         if (other.CompareTag("Human"))
         {
-            EnemyBT enemy = other.GetComponent<EnemyBT>();  // 'Enemy' 스크립트를 참조
+            EnemyBT enemy = other.GetComponent<EnemyBT>();
             if (enemy != null)
             {
-                enemy.OnDamaged(damage);  // 적에게 피해를 입힘
+                enemy.OnDamaged(damage);
             }
         }
     }
