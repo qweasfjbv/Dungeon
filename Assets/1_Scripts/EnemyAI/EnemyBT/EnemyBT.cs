@@ -323,6 +323,7 @@ namespace EnemyUI.BehaviorTree
                 // 보스를 처치한 경우
                 // 다시 가던길 가면됨
                 RemoveNodeData("isTracked");
+                RemoveNodeData("BossObject");
                 return NodeState.Failure;
             }
             Vector3 dir = boss.transform.position - transform.position;
@@ -417,13 +418,11 @@ namespace EnemyUI.BehaviorTree
                 // 때리고 죽었으면
                 if (tr.GetComponent<GoblinBT>() != null && tr.GetComponent<GoblinBT>().OnDamaged(stat.Attack))
                 {
-                    tr.tag = "Dying";
-                    RemoveNodeData("BossObject");
+                    Debug.Log("HIT GOBLIN");
                 }
                 if (tr.GetComponent<EnemyBT>() != null && tr.GetComponent<EnemyBT>().OnDamaged(stat.Attack))
                 {
-                    tr.tag = "Dying";
-                    RemoveNodeData("BossObject");
+                    Debug.Log("HIT ENEMY");
                 }
             }
 

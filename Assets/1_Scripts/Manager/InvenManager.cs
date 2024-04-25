@@ -23,14 +23,14 @@ public class InvenManager
         Managers.Game.onEventEnd += OnGameEnd;
 
 
-        summonCardList.Add(4);
-        summonCardList.Add(5);
-        summonCardList.Add(4);
-        summonCardList.Add(5);
-        summonCardList.Add(4);
-        summonCardList.Add(5);
-        summonCardList.Add(4);
-        summonCardList.Add(5);
+        summonCardList.Add(6);
+        summonCardList.Add(7);
+        summonCardList.Add(6);
+        summonCardList.Add(7);
+        summonCardList.Add(6);
+        summonCardList.Add(7);
+        summonCardList.Add(6);
+        summonCardList.Add(7);
 
 
         magicCardList.Add(1);

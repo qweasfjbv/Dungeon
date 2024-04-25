@@ -26,7 +26,7 @@ using UnityEngine;
                     {
                         new IsAttacking(transform),
                         new LinearTrack(transform, attackRange, enemyStat),
-                        new MagicAttack(transform, enemyStat, icePrefab)
+                        new IceMagicAttack(transform, enemyStat, icePrefab)
                     })
                 });
 
@@ -37,13 +37,13 @@ using UnityEngine;
     }
 
 
-    public class MagicAttack : Node
+    public class IceMagicAttack : Node
     {
         private Transform transform;
         private Animator animator;
         private EnemyStat stat;
         private GameObject magicEffect;
-        public MagicAttack(Transform transform, EnemyStat stat, GameObject magicEffect)
+        public IceMagicAttack(Transform transform, EnemyStat stat, GameObject magicEffect)
         {
             this.transform = transform;
             this.animator = transform.GetComponent<Animator>();
@@ -73,18 +73,6 @@ using UnityEngine;
                 GameObject eff = EffectGenerator.Instance.InstanceEffect(magicEffect, tr.transform.position, Quaternion.identity);
                 eff.GetComponent<IceEffect>().SetDamage(stat.Attack);
 
-                // 떄리는 로직
-                // 때리고 죽었으면
-                if (tr.GetComponent<GoblinBT>() != null && tr.GetComponent<GoblinBT>().OnDamaged(stat.Attack))
-                {
-                    tr.tag = "Dying";
-                    RemoveNodeData("BossObject");
-                }
-                if (tr.GetComponent<EnemyBT>() != null && tr.GetComponent<EnemyBT>().OnDamaged(stat.Attack))
-                {
-                    tr.tag = "Dying";
-                    RemoveNodeData("BossObject");
-                }
             }
 
             return NodeState.Success;

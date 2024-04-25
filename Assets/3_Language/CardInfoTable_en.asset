@@ -63,6 +63,23 @@ MonoBehaviour:
       He can attack beyond the wall.'
     m_Metadata:
       m_Items: []
+  - m_Id: 6983188192235520
+    m_Localized: Goblin Wizard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6983188221595648
+    m_Localized: This goblin has become able to use ice magic after extensive study.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6983188225789952
+    m_Localized: Goblin Wizard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6983188225789953
+    m_Localized: This goblin has become able to use thunder magic after extensive
+      study.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

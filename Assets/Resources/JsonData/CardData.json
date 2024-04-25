@@ -35,6 +35,20 @@
       "cardCost": 1,
       "duration": 1,
       "value": 1
+    },
+    {
+      "cardId": 6,
+      "cardType": 0,
+      "cardCost": 1,
+      "duration": 1,
+      "value": 1
+    },
+    {
+      "cardId": 7,
+      "cardType": 0,
+      "cardCost": 1,
+      "duration": 1,
+      "value": 1
     }
   ]
 }

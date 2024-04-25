@@ -59,8 +59,13 @@ namespace EnemyUI.BehaviorTree
             
             // BossObject 변수 받고 따라가기
             var boss = (GameObject)GetNodeData("BossObject");
-            if (boss == null) return NodeState.Failure;
-            
+
+            if (boss == null || boss.CompareTag("Dying"))
+            {
+                RemoveNodeData("BossObject");
+                return NodeState.Failure;
+            }
+
 
             Vector3 dir = boss.transform.position - transform.position;
             float dis2 = dir.x * dir.x + dir.y * dir.y;

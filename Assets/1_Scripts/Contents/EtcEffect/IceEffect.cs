@@ -7,7 +7,7 @@ public class IceEffect : MonoBehaviour
 {
 
     private float damage;
-    private string animName = "ThunderFall";
+    private string animName = "IceBlast";
 
     private bool isSet = false;
 
