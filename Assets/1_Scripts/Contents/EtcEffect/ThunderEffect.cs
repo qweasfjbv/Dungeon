@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IceEffect : MonoBehaviour
+public class ThunderEffect : MonoBehaviour
 {
-
     private float damage;
-    private string animName = "IceCrystal";
+    private string animName = "ThunderFall";
 
     private bool isSet = false;
 
@@ -42,6 +41,5 @@ public class IceEffect : MonoBehaviour
             }
         }
     }
-
 
 }
