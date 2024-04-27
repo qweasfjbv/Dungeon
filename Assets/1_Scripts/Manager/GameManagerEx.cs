@@ -11,9 +11,11 @@ public class GameManagerEx
     public delegate void EventDelegate<T1>(T1 a);
     public EventDelegate<int> dialogDelegate;
     private Action onEventStart = null;
-
-    public Action OnEventStart { get => onEventStart; set => onEventStart = value; }    
     public Action onEventEnd = null;
+
+    public Action OnEventStartAction { get => onEventStart; set => onEventStart = value; }
+
+    public Action OnEventEndAction { get=>onEventEnd; set => onEventEnd = value; }
 
     private Dictionary<int, int> buffs = new Dictionary<int, int>();
     private List<BTree> goblins = new List<BTree>();
@@ -41,7 +43,6 @@ public class GameManagerEx
     // Event끝나면 호출
     public void OnEventEnd()
     {
-        Debug.Log("ON END");
         onEventEnd.Invoke();
         isInEvent = false;
         SoundManager.Instance.ChangeBGM(Define.BgmType.Main);

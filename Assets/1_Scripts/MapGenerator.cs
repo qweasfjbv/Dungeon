@@ -94,6 +94,15 @@ public class MapGenerator: MonoBehaviour
         return (Define.GridType)map[y, x];
     }
 
+    private void OnMapGenComplete()
+    {
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            Destroy(rooms[i]);
+        }
+        rooms.Clear();
+    }
+
     /*  
      *  방 만들어지는 과정 시뮬하기위한 코루틴
      *  물리연산 되는동안 3.5~5초는 기다려야함
@@ -140,6 +149,8 @@ public class MapGenerator: MonoBehaviour
         jpm = new JumpPointSearch(map);
 
         SelectEntrances();
+
+        OnMapGenComplete();
 
     }
 

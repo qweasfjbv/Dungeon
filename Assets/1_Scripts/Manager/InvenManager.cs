@@ -19,8 +19,8 @@ public class InvenManager
 
     public void Init()
     {
-        Managers.Game.onEventEnd -= OnGameEnd;
-        Managers.Game.onEventEnd += OnGameEnd;
+        Managers.Game.OnEventEndAction -= OnGameEnd;
+        Managers.Game.OnEventEndAction += OnGameEnd;
 
 
         summonCardList.Add(6);
@@ -43,8 +43,8 @@ public class InvenManager
         magicCardList.Add(2);
         magicCardList.Add(3);
 
-        Managers.Game.OnEventStart -= OnGameStart;
-        Managers.Game.OnEventStart += OnGameStart;
+        Managers.Game.OnEventStartAction -= OnGameStart;
+        Managers.Game.OnEventStartAction += OnGameStart;
         return;
     }
     

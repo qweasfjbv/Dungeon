@@ -53,6 +53,12 @@ public class SliderController : MonoBehaviour
     {
         s_instance = this;
         // 게임 시작시로 바꿔야함
+        Managers.Game.OnEventEndAction -= (() => SetBloodFill(MaxBlood));
+        Managers.Game.OnEventEndAction -= (() => SetManaFill(MaxMana));
+        Managers.Game.OnEventEndAction += (() => SetBloodFill(MaxBlood));
+        Managers.Game.OnEventEndAction += (() => SetManaFill(MaxMana));
+
+
         GameStart();
     }
 

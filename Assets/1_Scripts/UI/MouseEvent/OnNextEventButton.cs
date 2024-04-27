@@ -11,11 +11,11 @@ public class OnNextEventButton : MonoBehaviour
         GetComponent<Button>().onClick.RemoveListener(Managers.Game.NextEvent);
         GetComponent<Button>().onClick.AddListener(Managers.Game.NextEvent);
 
-        Managers.Game.OnEventStart -= OnEventStart;
-        Managers.Game.OnEventStart += OnEventStart;
+        Managers.Game.OnEventStartAction -= OnEventStart;
+        Managers.Game.OnEventStartAction += OnEventStart;
 
-        Managers.Game.onEventEnd -= OnEventEnd;
-        Managers.Game.onEventEnd += OnEventEnd;
+        Managers.Game.OnEventEndAction -= OnEventEnd;
+        Managers.Game.OnEventEndAction += OnEventEnd;
     }
 
 
