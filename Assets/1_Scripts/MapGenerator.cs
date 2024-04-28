@@ -1068,8 +1068,10 @@ public class MapGenerator: MonoBehaviour
     #region PATH FINDING
 
     [Header("DEBUG")]
-    [SerializeField] GameObject Line;
     [SerializeField] Transform PathTest;
+    [SerializeField] private GameObject arrowPrefab;
+    [SerializeField] private GameObject arrowParent;
+
     public List<Vector2> PreprocessPath(Vector2Int startPoint, Vector2Int endPoint)
     {
         var pathList = (jpm.PathFind(startPoint, endPoint));
@@ -1081,19 +1083,6 @@ public class MapGenerator: MonoBehaviour
         { 
             
             retList.Add(new Vector2(point.y + 0.5f, point.x + 0.5f));
-
-
-            if (prevPoint.x != 0 || prevPoint.y != 0)
-            {
-                /*
-                GameObject line = Instantiate(Line);
-                line.GetComponent<LineRenderer>().SetPosition(0, new Vector3(prevPoint.y, prevPoint.x, -1));
-                line.GetComponent<LineRenderer>().SetPosition(1, new Vector3(point.y, point.x, -1));
-                line.GetComponent<LineRenderer>().startWidth = 0.3f;
-                line.GetComponent<LineRenderer>().endWidth = 0.3f;
-                */
-            }
-
             prevPoint = point;
         }
 
@@ -1101,12 +1090,19 @@ public class MapGenerator: MonoBehaviour
         return retList;
     }
 
+
+
     public EnemyBT SummonEnemy()
     {
         var tmpEnemy = Instantiate(PathTest);
+        var tmpArrow = Instantiate(arrowPrefab, arrowParent.transform);
         tmpEnemy.transform.position = new Vector3(floorEntrance.transform.position.x, floorEntrance.transform.position.y, 0);
         tmpEnemy.GetComponent<EnemyBT>().SetValues(new Vector2Int(Mathf.FloorToInt(floorExit.transform.position.x), Mathf.FloorToInt(floorExit.transform.position.y)));
+
+        if (tmpEnemy.GetComponent<Indicator>() != null) tmpEnemy.GetComponent<Indicator>().SetIndicator(tmpEnemy.transform, tmpArrow.GetComponent<RectTransform>());
+        
         tmpEnemy.gameObject.SetActive(true);
+
 
         return tmpEnemy.GetComponent<EnemyBT>();
     }
