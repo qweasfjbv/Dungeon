@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
@@ -7,16 +8,51 @@ using UnityEngine;
 
 namespace EnemyUI.BehaviorTree
 {
+
+    public class Buff: MonoBehaviour
+    {
+        public Define.BuffType buffType;
+        public float value = 1;
+        public float duration = 0;
+    }
+
+    [Serializable]
+    public class EnemyStat
+    {
+        private float moveSpeed;
+        private float attack;
+        private float hp;
+        private float attackCooltime;
+
+        public List<Buff> buffs;
+
+        public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+        public float Hp { get => hp; set => hp = value; }
+        public float Attack { get => attack; set => attack = value; }
+        public float Cooltime { get => attackCooltime; }
+
+        public EnemyStat(float moveSpeed, float attack, float hp, float attackCooltime)
+        {
+            this.moveSpeed = moveSpeed;
+            this.attack = attack;
+            this.hp = hp;
+            this.attackCooltime = attackCooltime;
+        }
+
+
+    }
+
     public abstract class BTree : MonoBehaviour
     {
-        // Constructs
-
         private Node root = null;
+        protected EnemyStat enemyStat = new EnemyStat(0.05f, 3, 10, 2.0f);
+
 
         private void OnEnable()
         {
             root = SetupRoot();
         }
+
         private void Update()
         {
             if (root != null) root.Evaluate();
@@ -26,10 +62,6 @@ namespace EnemyUI.BehaviorTree
         public abstract Node SetupRoot();
 
 
-        // Contents
-        // TODO : 각 Tree로 옮겨야함
-        [SerializeField]
-        protected EnemyStat enemyStat = new EnemyStat(0.05f, 3, 10, 2.0f);
 
         public static void SetAnimatior(Animator anim, string name)
         {
@@ -97,6 +129,8 @@ namespace EnemyUI.BehaviorTree
             return ret;
 
         }
+
+
 
     }
 

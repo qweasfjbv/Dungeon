@@ -11,8 +11,8 @@ public static class Settings
     public static float yScale = 1f;
 
     public static float DIAGONAL = Mathf.Sqrt(WIDTH * WIDTH + HEIGHT * HEIGHT);
-    public static float MAXCOS = WIDTH / DIAGONAL;
-    public static float MAXSIN = HEIGHT / DIAGONAL;
+    public static float MAXCOS = HEIGHT / DIAGONAL;
+    public static float MAXSIN = WIDTH / DIAGONAL;
 
 
 }

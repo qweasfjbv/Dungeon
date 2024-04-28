@@ -25,6 +25,13 @@ public class Define
 
     }
 
+    public enum BuffType
+    {
+        AtkUp, AtkDown,
+        SpdUp, SpdDown,
+        DefUP, DefDown
+    }
+
     public enum SFXSoundType
     {
         Paper,

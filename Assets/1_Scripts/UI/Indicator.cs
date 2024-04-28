@@ -46,7 +46,8 @@ public class Indicator : MonoBehaviour
             if (Mathf.Abs(cos) < Settings.MAXCOS)
             {
                 fromCenter.x = Mathf.Sign(fromCenter.x) * Screen.width / 2;
-                fromCenter.y = Mathf.Sign(fromCenter.y) * Screen.height / 2 * Mathf.Abs(cos) / Settings.MAXCOS;
+                fromCenter.y = Mathf.Sign(fromCenter.y) * Screen.height / 2 * Mathf.Abs(cos) /Settings.MAXCOS
+                    ;
 
 
                 fromCenter *= 0.95f;

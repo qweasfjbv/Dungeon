@@ -6,27 +6,6 @@ using UnityEngine.Localization.PropertyVariants.TrackedProperties;
 
 namespace EnemyUI.BehaviorTree
 {
-    [Serializable]
-    public class EnemyStat
-    {
-        private float moveSpeed;
-        private float attack;
-        private float hp;
-        private float attackCooltime;
-
-        public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
-        public float Hp { get => hp; set => hp = value; }
-        public float Attack { get => attack; set => attack = value; }
-        public float Cooltime { get => attackCooltime; }
-
-        public EnemyStat(float moveSpeed, float attack, float hp, float attackCooltime)
-        {
-            this.moveSpeed = moveSpeed;
-            this.attack = attack;
-            this.hp = hp;
-            this.attackCooltime = attackCooltime;
-        }
-    }
     public class EnemyBT : BTree
     {
 
