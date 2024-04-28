@@ -178,8 +178,8 @@ TextureImporter:
         y: 96
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -199,8 +199,8 @@ TextureImporter:
         y: 96
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -213,15 +213,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_2
+      name: HumanBaseAttack_10
       rect:
         serializedVersion: 2
         x: 64
-        y: 96
+        y: 32
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -234,15 +234,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_3
+      name: HumanBaseAttack_11
       rect:
         serializedVersion: 2
         x: 96
-        y: 96
+        y: 32
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -255,15 +255,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_4
+      name: HumanBaseAttack_12
       rect:
         serializedVersion: 2
         x: 0
-        y: 64
+        y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -276,15 +276,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_5
+      name: HumanBaseAttack_13
       rect:
         serializedVersion: 2
         x: 32
-        y: 64
+        y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -297,15 +297,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_6
+      name: HumanBaseAttack_14
       rect:
         serializedVersion: 2
         x: 64
-        y: 64
+        y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -318,15 +318,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_7
+      name: HumanBaseAttack_15
       rect:
         serializedVersion: 2
         x: 96
-        y: 64
+        y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -339,15 +339,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_8
+      name: HumanBaseAttack_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 32
+        x: 64
+        y: 96
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -360,15 +360,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_9
+      name: HumanBaseAttack_3
       rect:
         serializedVersion: 2
-        x: 32
-        y: 32
+        x: 96
+        y: 96
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -381,15 +381,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_10
+      name: HumanBaseAttack_4
       rect:
         serializedVersion: 2
-        x: 64
-        y: 32
+        x: 0
+        y: 64
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -402,15 +402,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_11
+      name: HumanBaseAttack_5
       rect:
         serializedVersion: 2
-        x: 96
-        y: 32
+        x: 32
+        y: 64
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -423,15 +423,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_12
+      name: HumanBaseAttack_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 64
+        y: 64
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -444,15 +444,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_13
+      name: HumanBaseAttack_7
       rect:
         serializedVersion: 2
-        x: 32
-        y: 0
+        x: 96
+        y: 64
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -465,15 +465,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_14
+      name: HumanBaseAttack_8
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0
+        x: 0
+        y: 32
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -486,15 +486,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HumanBaseAttack_15
+      name: HumanBaseAttack_9
       rect:
         serializedVersion: 2
-        x: 96
-        y: 0
+        x: 32
+        y: 32
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -519,20 +519,20 @@ TextureImporter:
     nameFileIdTable:
       HumanBaseAttack_0: 1173335314239885238
       HumanBaseAttack_1: -7729339473455529383
-      HumanBaseAttack_10: 6347960991075037636
-      HumanBaseAttack_11: -6675882384025459674
-      HumanBaseAttack_12: 1463068540150947005
-      HumanBaseAttack_13: 2308080642909634873
-      HumanBaseAttack_14: 5137893261841647601
-      HumanBaseAttack_15: 1433798380598326525
-      HumanBaseAttack_2: 266891876565821341
-      HumanBaseAttack_3: 7001301442144917385
-      HumanBaseAttack_4: 7666727062179746331
-      HumanBaseAttack_5: -7836297259064635787
-      HumanBaseAttack_6: 2426955389951385321
-      HumanBaseAttack_7: 265265029054533519
-      HumanBaseAttack_8: 4592651278508023558
-      HumanBaseAttack_9: -7569454566117194022
+      HumanBaseAttack_10: 266891876565821341
+      HumanBaseAttack_11: 7001301442144917385
+      HumanBaseAttack_12: 7666727062179746331
+      HumanBaseAttack_13: -7836297259064635787
+      HumanBaseAttack_14: 2426955389951385321
+      HumanBaseAttack_15: 265265029054533519
+      HumanBaseAttack_2: 4592651278508023558
+      HumanBaseAttack_3: -7569454566117194022
+      HumanBaseAttack_4: 6347960991075037636
+      HumanBaseAttack_5: -6675882384025459674
+      HumanBaseAttack_6: 1463068540150947005
+      HumanBaseAttack_7: 2308080642909634873
+      HumanBaseAttack_8: 5137893261841647601
+      HumanBaseAttack_9: 1433798380598326525
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

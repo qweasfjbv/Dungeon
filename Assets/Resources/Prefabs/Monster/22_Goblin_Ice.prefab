@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce64b574a21009b4fafe396097886429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  searchRange: 5
-  attackRange: 6
+  searchRange: 6
+  attackRange: 5
   icePrefab: {fileID: 2058617026692360558, guid: 07438fa3dd85ec44989bc032c2ffa59c,
     type: 3}

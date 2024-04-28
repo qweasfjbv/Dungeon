@@ -609,6 +609,7 @@ public class MapGenerator: MonoBehaviour
     [Header("Tilemaps")]
     [SerializeField] private Tilemap floorTilemap;
     [SerializeField] private Tilemap wallTilemap;
+    [SerializeField] private Tilemap wallTopTilemap;
     [SerializeField] private Tilemap cliffTilemap;
     [SerializeField] private Tilemap shadowTilemap;
     [SerializeField] private Tilemap colliderTilemap;
@@ -794,6 +795,7 @@ public class MapGenerator: MonoBehaviour
                 }
                 else if(tile == wall_Top_Left || tile == wall_Top_Right)
                 {
+
                     wallTilemap.SetTile(tilePos + new Vector3Int(0, 1, 0), tile);
                     if (tile == wall_Top_Left) wallTilemap.SetTile(tilePos, wall_Left);
                     else wallTilemap.SetTile(tilePos, wall_Right);
@@ -801,7 +803,7 @@ public class MapGenerator: MonoBehaviour
                 else if(tile == wall_Top_Center)
                 {
                     wallTilemap.SetTile(tilePos + new Vector3Int(0, 1, 0), tile);
-                    wallTilemap.SetTile(tilePos, wall_Center_Center);
+                    wallTopTilemap.SetTile(tilePos, wall_Center_Center);
                 }
                 else
                 {
@@ -811,20 +813,20 @@ public class MapGenerator: MonoBehaviour
                     {
                         if (tile == wall_Bottom_Left)
                         {
-                            wallTilemap.SetTile(tilePos, wall_Center_Left);
+                            wallTopTilemap.SetTile(tilePos, wall_Center_Left);
                         }
                         else if (tile == wall_Bottom_Right)
                         {
-                            wallTilemap.SetTile(tilePos, wall_Center_Right);
+                            wallTopTilemap.SetTile(tilePos, wall_Center_Right);
                         }
                         else
                         {
-                            wallTilemap.SetTile(tilePos, wall_Center);
+                            wallTopTilemap.SetTile(tilePos, wall_Center);
                         }
                     }
                     else
                     {
-                        wallTilemap.SetTile(tilePos, wall_Center);
+                        wallTopTilemap.SetTile(tilePos, wall_Center);
                     }
                 }
                 break;
@@ -859,9 +861,9 @@ public class MapGenerator: MonoBehaviour
 
         if (wallTile == wall_Center_Left || wallTile == wall_Center_Right || wallTile == wall_Center)
         {
-            if (wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null && floorTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null)
+            if ((wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null || wallTopTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null) && floorTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null)
                 cliffTilemap.SetTile(tilePos - new Vector3Int(0, 1, 0), cliff_0);
-            if (wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null && floorTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null)
+            if ((wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null || wallTopTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null)  && floorTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null)
                 cliffTilemap.SetTile(tilePos - new Vector3Int(0, 2, 0), cliff_1);
         }
 
@@ -873,7 +875,7 @@ public class MapGenerator: MonoBehaviour
         Vector3Int tilePos = new Vector3Int(x, y, 0);
 
 
-        if (wallTilemap.GetTile<Tile>(tilePos) == null && floorTilemap.GetTile<Tile>(tilePos) == null && cliffTilemap.GetTile<Tile>(tilePos) == null)
+        if (wallTilemap.GetTile<Tile>(tilePos) == null && wallTopTilemap.GetTile<Tile>(tilePos) == null && floorTilemap.GetTile<Tile>(tilePos) == null && cliffTilemap.GetTile<Tile>(tilePos) == null)
         {
             wallTilemap.SetTile(tilePos, black_Tile);
         }

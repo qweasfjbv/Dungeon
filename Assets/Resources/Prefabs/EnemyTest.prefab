@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8436098988084777336}
   - component: {fileID: 8261694804721066094}
   - component: {fileID: 7147788042644934357}
-  - component: {fileID: 7075531397005168617}
+  - component: {fileID: 583949514019035584}
   m_Layer: 8
   m_Name: EnemyTest
   m_TagString: Human
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   searchRange: 5
-  attackRange: 1
+  attackRange: 0.6
 --- !u!95 &7147788042644934357
 Animator:
   serializedVersion: 5
@@ -151,8 +151,8 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!70 &7075531397005168617
-CapsuleCollider2D:
+--- !u!58 &583949514019035584
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -180,9 +180,9 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0065775216, y: 0.1252645}
-  m_Size: {x: 0.61305624, y: 0.62160355}
-  m_Direction: 0
+  m_Offset: {x: 0, y: 0.26}
+  serializedVersion: 2
+  m_Radius: 0.25

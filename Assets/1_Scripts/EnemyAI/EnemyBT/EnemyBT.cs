@@ -31,7 +31,7 @@ namespace EnemyUI.BehaviorTree
     {
 
         [SerializeField] private int searchRange;
-        [SerializeField] private int attackRange;
+        [SerializeField] private float attackRange;
 
         private Vector2Int destination;
 
@@ -290,7 +290,7 @@ namespace EnemyUI.BehaviorTree
     public class Track : Node
     {
         private Transform transform;
-        private int attackRange;
+        private float attackRange;
         private Animator animator;
         private Rigidbody2D rigid;
         private EnemyStat stat;
@@ -298,7 +298,7 @@ namespace EnemyUI.BehaviorTree
 
         private int currentPointIndex = 0;
 
-        public Track(Transform transform, int attackRange, EnemyStat stat)
+        public Track(Transform transform, float attackRange, EnemyStat stat)
         {
 
             this.stat = stat;
