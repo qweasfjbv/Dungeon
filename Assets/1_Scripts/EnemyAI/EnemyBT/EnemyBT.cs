@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Localization.PropertyVariants.TrackedProperties;
 
@@ -28,10 +29,6 @@ namespace EnemyUI.BehaviorTree
     }
     public class EnemyBT : BTree
     {
-        private void DONE()
-        {
-            Debug.Log("DONE");
-        }
 
         [SerializeField] private int searchRange;
         [SerializeField] private int attackRange;
@@ -144,7 +141,7 @@ namespace EnemyUI.BehaviorTree
 
         private Transform transform;
         private int searchRange;
-        string tagName;
+        private string tagName;
         private Animator animator;
         private EnemyStat stat;
         private float coolTime = 0f;
@@ -175,19 +172,18 @@ namespace EnemyUI.BehaviorTree
             }
 
             var cols = Physics2D.OverlapCircleAll(transform.position, searchRange);
-            foreach (var col in cols)
+
+            var nearGo = BTree.SearchEnemy(transform, cols, tagName);
+
+            if (nearGo != null)
             {
-                if (col.CompareTag(tagName))
-                {
-                    parent.parent.SetNodeData("BossObject", col.gameObject);
-                    parent.SetNodeData("pathfindFlag", true);
-                    return NodeState.Failure;
-                }
+                parent.parent.SetNodeData("BossObject", nearGo);
+                parent.SetNodeData("pathfindFlag", true);
+                return NodeState.Failure;
             }
 
             if (GetNodeData("isTracked") != null || GetNodeData("attackFlag") != null)
             { return NodeState.Failure; }
-            //
 
             return NodeState.Success;
         }
@@ -416,14 +412,11 @@ namespace EnemyUI.BehaviorTree
                 
                 // 떄리는 로직
                 // 때리고 죽었으면
-                if (tr.GetComponent<GoblinBT>() != null && tr.GetComponent<GoblinBT>().OnDamaged(stat.Attack))
+                if (tr.GetComponent<BTree>() != null && tr.GetComponent<BTree>().OnDamaged(stat.Attack))
                 {
-                    Debug.Log("HIT GOBLIN");
+
                 }
-                if (tr.GetComponent<EnemyBT>() != null && tr.GetComponent<EnemyBT>().OnDamaged(stat.Attack))
-                {
-                    Debug.Log("HIT ENEMY");
-                }
+
             }
 
             return NodeState.Success;

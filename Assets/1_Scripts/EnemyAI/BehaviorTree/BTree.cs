@@ -1,6 +1,8 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 namespace EnemyUI.BehaviorTree
@@ -69,6 +71,31 @@ namespace EnemyUI.BehaviorTree
         public void MoveBuff(float w)
         {
             enemyStat.MoveSpeed *= w;
+        }
+
+        public static GameObject SearchEnemy(Transform transform, Collider2D[] cols, string tagName)
+        {
+            if (cols.Length == 0) return null;
+
+            GameObject ret = null;
+            float minDis = -1;
+            foreach (Collider2D col in cols)
+            {
+                if(!col.CompareTag(tagName)) continue;
+                if (ret == null) { ret = col.gameObject; minDis = UtilFunctions.VectorDistanceSq(ret.transform.position, transform.position); continue; }
+
+                var tmpDis = UtilFunctions.VectorDistanceSq(col.gameObject.transform.position, transform.position);
+
+                if (minDis > tmpDis)
+                {
+                    minDis = tmpDis;
+                    ret = col.gameObject;
+                }
+                
+
+            }
+            return ret;
+
         }
 
     }

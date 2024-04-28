@@ -18,8 +18,6 @@ public class InputManager
     public bool DialogBlock { get => dialogBlock; set => dialogBlock = value; }
     public bool EscBlock { get => escBlock; set => escBlock = value; }
 
-    
-
     public void OnUpdate()
     {
         if (Input.anyKey == false) return;

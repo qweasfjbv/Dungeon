@@ -1,20 +1,16 @@
 using EnemyUI.BehaviorTree;
-using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
 
-
-
-
     static EventManager s_instance;
     public static EventManager Instance { get { return s_instance; } }
 
+    
     private Dictionary<(int eventId, int choice), Action> eventActions;
 
 
@@ -30,11 +26,11 @@ public class EventManager : MonoBehaviour
         // 이벤트 함수 매핑 초기화
         eventActions = new Dictionary<(int, int), Action>
         {
-            { (1, 0), GG_S0 },
-            { (1, 1), GG_S1 },
-            { (2, 0), WT_S0 },
-            { (2, 1), WT_S1 },
-            { (2, 2), WT_S2 }
+            { (0, 0), GG_S0 },
+            { (0, 1), GG_S1 },
+            { (1, 0), WT_S0 },
+            { (1, 1), WT_S1 },
+            { (1, 2), WT_S2 }
         };
     }
 

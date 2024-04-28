@@ -49,7 +49,7 @@ public class DialogManager : MonoBehaviour
         selectorImage.SetActive(false);
         dialogBox.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, dialogHidePosY, 0);
 
-        Managers.Game.dialogDelegate = SetEvent;
+        Managers.Game.DialogDelegate = SetEvent;
 
         Managers.Input.dialogAction -= OnKeyboard;
         Managers.Input.dialogAction += OnKeyboard;

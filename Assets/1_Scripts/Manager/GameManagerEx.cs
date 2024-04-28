@@ -6,19 +6,19 @@ using UnityEngine;
 
 public class GameManagerEx
 {
-    private bool isInEvent = false;
-
     public delegate void EventDelegate<T1>(T1 a);
-    public EventDelegate<int> dialogDelegate;
+
+    private bool isInEvent = false;
     private Action onEventStart = null;
-    public Action onEventEnd = null;
+    private Action onEventEnd = null;
+    private EventDelegate<int> dialogDelegate;
+
+    private List<BTree> goblins = new List<BTree>();
 
     public Action OnEventStartAction { get => onEventStart; set => onEventStart = value; }
-
     public Action OnEventEndAction { get=>onEventEnd; set => onEventEnd = value; }
+    public EventDelegate<int> DialogDelegate {get=> dialogDelegate; set=>dialogDelegate = value; }
 
-    private Dictionary<int, int> buffs = new Dictionary<int, int>();
-    private List<BTree> goblins = new List<BTree>();
 
     public void Init()
     {
@@ -32,12 +32,12 @@ public class GameManagerEx
         isInEvent = true;
 
 
-        int eventIdx = 1;
+        int eventIdx = 0;
 
-        //이벤트Idx 선택하는 로직 필요
+        // TODO : 이벤트 선택지 선택하는 로직 필요
         onEventStart.Invoke();
 
-        dialogDelegate(eventIdx);
+        DialogDelegate(eventIdx);
     }
 
     // Event끝나면 호출
@@ -55,7 +55,6 @@ public class GameManagerEx
         {
             NextEvent();
         }
-
 
         return;
     }
