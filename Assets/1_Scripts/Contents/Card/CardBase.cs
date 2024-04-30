@@ -13,6 +13,7 @@ public abstract class CardBase : MonoBehaviour
     , IBeginDragHandler
     , IDragHandler
     , IEndDragHandler
+    , IPointerDownHandler
 {
 
     private Transform parentDeck;
@@ -27,6 +28,8 @@ public abstract class CardBase : MonoBehaviour
 
     private float duration;
     private float value;
+
+    private bool isInHand = false;
 
     [SerializeField] protected Sprite itemSprite;
     [SerializeField] private TextMeshProUGUI cardName;
@@ -117,11 +120,12 @@ public abstract class CardBase : MonoBehaviour
 
     private void Update()
     {
+        this.rect.localScale= UtilFunctions.CardLerp(rect.localScale, targetScale, cardMoveSpeed);
+
+        if (!isInHand) return;
         var targetV = UtilFunctions.CardLerp(rect.anchoredPosition, targetPos, cardMoveSpeed);
         this.rect.anchoredPosition = new Vector3(targetV.x, targetV.y);
         this.rect.localPosition = new Vector3(rect.localPosition.x, rect.localPosition.y, 0);
-
-        this.rect.localScale= UtilFunctions.CardLerp(rect.localScale, targetScale, cardMoveSpeed);
 
         var rotateZ = rect.localRotation.eulerAngles.z;
         if (rotateZ >= 180) rotateZ = rotateZ - 360;
@@ -156,7 +160,8 @@ public abstract class CardBase : MonoBehaviour
 
     private void OnDestroy()
     {
-        parentDeck.GetComponent<CardInHand>().UpdateCardLayout();
+        if (isInHand)
+            parentDeck.GetComponent<CardInHand>().UpdateCardLayout();
     }
 
     #endregion
@@ -189,7 +194,7 @@ public abstract class CardBase : MonoBehaviour
     public void OnPointerEnter(PointerEventData eventData)
     {
         Hover();
-        if(transform.parent != null)
+        if(transform.parent != null && isInHand)
         {
             transform.parent.GetComponent<CardInHand>().OnHover();
         }
@@ -200,7 +205,7 @@ public abstract class CardBase : MonoBehaviour
     public void OnPointerExit(PointerEventData eventData)
     {
         UnHover();
-        if (transform.parent != null)
+        if (transform.parent != null && isInHand)
         {
             transform.parent.GetComponent<CardInHand>().OnUnHover();
         }
@@ -208,6 +213,8 @@ public abstract class CardBase : MonoBehaviour
 
     public void OnDrag(PointerEventData eventData)
     {
+
+        if (!isInHand) return;
 
         var mousePos = transform.parent.InverseTransformPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         SetTargetPosX(mousePos.x);
@@ -233,6 +240,9 @@ public abstract class CardBase : MonoBehaviour
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+
+        if (!isInHand) return;
+
         SoundManager.Instance.PlaySfxSound(Define.SFXSoundType.Paper);
         CameraController.CanMove = false;
         isDragged = true;
@@ -241,6 +251,8 @@ public abstract class CardBase : MonoBehaviour
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!isInHand) return;
+
         CameraController.CanMove = true;
         isDragged = false;
         Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -277,6 +289,11 @@ public abstract class CardBase : MonoBehaviour
                 text.color = new Color(0,0, 0, color.a);
             }
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        
     }
 
     #endregion

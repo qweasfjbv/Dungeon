@@ -14,7 +14,6 @@ public class Define
     {
         Summon = 0,
         Magic,
-        Buff,
         None
     }
 

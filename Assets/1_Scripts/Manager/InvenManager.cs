@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class InvenManager
@@ -14,40 +13,36 @@ public class InvenManager
     List<int> usedCardList = new List<int>();
 
     private const float DRAWCOST = 1;
+    
+    private GameObject invenParent;
 
     public Action onGameEnd;
 
     public void Init()
     {
+
+
         Managers.Game.OnEventEndAction -= OnGameEnd;
         Managers.Game.OnEventEndAction += OnGameEnd;
 
+        invenParent = GameObject.Find("InvenContent");
 
-        summonCardList.Add(6);
-        summonCardList.Add(7);
-        summonCardList.Add(6);
-        summonCardList.Add(7);
-        summonCardList.Add(6);
-        summonCardList.Add(7);
-        summonCardList.Add(6);
-        summonCardList.Add(7);
+        Managers.Input.escAction -= TmpKey;
+        Managers.Input.escAction += TmpKey;
 
-
-        magicCardList.Add(1);
-        magicCardList.Add(2);
-        magicCardList.Add(3);
-        magicCardList.Add(1);
-        magicCardList.Add(2);
-        magicCardList.Add(3);
-        magicCardList.Add(1);
-        magicCardList.Add(2);
-        magicCardList.Add(3);
 
         Managers.Game.OnEventStartAction -= OnGameStart;
         Managers.Game.OnEventStartAction += OnGameStart;
         return;
     }
     
+    private void TmpKey()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            AddCard(1);
+        }
+    }
     public void OnGameStart()
     {
         foreach (var card in summonCardList)
@@ -72,6 +67,12 @@ public class InvenManager
 
     public void MoveUsedtoUnused()
     {
+        // 카드 초기화할때도 드로우할 떄 만큼 마나 소비
+        if (!SliderController.Instance.UseMana(DRAWCOST))
+        {
+            Debug.Log("Mana부족");
+            return;
+        }
         foreach (var used in usedCardList)
         {
             unusedCardList.Add(used);
@@ -80,6 +81,23 @@ public class InvenManager
         usedCardList.Clear();
     }
 
+    public void AddCard(int id)
+    {
+        Debug.Log("ADDED");
+        var cardData = Managers.Resource.GetCardInfo(id);
+
+        switch (cardData.cardType)
+        {
+            case Define.CardType.Summon:
+                summonCardList.Add(id);
+                break;
+            case Define.CardType.Magic:
+                magicCardList.Add(id);
+                break;
+        }
+
+        GameObject.Instantiate(Managers.Resource.GetCardPrefab(cardData.cardId), invenParent.transform); 
+    }
     public void OnUseCard(int id)
     {
         usedCardList.Add(id);
