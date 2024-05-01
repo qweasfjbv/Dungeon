@@ -111,7 +111,7 @@ public class DialogManager : MonoBehaviour
 
         SoundManager.Instance.PlayNPCSound((Define.NpcSoundType)id);
 
-            Managers.Input.DialogBlock = true;
+        Managers.Input.DialogBlock = true;
         GetComponent<BlockPanelController>().OnBlock();
 
         SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ClickButton);

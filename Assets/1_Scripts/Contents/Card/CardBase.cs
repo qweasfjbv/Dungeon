@@ -100,6 +100,9 @@ public abstract class CardBase : MonoBehaviour
 
     public void SetCard(int id)
     {
+
+        isInHand = true;
+
         var cardInfo = Managers.Resource.GetCardInfo(id);
 
         this.cardId = cardInfo.cardId;
@@ -110,6 +113,11 @@ public abstract class CardBase : MonoBehaviour
         cardName.GetComponent<LocalizeStringEvent>().StringReference.SetReference("CardInfoTable", (cardInfo.cardId * 100 + 0).ToString());
         cardDesc.GetComponent<LocalizeStringEvent>().StringReference.SetReference("CardInfoTable", (cardInfo.cardId * 100 + 1).ToString());
 
+    }
+
+    public void UnsetCard()
+    {
+        isInHand = false;
     }
 
     // 실제 사용할 때 호출할 함수
@@ -173,6 +181,7 @@ public abstract class CardBase : MonoBehaviour
         if (!isHover)
         {
             isHover = true;
+            rect.localScale = new Vector3(CARD_SCALE_HOVERED, CARD_SCALE_HOVERED);
             targetScale = new Vector3(CARD_SCALE_HOVERED, CARD_SCALE_HOVERED);
             SetTargetAngle(0f);
             if (!isDragged)
@@ -187,6 +196,7 @@ public abstract class CardBase : MonoBehaviour
         if (isHover)
         {
             isHover = false;
+            
             targetScale = new Vector3(CARD_SCALE, CARD_SCALE);
         }
     }

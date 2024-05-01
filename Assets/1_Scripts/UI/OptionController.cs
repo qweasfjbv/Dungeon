@@ -21,13 +21,11 @@ public class OptionController : MonoBehaviour
             if (optionUI.Toggle()) // ON
             {
                 SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ClickButton);
-                Managers.Input.EscBlock = true;
                 GetComponent<BlockPanelController>().OnBlock();
             }
             else // OFF
             {
                 SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ShowButton);
-                Managers.Input.EscBlock = false;
                 GetComponent<BlockPanelController>().OffBlock();
             }
         }

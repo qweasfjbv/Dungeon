@@ -83,7 +83,7 @@ public class InvenManager
 
     public void AddCard(int id)
     {
-        Debug.Log("ADDED");
+
         var cardData = Managers.Resource.GetCardInfo(id);
 
         switch (cardData.cardType)

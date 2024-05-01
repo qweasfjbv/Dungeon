@@ -19,12 +19,14 @@ public class OptionUI : MonoBehaviour
     {
         if (!isOnUI)
         {
+            Managers.Input.EscBlock = true;
             isOnUI = true;
             GetComponent<RectTransform>().DOAnchorPos(showPos, 0.7f).SetEase(Ease.InOutElastic);
             return true;
         }
         else
         {
+            Managers.Input.EscBlock = false;
             isOnUI = false;
             GetComponent<RectTransform>().DOAnchorPos(hidePos, 0.7f).SetEase(Ease.InOutElastic);
             return false;
