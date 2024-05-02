@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class ButtonPivotUI : MonoBehaviour
 {
-    private Vector2 buttonHidePos = new Vector2(120, 30);
-    private Vector2 buttonShowPos = new Vector2(-50, 30);
+    private float buttonHidePosX = 120f;
+    private float buttonShowPosX = -50;
 
 
     private void Start()
@@ -16,12 +16,12 @@ public class ButtonPivotUI : MonoBehaviour
 
     public void HideButton()
     {
-        GetComponent<RectTransform>().DOAnchorPos(buttonHidePos, 0.7f).SetEase(Ease.OutCubic);
+        GetComponent<RectTransform>().DOAnchorPosX(buttonHidePosX, 0.7f).SetEase(Ease.OutCubic);
     }
 
     public void ShowButton()
     {
-        GetComponent<RectTransform>().DOAnchorPos(buttonShowPos, 0.7f).SetEase(Ease.OutBounce);
+        GetComponent<RectTransform>().DOAnchorPosX(buttonShowPosX, 0.7f).SetEase(Ease.OutBounce);
     }
 
 }

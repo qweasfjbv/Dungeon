@@ -46,7 +46,7 @@ public class ResourceManager
     private EventInfos eventInfos = new EventInfos();
     private GameObject[] cardPrefabs;
 
-    const int CARDOFFSET = 1;
+    public const int CARDOFFSET = 1;
 
     public void Init()
     {
@@ -65,6 +65,11 @@ public class ResourceManager
     public GameObject GetCardPrefab(int id)
     {
         return cardPrefabs[id - CARDOFFSET];
+    }
+
+    public int GetCardCount()
+    {
+        return cardInfos.cardInfo.Count();
     }
 
     public DialogEventInfo GetEventInfo(int id)

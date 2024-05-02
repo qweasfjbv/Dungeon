@@ -27,24 +27,19 @@ public class InvenManager
 
         invenParent = GameObject.Find("InvenContent");
 
-        Managers.Input.escAction -= TmpKey;
-        Managers.Input.escAction += TmpKey;
-
 
         Managers.Game.OnEventStartAction -= OnGameStart;
         Managers.Game.OnEventStartAction += OnGameStart;
         return;
     }
     
-    private void TmpKey()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            AddCard(1);
-        }
-    }
+
     public void OnGameStart()
     {
+
+        unusedCardList.Clear();
+        usedCardList.Clear();
+
         foreach (var card in summonCardList)
             unusedCardList.Add(card);
         foreach (var card in magicCardList)
@@ -83,6 +78,7 @@ public class InvenManager
 
     public void AddCard(int id)
     {
+        Debug.Log("ADD CARD : " + id);
 
         var cardData = Managers.Resource.GetCardInfo(id);
 
@@ -96,8 +92,16 @@ public class InvenManager
                 break;
         }
 
-        GameObject.Instantiate(Managers.Resource.GetCardPrefab(cardData.cardId), invenParent.transform); 
+        var go = GameObject.Instantiate(Managers.Resource.GetCardPrefab(cardData.cardId), invenParent.transform);
+        go.GetComponent<CardBase>().SetCard(cardData.cardId, false);
     }
+
+    public void AddRandomCard()
+    {
+        int ind = UnityEngine.Random.Range(ResourceManager.CARDOFFSET, ResourceManager.CARDOFFSET+ Managers.Resource.GetCardCount());
+        AddCard(ind);
+    }
+
     public void OnUseCard(int id)
     {
         usedCardList.Add(id);

@@ -52,9 +52,10 @@ public abstract class CardBase : MonoBehaviour
     private bool isHover = false;
     private bool isDragged = false;
     private bool isInField = false;
-    public bool IsHover { get=>isHover; }
+    public bool IsHover { get => isHover; }
     public bool IsDragged { get => isDragged; }
     public bool IsInField { get => isInField; }
+    public Define.CardType Cardtype{ get => cardType; }
 
     private RectTransform rect;
 
@@ -98,10 +99,10 @@ public abstract class CardBase : MonoBehaviour
     #endregion
 
 
-    public void SetCard(int id)
+    public void SetCard(int id, bool toHand = true)
     {
 
-        isInHand = true;
+        isInHand = toHand;
 
         var cardInfo = Managers.Resource.GetCardInfo(id);
 

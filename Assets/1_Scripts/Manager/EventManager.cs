@@ -26,11 +26,11 @@ public class EventManager : MonoBehaviour
         // 이벤트 함수 매핑 초기화
         eventActions = new Dictionary<(int, int), Action>
         {
-            { (0, 0), GG_S0 },
-            { (0, 1), GG_S1 },
-            { (1, 0), WT_S0 },
-            { (1, 1), WT_S1 },
-            { (1, 2), WT_S2 }
+            { (0, 0), F_0_0 },
+            { (0, 1), F_0_1 },
+            { (0, 2), F_0_2 },
+            { (1, 0), F_1_0 },
+            { (1, 1), F_1_1 }
         };
     }
 
@@ -39,30 +39,30 @@ public class EventManager : MonoBehaviour
         eventActions[(id, select)].Invoke();
     }
 
-    private void GG_S0()
+    private void F_0_0()
     {
         Debug.Log("GG_S0");
         StartCoroutine(EnemyAppearEvent(3));
     }
 
-    private void GG_S1()
+    private void F_0_1()
+    {
+        Debug.Log("GG_S1");
+        Managers.Inven.AddRandomCard();
+        Managers.Game.OnEventEnd();
+    }
+    private void F_0_2()
     {
         Debug.Log("GG_S1");
 
         Managers.Game.OnEventEnd();
     }
-    private void WT_S0()
+    private void F_1_0()
     {
 
         Managers.Game.OnEventEnd();
     }
-    private void WT_S1()
-    {
-
-        Managers.Game.OnEventEnd();
-    }
-
-    private void WT_S2()
+    private void F_1_1()
     {
 
         Managers.Game.OnEventEnd();
