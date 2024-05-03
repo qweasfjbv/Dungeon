@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class OnHover_2 : MonoBehaviour
     , IPointerEnterHandler
     , IPointerExitHandler
-    , IPointerDownHandler
 {
 
     private Transform icon;
@@ -24,20 +23,23 @@ public class OnHover_2 : MonoBehaviour
 
     private float onHoverOffset = -40f;
 
-    public void OnClicked()
+    public void OnSelected()
+    {
+        if (!isClicked)
+        {
+            isClicked = true;
+            targetAlpha = 0.3f;
+        }
+    }
+
+    public void OnUnselected()
     {
         if (isClicked)
         {
             isClicked = false;
             targetAlpha = 1f;
         }
-        else
-        {
-            isClicked = true;
-            targetAlpha = 0.3f;
-        }
     }
-    
 
     private void Awake()
     {
@@ -70,8 +72,5 @@ public class OnHover_2 : MonoBehaviour
         icon.GetComponent<Image>().color = targetColor;
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        OnClicked();
-    }
+
 }

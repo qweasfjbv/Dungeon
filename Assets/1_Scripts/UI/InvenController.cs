@@ -9,8 +9,7 @@ public class InvenController : MonoBehaviour
 
     [SerializeField] private Button invenButton;
     [SerializeField] private Button invenCloseButton;
-    [SerializeField] private Button invenSortButton_1;
-    [SerializeField] private Button invenSortButton_2;
+    [SerializeField] private List<Button> invenSortButton = new List<Button>();
     [SerializeField] private GameObject inventory;
     [SerializeField] private Transform invenContent;
 
@@ -18,6 +17,8 @@ public class InvenController : MonoBehaviour
     private Vector3 invenHidePos = new Vector3(0, 1500);
 
     private bool isShowing = false;
+
+    private Define.CardType curSortedType = Define.CardType.None;
 
     private void Start()
     {
@@ -29,10 +30,10 @@ public class InvenController : MonoBehaviour
         invenCloseButton.onClick.RemoveAllListeners();
         invenCloseButton.onClick.AddListener(Toggle);
 
-        invenSortButton_1.onClick.RemoveAllListeners();
-        invenSortButton_2.onClick.RemoveAllListeners();
-        invenSortButton_1.onClick.AddListener(() => OnSortButtonClicked(Define.CardType.Magic));
-        invenSortButton_2.onClick.AddListener(() => OnSortButtonClicked(Define.CardType.Summon));
+        invenSortButton[0].onClick.RemoveAllListeners();
+        invenSortButton[1].onClick.RemoveAllListeners();
+        invenSortButton[0].onClick.AddListener(() => OnSortButtonClicked(Define.CardType.Summon));
+        invenSortButton[1].onClick.AddListener(() => OnSortButtonClicked(Define.CardType.Magic));
 
         Managers.Input.invenAction -= OnKeyboard;
         Managers.Input.invenAction += OnKeyboard;
@@ -77,7 +78,25 @@ public class InvenController : MonoBehaviour
 
     private void OnSortButtonClicked(Define.CardType type)
     {
-        foreach(Transform tr in invenContent)
+
+        SoundManager.Instance.PlaySfxSound(Define.SFXSoundType.Paper);
+        if (curSortedType == type)
+        {
+            invenSortButton[(int)curSortedType].GetComponent<OnHover_2>().OnUnselected();
+            curSortedType = Define.CardType.None;
+
+            foreach (Transform tr in invenContent)
+            {
+                if (tr.GetComponent<CardBase>() != null) tr.gameObject.SetActive(true);
+            }
+            return;
+        }
+
+        curSortedType = type;
+        invenSortButton[(int)curSortedType].GetComponent<OnHover_2>().OnSelected();
+        invenSortButton[1 - (int)curSortedType].GetComponent<OnHover_2>().OnUnselected();
+
+        foreach (Transform tr in invenContent)
         {
             if (tr.GetComponent<CardBase>() == null) continue;
 

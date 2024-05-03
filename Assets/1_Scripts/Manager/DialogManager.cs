@@ -148,7 +148,9 @@ public class DialogManager : MonoBehaviour
         GetComponent<BlockPanelController>().OffBlock();
         SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ShowButton);
         dialogBox.GetComponent<RectTransform>().DOAnchorPosY(dialogHidePosY, 0.6f).SetEase(Ease.InOutElastic);
+
         dialogInProgress = false;
+
 
         dialogKeys.Clear();
         curLineIndex = 0;
@@ -157,6 +159,7 @@ public class DialogManager : MonoBehaviour
         selectinProgress = false;
 
     }
+
 
     private void ShowNextLine()
     {

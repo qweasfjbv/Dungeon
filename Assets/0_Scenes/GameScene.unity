@@ -836,8 +836,8 @@ RectTransform:
   m_LocalScale: {x: 0.9, y: 0.9, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1356250607}
   - {fileID: 414054040}
+  - {fileID: 1356250607}
   - {fileID: 1212713928}
   - {fileID: 1590512109}
   m_Father: {fileID: 1606266770}
@@ -994,7 +994,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 125, y: -223}
+  m_AnchoredPosition: {x: 125, y: -121}
   m_SizeDelta: {x: 346.5, y: 143.3}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &414054041
@@ -4667,7 +4667,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 125, y: -121}
+  m_AnchoredPosition: {x: 125, y: -223}
   m_SizeDelta: {x: 346.5, y: 143.3}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1356250608
@@ -5383,7 +5383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ead65ff1fa4c8545b21e8a9d0401b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltip: {fileID: 1065774137}
+  tooltip: {fileID: 0}
 --- !u!114 &1590512112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5612,8 +5612,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   invenButton: {fileID: 1244975131}
   invenCloseButton: {fileID: 1590512110}
-  invenSortButton_1: {fileID: 1356250611}
-  invenSortButton_2: {fileID: 414054044}
+  invenSortButton:
+  - {fileID: 414054044}
+  - {fileID: 1356250611}
   inventory: {fileID: 303124311}
   invenContent: {fileID: 1631460754}
 --- !u!1 &1618121620

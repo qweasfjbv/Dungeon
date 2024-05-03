@@ -20,7 +20,8 @@ public class OnHover : MonoBehaviour
     private void Start()
     {
         originScale = transform.GetComponent<RectTransform>().localScale;
-        tooltip.SetActive(false);
+        if (tooltip != null)
+            tooltip.SetActive(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
