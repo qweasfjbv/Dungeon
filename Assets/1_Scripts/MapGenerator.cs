@@ -13,9 +13,10 @@ public class MapGenerator: MonoBehaviour
 
     static MapGenerator s_instance;
     public static MapGenerator Instance { get { return s_instance; } }
-    
+
 
     [Header("Map Generate Variables")]
+    [SerializeField] private GameObject mapObject;
     [SerializeField] private GameObject GridPrefab;
     [SerializeField] private int generateRoomCnt;
     [SerializeField] private int selectRoomCnt;
@@ -42,9 +43,6 @@ public class MapGenerator: MonoBehaviour
     private JumpPointSearch jpm;
     int minX = int.MaxValue, minY = int.MaxValue;
     int maxX = int.MinValue, maxY = int.MinValue;
-
-    private Vector2Int startV;
-    private Vector2Int endV;
 
 
     private List<(int index, Vector2 pos)> selectedRooms = new List<(int, Vector2)>();
@@ -79,11 +77,6 @@ public class MapGenerator: MonoBehaviour
         StartCoroutine(MapGenerateCoroutine());
     }
 
-
-    int count = 0;
-    bool again = false;
-    
-
     #region PROCEDURE MAP GENERATE
 
     public Define.GridType GetGridType(int x, int y)
@@ -101,6 +94,8 @@ public class MapGenerator: MonoBehaviour
             Destroy(rooms[i]);
         }
         rooms.Clear();
+
+        MapAppearEffect();
     }
 
     /*  
@@ -151,7 +146,6 @@ public class MapGenerator: MonoBehaviour
         SelectEntrances();
 
         OnMapGenComplete();
-
     }
 
     private Vector3 GetRandomPointInCircle(int rad)
@@ -601,6 +595,13 @@ public class MapGenerator: MonoBehaviour
         }
     }
 
+    private void MapAppearEffect()
+    {
+        mapObject.transform.position = new Vector3(0, 70, 0);
+
+        mapObject.transform.DOMoveY(0, 1.5f).SetEase(Ease.InOutElastic);
+    }
+
 
     #endregion
 
@@ -634,7 +635,6 @@ public class MapGenerator: MonoBehaviour
     [SerializeField] private Tile wall_T;
 
     [Header("Random Tiles")]
-    [SerializeField] private Tile wall_Top_Random;
     [SerializeField] private Tile floor_Random_0;
     [SerializeField] private Tile floor_Random_1;
     [SerializeField] private Tile floor_Random_2;
@@ -649,13 +649,25 @@ public class MapGenerator: MonoBehaviour
 
     #region bitmasks
 
+
+    // For Wall_Top TileMap (Behind Charactor)
     const int TopMask = (1 << 1) | (1 << 3) | (1 << 5);
+
+    const int TopLeftMask_0 = (1 << 3) | (1 << 1) | (1 << 0);
+    const int TopRightMask_0 = (1 << 1) | (1 << 2) | (1 << 5);
+
+    
+    const int TopMatch = 1 << 1;
+
+    const int TopLeftMatch_0 = 1 << 0;
+    const int TopRightMatch_0 = 1 << 2;
+
+
+    // For Wall Tilemap (above Charactor, Any Effect)
     const int BottomMask = (1 << 3) | (1 << 5) | (1 << 7);
     const int LeftMask = (1 << 1) | (1 << 3) | (1 << 7);
     const int RightMask = (1 << 1) | (1 << 5) | (1 << 7);
 
-    const int TopLeftMask_0 = (1 << 3) | (1 << 1) | (1 << 0);
-    const int TopRightMask_0 = (1 << 1) | (1 << 2) | (1 << 5);
     const int BottomLeftMask_0 = (1 << 3) | (1 << 6) | (1 << 7);
     const int BottomRightMask_0 = (1 << 5) | (1 << 7) | (1 << 8);
     const int TopLeftMask_1 = (1 << 5) | (1 << 7);
@@ -664,13 +676,10 @@ public class MapGenerator: MonoBehaviour
     const int BottomRightMask_1 = (1 << 1) | (1 << 3);
 
 
-    const int TopMatch = 1 << 1;
     const int BottomMatch = 1 << 7;
     const int LeftMatch = 1 << 3;
     const int RightMatch = 1 << 5;
 
-    const int TopLeftMatch_0 = 1 << 0;
-    const int TopRightMatch_0 = 1 << 2;
     const int BottomLeftMatch_0 = 1 << 6;
     const int BottomRightMatch_0 = 1 << 8;
     const int TopLeftMatch_1 = (1 << 5) | (1 << 7);
@@ -767,12 +776,25 @@ public class MapGenerator: MonoBehaviour
             for (int j = 0; j < map.GetLength(1); j++)
             {
                 PlaceBlackTile(j, i);
+                ReplaceWallTile(j, i);
             }
         }
 
 
     }
 
+    private void ReplaceWallTile(int x, int y)
+    {
+        Vector3Int tilePos = new Vector3Int(x, y, 0);
+
+        if ((wallTilemap.GetTile(tilePos) == wall_Top ||
+            wallTilemap.GetTile(tilePos) == wall_Bottom_Right || 
+            wallTilemap.GetTile(tilePos) == wall_Bottom_Left ) && map[y, x] == (int)Define.GridType.None)
+        {
+            wallTopTilemap.SetTile(tilePos, wallTilemap.GetTile(tilePos));
+            wallTilemap.SetTile(tilePos, null);
+        }
+    }
     // tileType : 1이면 바닥, 2면 벽
     private void PlaceTile(int x, int y, int tileType)
     {
@@ -963,8 +985,7 @@ public class MapGenerator: MonoBehaviour
 
     private Tile GetRandomTopTile()
     {
-        if (Random.Range(0, 7) == 0) return wall_Top_Random;
-        else return wall_Top;
+        return wall_Top;
     }
 
     int[] surrX = { 1, 0, -1, 1, 0, -1, 1, 0, -1 };
