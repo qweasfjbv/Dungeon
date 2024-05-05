@@ -8190,6 +8190,9 @@ MonoBehaviour:
   shadow_Right_Bottom: {fileID: 11400000, guid: 57fc72d196d79a943a53140b7129801b,
     type: 2}
   black_Tile: {fileID: 11400000, guid: 8d7fd29abb9183745b1fb44a81165333, type: 2}
+  lightPrefab: {fileID: 4311911467608311987, guid: ede366b2f23aa5b48aada72122ed8641,
+    type: 3}
+  propDistGap: 8
   floorEntrance: {fileID: 41135761}
   floorExit: {fileID: 1219024573}
   PathTest: {fileID: 2832214673766106028, guid: 8314b40077231a74b9579902399e61ac,

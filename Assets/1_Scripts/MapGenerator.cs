@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using DG.Tweening;
+using JetBrains.Annotations;
 
 public class MapGenerator: MonoBehaviour
 {
@@ -647,10 +648,13 @@ public class MapGenerator: MonoBehaviour
 
     [SerializeField] private Tile black_Tile;
 
+    [Header("Props")]
+    [SerializeField] private GameObject lightPrefab;
+    [SerializeField] private int propDistGap;
+
     #region bitmasks
 
 
-    // For Wall_Top TileMap (Behind Charactor)
     const int TopMask = (1 << 1) | (1 << 3) | (1 << 5);
 
     const int TopLeftMask_0 = (1 << 3) | (1 << 1) | (1 << 0);
@@ -663,7 +667,6 @@ public class MapGenerator: MonoBehaviour
     const int TopRightMatch_0 = 1 << 2;
 
 
-    // For Wall Tilemap (above Charactor, Any Effect)
     const int BottomMask = (1 << 3) | (1 << 5) | (1 << 7);
     const int LeftMask = (1 << 1) | (1 << 3) | (1 << 7);
     const int RightMask = (1 << 1) | (1 << 5) | (1 << 7);
@@ -717,6 +720,10 @@ public class MapGenerator: MonoBehaviour
 
     #endregion
 
+
+    int propCount = 0;
+
+
     private void MapArrNormalization()
     {
         for (int i = 0; i < map.GetLength(0); i++)
@@ -737,6 +744,9 @@ public class MapGenerator: MonoBehaviour
     // Floor->Wall->Exception->Cliff->Shadow
     private void AutoTiling()
     {
+        propCount = 0;
+
+        // 바닥/벽 처리
         for (int i = map.GetLength(0)-1; i>=0; i--)
         {
             for (int j = map.GetLength(1)-1; j >= 0 ; j--)
@@ -753,6 +763,7 @@ public class MapGenerator: MonoBehaviour
 
         }
 
+        // 예외적인 타일 처리
         for (int i = map.GetLength(0) - 1; i >= 0; i--)
         {
             for (int j = map.GetLength(1) - 1; j >= 0; j--)
@@ -761,6 +772,15 @@ public class MapGenerator: MonoBehaviour
             }
         }
 
+        for (int i = map.GetLength(0) - 1; i >= 0; i--)
+        {
+            for (int j = map.GetLength(1) - 1; j >= 0; j--)
+            {
+                ReplaceWallTile(j, i);
+            }
+        }
+
+        // 바닥/벽 토대로 절벽과 그림자 처리
         for (int i = 0; i < map.GetLength(0); i++)
         {
             for (int j = 0; j < map.GetLength(1); j++)
@@ -771,30 +791,19 @@ public class MapGenerator: MonoBehaviour
             }
         }
 
+        // 검정색 배경 및 데코 추가
         for (int i = 0; i < map.GetLength(0); i++)
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
                 PlaceBlackTile(j, i);
-                ReplaceWallTile(j, i);
+                PlaceProps(j, i);
             }
         }
 
 
     }
 
-    private void ReplaceWallTile(int x, int y)
-    {
-        Vector3Int tilePos = new Vector3Int(x, y, 0);
-
-        if ((wallTilemap.GetTile(tilePos) == wall_Top ||
-            wallTilemap.GetTile(tilePos) == wall_Bottom_Right || 
-            wallTilemap.GetTile(tilePos) == wall_Bottom_Left ) && map[y, x] == (int)Define.GridType.None)
-        {
-            wallTopTilemap.SetTile(tilePos, wallTilemap.GetTile(tilePos));
-            wallTilemap.SetTile(tilePos, null);
-        }
-    }
     // tileType : 1이면 바닥, 2면 벽
     private void PlaceTile(int x, int y, int tileType)
     {
@@ -857,6 +866,19 @@ public class MapGenerator: MonoBehaviour
         }
     }
 
+    private void ReplaceWallTile(int x, int y)
+    {
+        Vector3Int tilePos = new Vector3Int(x, y, 0);
+
+        if ((wallTilemap.GetTile(tilePos) == wall_Top ||
+            wallTilemap.GetTile(tilePos) == wall_Bottom_Right ||
+            wallTilemap.GetTile(tilePos) == wall_Bottom_Left ||
+            wallTilemap.GetTile(tilePos) == wall_Top_Center) && map[y, x] == (int)Define.GridType.None)
+        {
+            wallTopTilemap.SetTile(tilePos, wallTilemap.GetTile(tilePos));
+            wallTilemap.SetTile(tilePos, null);
+        }
+    }
     private void PlaceShadowTile(int x, int y)
     {
 
@@ -903,6 +925,21 @@ public class MapGenerator: MonoBehaviour
         }
     }
 
+    private void PlaceProps(int x, int y)
+    {
+        if (y == 0 || y == map.GetLength(0)) return;
+
+        Vector3Int pos = new Vector3Int(x, y, 0);
+
+        if (wallTopTilemap.GetTile(pos) != wall_Center && wallTopTilemap && wall_Center_Left && wallTopTilemap != wall_Center_Right && wallTopTilemap != wall_Center_Center) return;
+        if (map[y - 1, x] == (int)Define.GridType.None) return;
+        if (wallTopTilemap.GetTile(pos + new Vector3Int(0, 1, 0)) == null) return;
+
+        if (propCount % propDistGap == 0)
+            Instantiate(lightPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 1), Quaternion.identity, mapObject.transform);
+        propCount++;
+
+    }
 
     private void PlaceExceptionTiles(int x, int y)
     {
