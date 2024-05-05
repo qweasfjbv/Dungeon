@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public enum TooltipDir {Left, Down}
+
 public class OnHover : MonoBehaviour
     , IPointerEnterHandler
     , IPointerExitHandler
@@ -16,6 +18,8 @@ public class OnHover : MonoBehaviour
 
     [SerializeField]
     private GameObject tooltip;
+    [SerializeField]
+    private TooltipDir ttDir;
 
     private void Start()
     {
@@ -29,8 +33,10 @@ public class OnHover : MonoBehaviour
         transform.GetComponent<RectTransform>().localScale = originScale * 1.3f;
         if (tooltip != null)
         {
-
-            tooltip.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition - new Vector2(GetComponent<RectTransform>().sizeDelta.x + PADDING, 0);
+            if (ttDir == TooltipDir.Left)
+                tooltip.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition - new Vector2(GetComponent<RectTransform>().sizeDelta.x + PADDING, 0);
+            else
+                tooltip.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition - new Vector2(0, GetComponent<RectTransform>().sizeDelta.y + PADDING);
             tooltip.SetActive(true);
         }
     }

@@ -62,12 +62,19 @@ public class InvenManager
 
     public void MoveUsedtoUnused()
     {
+        if (usedCardList.Count == 0)
+        {
+            Debug.Log("카드가 없음");
+            return;
+        }
+
         // 카드 초기화할때도 드로우할 떄 만큼 마나 소비
         if (!SliderController.Instance.UseMana(DRAWCOST))
         {
             Debug.Log("Mana부족");
             return;
         }
+
         foreach (var used in usedCardList)
         {
             unusedCardList.Add(used);

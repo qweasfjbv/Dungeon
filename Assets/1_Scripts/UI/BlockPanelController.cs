@@ -8,6 +8,8 @@ public class BlockPanelController : MonoBehaviour
 
     [SerializeField] private GameObject blockPanel;
     [SerializeField] private ButtonPivotUI buttonPivot;
+    [SerializeField] private InvenPivotUI invenPivot;
+
 
     private bool isBlocking = false;
 
@@ -28,6 +30,7 @@ public class BlockPanelController : MonoBehaviour
             blockPanel.SetActive(true);
 
             buttonPivot.HideButton();
+            invenPivot.HideButton();
             GetComponent<SliderController>().Hide();
 
         }
@@ -40,6 +43,7 @@ public class BlockPanelController : MonoBehaviour
             isBlocking = false;
 
             buttonPivot.ShowButton();
+            invenPivot.ShowButton();
             GetComponent<SliderController>().Show();
             
             blockPanel.SetActive(false);    

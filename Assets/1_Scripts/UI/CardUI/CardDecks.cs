@@ -21,7 +21,6 @@ public class CardDecks : MonoBehaviour
         cardDrawButton.onClick.RemoveListener(OnCardDraw);
         cardDrawButton.onClick.AddListener(OnCardDraw);
 
-        showingDeckText.text = "";
 
         Managers.Input.cardAction -= OnKeyboard;
         Managers.Input.cardAction += OnKeyboard;
