@@ -26,9 +26,9 @@ public class Define
 
     public enum BuffType
     {
-        AtkUp, AtkDown,
-        SpdUp, SpdDown,
-        DefUP, DefDown
+        Atk,
+        Spd,
+        Def
     }
 
     public enum SFXSoundType
