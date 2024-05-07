@@ -48,8 +48,8 @@ public class RedEffect : PotionEffect
 
                 foreach (EnemyBT enemy in enemies)
                 {
-                    // 공격력 구현
-                    enemy.OnDamaged(2);
+                    // TODO : 공격력 구현
+                    enemy.OnDamaged(2, Define.AtkType.Blood);
                 }
             }
             textMesh.text = (duringTime - elapsedTime).ToString("0.0");

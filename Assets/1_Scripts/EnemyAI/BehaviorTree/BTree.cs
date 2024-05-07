@@ -137,43 +137,37 @@ namespace EnemyUI.BehaviorTree
         {
             enemyStat.OnUpdate();
             if (root != null) root.Evaluate();
-
-            if (Input.GetKeyDown(KeyCode.B)) AddBuff();
-
-            Debug.Log(enemyStat.Attack);
         }
 
 
         public abstract Node SetupRoot();
 
-        public void AddBuff(Define.BuffType type = Define.BuffType.Atk, int value = 20, float duration = 3f)
+        public void AddBuff(Define.BuffType type, int value, float duration)
         {
-            type = Define.BuffType.Atk;
-            value = 20;
-            duration = 3f;
             enemyStat.AddBuff(type, value, duration);
         }
 
         public static void SetAnimatior(Animator anim, string name)
         {
-            anim.SetBool("Attack", false);
-            anim.SetBool("Die", false);
-            anim.SetBool("Damage", false);
-            anim.SetBool("Walk", false);
-            anim.SetBool("Idle", false);
+            anim.SetBool(Constants.ANIM_PARAM_ATK, false);
+            anim.SetBool(Constants.ANIM_PARAM_DIE, false);
+            anim.SetBool(Constants.ANIM_PARAM_DMG, false);
+            anim.SetBool(Constants.ANIM_PARAM_WALK, false);
+            anim.SetBool(Constants.ANIM_PARAM_IDLE, false);
 
             anim.SetBool(name, true);
 
         }
 
-        public bool OnDamaged(float damage)
+        public bool OnDamaged(float damage, Define.AtkType type)
         {
+            // TODO : 타입에 따른 처리 필요
             SoundManager.Instance.PlayEffectSound(Define.EffectSoundType.Hit);
             enemyStat.Hp -= damage;
             if (enemyStat.Hp > 0)
             {
                 var animator = transform.GetComponent<Animator>();
-                SetAnimatior(animator, "Damage");
+                SetAnimatior(animator, Constants.ANIM_PARAM_DMG);
 
                 return false;
             }
@@ -187,6 +181,7 @@ namespace EnemyUI.BehaviorTree
             }
         }
 
+        // TODO : 수정해야합니다.
         public void MoveDebuff(float w)
         {
             enemyStat.MoveSpeed /= w;

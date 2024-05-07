@@ -18,7 +18,7 @@ namespace EnemyUI.BehaviorTree
                     }) ,
                     new Sequence(new List<Node>
                     {
-                        new Search(transform, searchRange, "Human", enemyStat)
+                        new Search(transform, searchRange, Constants.TAG_ENEMY, enemyStat)
                     }),
                     new Sequence(new List<Node>
                     {
@@ -56,31 +56,32 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
-            
-            // BossObject 변수 받고 따라가기
-            var boss = (GameObject)GetNodeData("BossObject");
-
-            if (boss == null || boss.CompareTag("Dying"))
+            // 따라가는 도중에 죽었다면 Failure 반환.
+            // NDATA_TARGET을 지웠으므로 Search에서 다시 찾아야함
+            var enemy = (GameObject)GetNodeData(Constants.NDATA_TARGET);
+            if (enemy == null || enemy.CompareTag(Constants.TAG_DYING))
             {
-                RemoveNodeData("BossObject");
+                RemoveNodeData(Constants.NDATA_TARGET);
                 return NodeState.Failure;
             }
 
-
-            Vector3 dir = boss.transform.position - transform.position;
+            Vector3 dir = enemy.transform.position - transform.position;
             float dis2 = dir.x * dir.x + dir.y * dir.y;
 
             animator.SetFloat("X", dir.x);
             animator.SetFloat("Y", dir.y);
 
-            // 성공 -> Seq의 다음노드 실행
+            // AttackRange안에 들어온 경우
+            // Success 반환 -> Seq에 의해 Atk실행
             if (dis2 < attackRange * attackRange)
             {
-                animator.SetBool("Walk", false);
+                animator.SetBool(Constants.ANIM_PARAM_WALK, false);
                 return NodeState.Success;
             }
 
-            EnemyBT.SetAnimatior(animator, "Walk");
+            // AttackRange에 들어오지 않았지만 Track은 하고있는 경우
+            // 계속 이동
+            EnemyBT.SetAnimatior(animator, Constants.ANIM_PARAM_WALK);
             dir.Normalize();
             rigid.MovePosition(transform.position + stat.MoveSpeed * dir);
 

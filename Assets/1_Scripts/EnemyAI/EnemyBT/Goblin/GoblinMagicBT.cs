@@ -20,7 +20,7 @@ using UnityEngine;
                     }) ,
                     new Sequence(new List<Node>
                     {
-                        new Search(transform, searchRange, "Human", enemyStat)
+                        new Search(transform, searchRange, Constants.TAG_ENEMY, enemyStat)
                     }),
                     new Sequence(new List<Node>
                     {
@@ -54,22 +54,21 @@ using UnityEngine;
 
         public override NodeState Evaluate()
         {
-            if (GetNodeData("attackFlag") == null)
+            if (GetNodeData(Constants.NDATA_ATK) == null)
             {
-                parent.parent.SetNodeData("attackFlag", true);
-
-                EnemyBT.SetAnimatior(animator, "Attack");
-                // 죽으면 지워야됨
-
-                var tr = (GameObject)GetNodeData("BossObject");
-
-                if (tr == null)
+                var tr = (GameObject)GetNodeData(Constants.NDATA_TARGET);
+                if (tr == null || tr.CompareTag(Constants.TAG_DYING))
                 {
-                    RemoveNodeData("BossObject");
+                    RemoveNodeData(Constants.NDATA_TARGET);
                     return NodeState.Failure;
                 }
 
+                parent.parent.SetNodeData(Constants.NDATA_ATK, true);
+                EnemyBT.SetAnimatior(animator, Constants.ANIM_PARAM_ATK);
 
+                // IceEffect, ThunderEffect는 디버깅용으로 만든 클래스입니다.
+                // TODO : IceEffect와 ThunderEffect의 공통부모를 만들어서 호출.
+                // -> MagitAttack노드에 생성자에 인자 하나 추가하고 재활용 가능합니다.
                 GameObject eff = EffectGenerator.Instance.InstanceEffect(magicEffect, tr.transform.position, Quaternion.identity);
                 eff.GetComponent<IceEffect>().SetDamage(stat.Attack);
 

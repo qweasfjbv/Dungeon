@@ -37,7 +37,7 @@ public class ThunderEffect : MonoBehaviour
             EnemyBT enemy = other.GetComponent<EnemyBT>();
             if (enemy != null)
             {
-                enemy.OnDamaged(damage);
+                enemy.OnDamaged(damage, Define.AtkType.Thunder);
             }
         }
     }

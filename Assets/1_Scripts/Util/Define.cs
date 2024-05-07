@@ -74,4 +74,13 @@ public class Define
         Goblin = 0,
         Witch
     }
+
+    public enum AtkType
+    {
+        Slash = 0,
+        Bow,
+        Ice,
+        Thunder,
+        Blood
+    }
 }
