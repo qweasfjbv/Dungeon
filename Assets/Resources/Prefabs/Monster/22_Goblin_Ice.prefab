@@ -186,5 +186,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   searchRange: 6
   attackRange: 5
-  icePrefab: {fileID: 2058617026692360558, guid: 07438fa3dd85ec44989bc032c2ffa59c,
+  magicPrefab: {fileID: 2058617026692360558, guid: 07438fa3dd85ec44989bc032c2ffa59c,
     type: 3}

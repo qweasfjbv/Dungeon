@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace EnemyUI.BehaviorTree
+namespace EnemyAI.BehaviorTree
 {
     [Serializable]
     public class Buff
@@ -193,10 +193,14 @@ namespace EnemyUI.BehaviorTree
 
         public static GameObject SearchEnemy(Transform transform, Collider2D[] cols, string tagName)
         {
+            // 주변에 아무것도 없는 경우
             if (cols.Length == 0) return null;
 
             GameObject ret = null;
             float minDis = -1;
+            
+
+            // 주변에 뭔가 있으면 tagName으로 가장 가까운 적을 찾습니다.            
             foreach (Collider2D col in cols)
             {
                 if(!col.CompareTag(tagName)) continue;
@@ -209,11 +213,8 @@ namespace EnemyUI.BehaviorTree
                     minDis = tmpDis;
                     ret = col.gameObject;
                 }
-                
-
             }
             return ret;
-
         }
 
 

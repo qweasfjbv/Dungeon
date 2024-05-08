@@ -1,4 +1,4 @@
-using EnemyUI.BehaviorTree;
+using EnemyAI.BehaviorTree;
 using System.Collections;
 using TMPro;
 using UnityEngine;

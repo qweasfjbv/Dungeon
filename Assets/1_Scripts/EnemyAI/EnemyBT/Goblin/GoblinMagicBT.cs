@@ -1,14 +1,17 @@
-using EnemyUI.BehaviorTree;
+using EnemyAI.BehaviorTree;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+namespace EnemyAI.BehaviorTree
+{
 
     public class GoblinMagicBT : BTree
     {
         [SerializeField] private int searchRange;
         [SerializeField] private int attackRange;
-        [SerializeField] private GameObject icePrefab;
-        
+        [SerializeField] private GameObject magicPrefab;
+
 
         public override Node SetupRoot()
         {
@@ -26,7 +29,7 @@ using UnityEngine;
                     {
                         new IsAttacking(transform),
                         new LinearTrack(transform, attackRange, enemyStat),
-                        new IceMagicAttack(transform, enemyStat, icePrefab)
+                        new MagicAttack(transform, enemyStat, magicPrefab)
                     })
                 });
 
@@ -37,13 +40,13 @@ using UnityEngine;
     }
 
 
-    public class IceMagicAttack : Node
+    public class MagicAttack : Node
     {
         private Transform transform;
         private Animator animator;
         private EnemyStat stat;
         private GameObject magicEffect;
-        public IceMagicAttack(Transform transform, EnemyStat stat, GameObject magicEffect)
+        public MagicAttack(Transform transform, EnemyStat stat, GameObject magicEffect)
         {
             this.transform = transform;
             this.animator = transform.GetComponent<Animator>();
@@ -64,17 +67,15 @@ using UnityEngine;
                 }
 
                 parent.parent.SetNodeData(Constants.NDATA_ATK, true);
-                EnemyBT.SetAnimatior(animator, Constants.ANIM_PARAM_ATK);
+                BTree.SetAnimatior(animator, Constants.ANIM_PARAM_ATK);
 
-                // IceEffect, ThunderEffect는 디버깅용으로 만든 클래스입니다.
-                // TODO : IceEffect와 ThunderEffect의 공통부모를 만들어서 호출.
-                // -> MagitAttack노드에 생성자에 인자 하나 추가하고 재활용 가능합니다.
                 GameObject eff = EffectGenerator.Instance.InstanceEffect(magicEffect, tr.transform.position, Quaternion.identity);
-                eff.GetComponent<IceEffect>().SetDamage(stat.Attack);
-
+                eff.GetComponent<BaseMagicEffect>().SetDamage(stat.Attack, Constants.TAG_ENEMY);
             }
 
             return NodeState.Success;
         }
 
     }
+
+}

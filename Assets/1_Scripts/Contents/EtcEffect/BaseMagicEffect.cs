@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class BaseMagicEffect : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    // have to be set
+    protected  float damage;
+    protected  string tagName;
+
+    protected bool isSet = false;
+
+    public void SetDamage(float damage, string tagName)
     {
-        
+        this.damage = damage;
+        this.tagName = tagName;
+
+        isSet = true;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

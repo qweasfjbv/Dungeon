@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EnemyUI.BehaviorTree
+namespace EnemyAI.BehaviorTree
 {
     public class Selector : Node
     {

@@ -1,21 +1,12 @@
-using EnemyUI.BehaviorTree;
+using EnemyAI.BehaviorTree;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThunderEffect : MonoBehaviour
+public class ThunderEffect : BaseMagicEffect
 {
-    private float damage;
-    private string animName = "ThunderFall";
 
-    private bool isSet = false;
-
-    public void SetDamage(float damage)
-    {
-        this.damage = damage;
-
-        isSet = true;
-    }
+    private string animName = Constants.THUNDER_ANIM_NAME;
 
     void Update()
     {
@@ -32,7 +23,7 @@ public class ThunderEffect : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Human"))
+        if (other.CompareTag(tagName))
         {
             EnemyBT enemy = other.GetComponent<EnemyBT>();
             if (enemy != null)

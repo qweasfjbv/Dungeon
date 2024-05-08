@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Compilation;
 using UnityEngine;
 
-namespace EnemyUI.BehaviorTree
+namespace EnemyAI.BehaviorTree
 {
     public class EnemyBT : BTree
     {
@@ -67,10 +67,10 @@ namespace EnemyUI.BehaviorTree
                 // 애니메이션이 끝났다면 IDLE로 바꿔주고 Failure 반환
                 // 
                 damageTrigger += Time.deltaTime;
-                if(damageTrigger >= 0.4f)
+                if(damageTrigger >= Constants.DMG_ANIM_TIME)
                 {
                     damageTrigger = 0f;
-                    EnemyBT.SetAnimatior(transform.GetComponent<Animator>(), Constants.ANIM_PARAM_IDLE);
+                    BTree.SetAnimatior(transform.GetComponent<Animator>(), Constants.ANIM_PARAM_IDLE);
                     return NodeState.Failure;
                 }
 
@@ -83,7 +83,9 @@ namespace EnemyUI.BehaviorTree
             if (stat.Hp <= 0)
             {
                 if (!transform.GetComponent<Animator>().GetBool(Constants.ANIM_PARAM_DIE))
-                    EnemyBT.SetAnimatior(transform.GetComponent<Animator>(), Constants.ANIM_PARAM_DIE);
+                {
+                    BTree.SetAnimatior(transform.GetComponent<Animator>(), Constants.ANIM_PARAM_DIE);
+                }
 
                 return NodeState.Success;
             }
@@ -144,20 +146,30 @@ namespace EnemyUI.BehaviorTree
         public override NodeState Evaluate()
         {
             // 공격 쿨타임을 잽니다.
-            if (GetNodeData(Constants.NDATA_ATK) != null) coolTime += Time.deltaTime;
-            
+            if (GetNodeData(Constants.NDATA_ATK) != null)
+            {
+                coolTime += Time.deltaTime;
+            }
+
             // 쿨타임만큼 기다렸으면 다시 Atk이 가능합니다.
-            // NDATA_ATK을 지워서 
+            // NDATA_ATK을 지워서 공격할 수 있도록 합니다.
             if (coolTime >= stat.Cooltime)
             {
                 coolTime = 0;
-                EnemyBT.SetAnimatior(animator, Constants.ANIM_PARAM_IDLE);
+                BTree.SetAnimatior(animator, Constants.ANIM_PARAM_IDLE);
                 RemoveNodeData(Constants.NDATA_ATK);
             }
 
+           
             // 가장 가까운 적 찾기
-            var cols = Physics2D.OverlapCircleAll(transform.position, searchRange);
-            var nearGo = BTree.SearchEnemy(transform, cols, tagName);
+
+            var target = (GameObject)GetNodeData(Constants.NDATA_TARGET);
+            GameObject nearGo = null;
+
+            if (target == null || target.CompareTag(Constants.TAG_DYING))
+            {
+                nearGo = BTree.SearchEnemy(transform, Physics2D.OverlapCircleAll(transform.position, searchRange), tagName);
+            }
 
             // 근처에 적이 있으면 Target을 설정, Path 재설정을 해야한다고 알려줍니다.
             // Failure를 리턴하기 때문에 적이 사라진 후에 Move에서 Path를 재설정하고,
@@ -169,9 +181,13 @@ namespace EnemyUI.BehaviorTree
                 return NodeState.Failure;
             }
 
+            Debug.Log(transform.gameObject.name + "  : " + "move node : runng");
+
             // Track 중이거나 ATK 중이면 움직이면 안되므로 Failure 반환
-            if (GetNodeData(Constants.NDATA_TRACK) != null || GetNodeData(Constants.NDATA_ATK) != null) 
+            if (GetNodeData(Constants.NDATA_TRACK) != null || GetNodeData(Constants.NDATA_ATK) != null)
+            {
                 return NodeState.Failure;
+            }
 
             // Success 반환해서 움직이도록 설정
             return NodeState.Success;
@@ -216,12 +232,16 @@ namespace EnemyUI.BehaviorTree
             }
 
             // path가 없는 경우 바로 return
-            if (path == null || path.Count == 0) return NodeState.Success;
+            if (path == null || path.Count == 0)
+            {
+                return NodeState.Success;
+            }
 
             // 애니메이션 실행
             if (!animator.GetBool(Constants.ANIM_PARAM_WALK))
-                EnemyBT.SetAnimatior(animator, Constants.ANIM_PARAM_WALK);
-
+            {
+                BTree.SetAnimatior(animator, Constants.ANIM_PARAM_WALK);
+            }
 
             Vector2 currentTarget = path[currentPointIndex];
             var step = stat.MoveSpeed* new Vector3(currentTarget.x - transform.position.x, currentTarget.y - transform.position.y, 0).normalized;
@@ -237,7 +257,9 @@ namespace EnemyUI.BehaviorTree
                 currentPointIndex++;
 
                 if (currentPointIndex >= path.Count)
+                {
                     transform.gameObject.SetActive(false);
+                }
             }
             return NodeState.Running;
         }
@@ -252,18 +274,21 @@ namespace EnemyUI.BehaviorTree
         public IsAttacking(Transform transform)
         {
             animator = transform.GetComponent<Animator>();
+            this.transform = transform;
         }
 
         public override NodeState Evaluate()
         {
+            Debug.Log(transform.gameObject.name);
             var isAtt= animator.GetBool(Constants.ANIM_PARAM_ATK);
             if (isAtt)
             {
                 // 애니메이션이 끝날 때까지 기다림
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName(Constants.ATK_ANIM_NAME) && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
                 {
-                    EnemyBT.SetAnimatior(animator, Constants.ANIM_PARAM_IDLE);
+                    BTree.SetAnimatior(animator, Constants.ANIM_PARAM_IDLE);
                 }
+
                 return NodeState.Failure;
             }
             else
@@ -294,11 +319,11 @@ namespace EnemyUI.BehaviorTree
 
         public override NodeState Evaluate()
         {
-            var boss = (GameObject)GetNodeData(Constants.NDATA_TARGET);
+            var enemy = (GameObject)GetNodeData(Constants.NDATA_TARGET);
 
             // 보스가 죽었거나 사라진 경우
             // TRACK, TARGET을 제거하고 Failure를 반환합니다.
-            if(boss == null || boss.CompareTag(Constants.TAG_DYING))
+            if(enemy == null || enemy.CompareTag(Constants.TAG_DYING))
             {
                 RemoveNodeData(Constants.NDATA_TRACK);
                 RemoveNodeData(Constants.NDATA_TARGET);
@@ -310,14 +335,14 @@ namespace EnemyUI.BehaviorTree
             if (GetNodeData(Constants.NDATA_TRACK) == null)
             {
                 path = MapGenerator.Instance.PreprocessPath(new Vector2Int((int)transform.position.y, (int)transform.position.x),
-            new Vector2Int((int)boss.transform.position.y, (int)boss.transform.position.x));
+            new Vector2Int((int)enemy.transform.position.y, (int)enemy.transform.position.x));
                 currentPointIndex = 0;
                 parent.parent.SetNodeData(Constants.NDATA_TRACK, true);
             }
 
             // Attack Range안에 들어온 경우입니다.
             // Success를 반환해서 Attack노드를 실행하도록 합니다.
-            Vector3 dir = boss.transform.position - transform.position;
+            Vector3 dir = enemy.transform.position - transform.position;
             float dis2 = dir.x * dir.x + dir.y * dir.y;
             if (dis2 < attackRange * attackRange) {
                 animator.SetBool(Constants.ANIM_PARAM_WALK, false);
@@ -327,7 +352,8 @@ namespace EnemyUI.BehaviorTree
             // 도착했지만 적이 없는 경우이므로 NDATA_TRACK을 제거합니다.
             if (currentPointIndex >= path.Count) {
                 RemoveNodeData(Constants.NDATA_TRACK);
-                return NodeState.Failure; }
+                return NodeState.Failure; 
+            }
 
             // 물리 이동 및 애니메이션 구현입니다.
             Vector2 currentTarget = path[currentPointIndex];
@@ -335,13 +361,15 @@ namespace EnemyUI.BehaviorTree
             rigid.MovePosition(transform.position + new Vector3(step.x, step.y, 0));
             animator.SetFloat("X", step.x);
             animator.SetFloat("Y", step.y);
-            EnemyBT.SetAnimatior(animator, Constants.ANIM_PARAM_WALK);
+            BTree.SetAnimatior(animator, Constants.ANIM_PARAM_WALK);
 
 
             // Move와 동일하게 웨이포인트 근처에서 웨이포인트를 바꿔줍니다.
             // Index의 범위는 위에서 확인하므로 여기서는 따로 확인하지 않습니다.
             if (Vector2.Distance(transform.position, currentTarget) < 0.2f)
+            {
                 currentPointIndex++;
+            }
 
             return NodeState.Running;
         }
@@ -374,9 +402,9 @@ namespace EnemyUI.BehaviorTree
                     return NodeState.Failure;
                 }
 
-
+                // 때렸다는 flag를 띄우면 search 노드에서 쿨타임을 세줍니다
                 parent.parent.SetNodeData(Constants.NDATA_ATK, true);
-                EnemyBT.SetAnimatior(animator, Constants.ANIM_PARAM_ATK);
+                BTree.SetAnimatior(animator, Constants.ANIM_PARAM_ATK);
 
 
                 // AtkRange에 따라 Slash/Bow 구분 가능

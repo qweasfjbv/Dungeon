@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1117874129786294737}
   - component: {fileID: 693832158947116621}
   - component: {fileID: 3501730243428158249}
-  - component: {fileID: 4494488259806531601}
+  - component: {fileID: -8192556653129725363}
   m_Layer: 8
   m_Name: 23_Goblin_Elec
   m_TagString: Monster
@@ -172,7 +172,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4494488259806531601
+--- !u!114 &-8192556653129725363
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -181,10 +181,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5720277353491606258}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1de1f65aeb379f148a4165f2ad9f16cb, type: 3}
+  m_Script: {fileID: 11500000, guid: ce64b574a21009b4fafe396097886429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   searchRange: 10
-  attackRange: 10
-  icePrefab: {fileID: 5471020631771812657, guid: a52a1a0c3458d1841a0230e01d8e963c,
+  attackRange: 9
+  magicPrefab: {fileID: 5471020631771812657, guid: a52a1a0c3458d1841a0230e01d8e963c,
     type: 3}

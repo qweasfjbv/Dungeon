@@ -5,7 +5,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Animations;
 
-namespace EnemyUI.BehaviorTree
+namespace EnemyAI.BehaviorTree
 {
     public enum NodeState { 
     Failure,
