@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   searchRange: 5
-  attackRange: 0.6
+  attackRange: 1
 --- !u!95 &7147788042644934357
 Animator:
   serializedVersion: 5

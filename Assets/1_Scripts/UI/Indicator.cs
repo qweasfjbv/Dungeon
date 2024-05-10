@@ -9,7 +9,6 @@ public class Indicator : MonoBehaviour
     public RectTransform indicator; // UI »≠ªÏ«•
     private Camera mainCamera;
 
-    private bool sett = false;
 
     private void OnEnable()
     {
@@ -21,7 +20,6 @@ public class Indicator : MonoBehaviour
     {
         this.target = target;
         indicator = indi;
-        sett = true;
     }
 
     void Update()
@@ -46,9 +44,7 @@ public class Indicator : MonoBehaviour
             if (Mathf.Abs(cos) < Settings.MAXCOS)
             {
                 fromCenter.x = Mathf.Sign(fromCenter.x) * Screen.width / 2;
-                fromCenter.y = Mathf.Sign(fromCenter.y) * Screen.height / 2 * Mathf.Abs(cos) /Settings.MAXCOS
-                    ;
-
+                fromCenter.y = Mathf.Sign(fromCenter.y) * Screen.height / 2 * Mathf.Abs(cos) /Settings.MAXCOS;
 
                 fromCenter *= 0.95f;
             }

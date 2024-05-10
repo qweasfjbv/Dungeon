@@ -11,22 +11,29 @@ namespace EnemyAI.BehaviorTree
         public override Node SetupRoot()
         {
             Node root = new Selector(new List<Node> {
-                    new Sequence(new List<Node>
+                new Selector(new List<Node>
+                {
+                     new Sequence(new List<Node>
                     {
                         new IsDead(transform, enemyStat),
                         new Disappear(transform, enemyStat)
                     }) ,
+                     new IsBlocked(transform, enemyStat)
+                }),
+                new Sequence(new List<Node>
+                {
+                    new Search(transform, searchRange, Constants.TAG_ENEMY)
+                }),
+                new Selector(new List<Node>
+                {
                     new Sequence(new List<Node>
                     {
-                        new Search(transform, searchRange, Constants.TAG_ENEMY, enemyStat)
-                    }),
-                    new Sequence(new List<Node>
-                    {
-                        new IsAttacking(transform),
-                        new LinearTrack(transform, attackRange, enemyStat),
+                        new IsAttackable(transform, attackRange),
                         new Attack(transform, enemyStat)
-                    })
-                });
+                    }),
+                    new LinearTrack(transform, enemyStat, attackRange),
+                })
+            });
 
 
             return root;
@@ -38,19 +45,19 @@ namespace EnemyAI.BehaviorTree
     public class LinearTrack : Node
     {
         private Transform transform;
-        private int attackRange;
         private Animator animator;
         private Rigidbody2D rigid;
         private EnemyStat stat;
+        private float attackRange;
 
-        public LinearTrack(Transform transform, int attackRange, EnemyStat stat)
+        public LinearTrack(Transform transform, EnemyStat stat, float attackRange)
         {
 
             this.stat = stat;
             this.transform = transform;
-            this.attackRange = attackRange;
             this.animator = transform.GetComponent<Animator>();
             this.rigid = transform.GetComponent<Rigidbody2D>();
+            this.attackRange = attackRange;
         }
 
         public override NodeState Evaluate()
@@ -74,21 +81,20 @@ namespace EnemyAI.BehaviorTree
                 parent.parent.SetNodeData(Constants.NDATA_TRACK, true);
             }
 
-
-
             Vector3 dir = enemy.transform.position - transform.position;
             float dis2 = dir.x * dir.x + dir.y * dir.y;
 
-            animator.SetFloat("X", dir.x);
-            animator.SetFloat("Y", dir.y);
 
-            // AttackRange안에 들어온 경우
-            // Success 반환 -> Seq에 의해 Atk실행
+
             if (dis2 < attackRange * attackRange)
             {
                 animator.SetBool(Constants.ANIM_PARAM_WALK, false);
-                return NodeState.Success;
+                return NodeState.Failure;
             }
+
+
+            animator.SetFloat("X", dir.x);
+            animator.SetFloat("Y", dir.y);
 
             // AttackRange에 들어오지 않았지만 Track은 하고있는 경우
             // 계속 이동

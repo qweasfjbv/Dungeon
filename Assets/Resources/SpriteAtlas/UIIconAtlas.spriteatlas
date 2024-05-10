@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UIIconAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_IgnorePlatformSupport: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: d0db6d5f591702443bab1d6d717b970b, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - ffd73010eadf5104d9965b741b8cac3d: 21300000
+    - ab357ea0d8e9f4e4199e41eaac9424f3: 21300000
+    - f4d53af2b873e724ead66de8ef59f3b6: 21300000
+    - 7e540fb306dc65f42a9f739f706937ed: 21300000
+    - 5957cd849f5b8e644b115d0ac77e754d: 21300000
+    - eea527f4dde61bd489aef3e7a42facc1: 21300000
+    - 2ce36ca5363289e4184e555df1962cd9: 21300000
+    - bf66ecf54c0ffa148b95aec38e97fb18: 21300000
+    - b534db27c122d9a4e8b96f5aae7891cb: 21300000
+    - 8892a9b7345110c4f9f21afec2186c4c: 21300000
+    - 3fee2ff7f5644a349a17e870b4c92489: 21300000
+    - 1a42de08dd868d94e9fee4a75ebcf591: 21300000
+    - bcf1ca393df014c428d18387aa4545a1: 21300000
+    - 816bf469470e1944a82645e3a13b704a: 21300000
+    - c5f4804adbf5ef345a340eb50e94c36e: 21300000
+    - 58c9b78cf38e4dd4e9b4b10089d35749: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: ffd73010eadf5104d9965b741b8cac3d, type: 3}
+  - {fileID: 21300000, guid: ab357ea0d8e9f4e4199e41eaac9424f3, type: 3}
+  - {fileID: 21300000, guid: f4d53af2b873e724ead66de8ef59f3b6, type: 3}
+  - {fileID: 21300000, guid: 7e540fb306dc65f42a9f739f706937ed, type: 3}
+  - {fileID: 21300000, guid: 5957cd849f5b8e644b115d0ac77e754d, type: 3}
+  - {fileID: 21300000, guid: eea527f4dde61bd489aef3e7a42facc1, type: 3}
+  - {fileID: 21300000, guid: 2ce36ca5363289e4184e555df1962cd9, type: 3}
+  - {fileID: 21300000, guid: bf66ecf54c0ffa148b95aec38e97fb18, type: 3}
+  - {fileID: 21300000, guid: b534db27c122d9a4e8b96f5aae7891cb, type: 3}
+  - {fileID: 21300000, guid: 8892a9b7345110c4f9f21afec2186c4c, type: 3}
+  - {fileID: 21300000, guid: 3fee2ff7f5644a349a17e870b4c92489, type: 3}
+  - {fileID: 21300000, guid: 1a42de08dd868d94e9fee4a75ebcf591, type: 3}
+  - {fileID: 21300000, guid: bcf1ca393df014c428d18387aa4545a1, type: 3}
+  - {fileID: 21300000, guid: 816bf469470e1944a82645e3a13b704a, type: 3}
+  - {fileID: 21300000, guid: c5f4804adbf5ef345a340eb50e94c36e, type: 3}
+  - {fileID: 21300000, guid: 58c9b78cf38e4dd4e9b4b10089d35749, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Entrance
+  - NextEventIcon
+  - BloodIcon16
+  - BloodIcon
+  - ManaIcon16
+  - BarBackground
+  - CardDrawIcon
+  - DeckChangeIcon
+  - Exit
+  - ManaIcon
+  - BarPlace
+  - BarFill
+  - CardsIcon
+  - SettingIcon
+  - Indicator
+  - SelectEff
+  m_RenderDataMap: {}
+  m_Tag: UIIconAtlas
+  m_IsVariant: 0

@@ -12,26 +12,32 @@ namespace EnemyAI.BehaviorTree
         [SerializeField] private int attackRange;
         [SerializeField] private GameObject magicPrefab;
 
-
         public override Node SetupRoot()
         {
             Node root = new Selector(new List<Node> {
-                    new Sequence(new List<Node>
+                new Selector(new List<Node>
+                {
+                     new Sequence(new List<Node>
                     {
                         new IsDead(transform, enemyStat),
                         new Disappear(transform, enemyStat)
                     }) ,
+                     new IsBlocked(transform, enemyStat)
+                }),
+                new Sequence(new List<Node>
+                {
+                    new Search(transform, searchRange, Constants.TAG_ENEMY)
+                }),
+                new Selector(new List<Node>
+                {
                     new Sequence(new List<Node>
                     {
-                        new Search(transform, searchRange, Constants.TAG_ENEMY, enemyStat)
-                    }),
-                    new Sequence(new List<Node>
-                    {
-                        new IsAttacking(transform),
-                        new LinearTrack(transform, attackRange, enemyStat),
+                        new IsAttackable(transform, attackRange),
                         new MagicAttack(transform, enemyStat, magicPrefab)
-                    })
-                });
+                    }),
+                    new LinearTrack(transform, enemyStat, attackRange),
+                })
+            });
 
 
             return root;
