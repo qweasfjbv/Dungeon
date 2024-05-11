@@ -212,15 +212,13 @@ namespace EnemyAI.BehaviorTree
         public override NodeState Evaluate()
         {
             // 가장 가까운 적 찾기
-            Debug.Log(transform.name + "Search");
-
             var target = (GameObject)GetNodeData(Constants.NDATA_TARGET);
             GameObject nearGo = null;
 
-            
-            
             if (target == null || target.CompareTag(Constants.TAG_DYING))
             {
+                RemoveNodeData(Constants.NDATA_TRACK);
+                RemoveNodeData(Constants.NDATA_TARGET);
                 nearGo = BTree.SearchEnemy(transform, Physics2D.OverlapCircleAll(transform.position, searchRange), tagName);
             }
             else return NodeState.Failure;
@@ -385,14 +383,6 @@ namespace EnemyAI.BehaviorTree
         {
             var enemy = (GameObject)GetNodeData(Constants.NDATA_TARGET);
 
-            // 보스가 죽었거나 사라진 경우
-            // TRACK, TARGET을 제거하고 Failure를 반환합니다.
-            if(enemy == null || enemy.CompareTag(Constants.TAG_DYING))
-            {
-                RemoveNodeData(Constants.NDATA_TRACK);
-                RemoveNodeData(Constants.NDATA_TARGET);
-                return NodeState.Failure;
-            }
 
             // 성능을 위해 JPS를 매 프레임 호출하지 않습니다.
             // NDATA_TRACK이 설정되어있지 않으면 경로가 없으므로 경로를 생성합니다.

@@ -66,13 +66,6 @@ namespace EnemyAI.BehaviorTree
             // NDATA_TARGET을 지웠으므로 Search에서 다시 찾아야함
             var enemy = (GameObject)GetNodeData(Constants.NDATA_TARGET);
 
-            if (enemy == null || enemy.CompareTag(Constants.TAG_DYING))
-            {
-                RemoveNodeData(Constants.NDATA_TARGET);
-                RemoveNodeData(Constants.NDATA_TRACK);
-                return NodeState.Failure;
-            }
-
 
             // Enemy.BT의 Search를 재사용하기 위해 사용
             // Track을 시작했다 알려야 failure return -> Selector에서 막히지 않음

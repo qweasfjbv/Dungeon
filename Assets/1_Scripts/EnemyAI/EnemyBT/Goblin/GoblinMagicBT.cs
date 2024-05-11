@@ -72,14 +72,16 @@ namespace EnemyAI.BehaviorTree
                     return NodeState.Failure;
                 }
 
-                parent.parent.SetNodeData(Constants.NDATA_ATK, true);
+                parent.parent.parent.SetNodeData(Constants.NDATA_ATK, true);
                 BTree.SetAnimatior(animator, Constants.ANIM_PARAM_ATK);
 
                 GameObject eff = EffectGenerator.Instance.InstanceEffect(magicEffect, tr.transform.position, Quaternion.identity);
                 eff.GetComponent<BaseMagicEffect>().SetDamage(stat.Attack, Constants.TAG_ENEMY);
+
+                return NodeState.Success;
             }
 
-            return NodeState.Success;
+            else return NodeState.Failure;
         }
 
     }
