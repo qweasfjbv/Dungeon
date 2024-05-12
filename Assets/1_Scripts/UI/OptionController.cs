@@ -7,7 +7,6 @@ public class OptionController : MonoBehaviour
 
     [SerializeField] private OptionUI optionUI;
 
-
     private void Start()
     {
         Managers.Input.escAction -= OnKeyboard;

@@ -10,26 +10,31 @@ public class InputManager
     public Action cardAction = null;
     public Action escAction = null;
     public Action invenAction = null;
+    public Action treasureAction = null;
 
     // 각 Block은 key를 눌렀을때 toggle 되도록
     // 필요하면 함수딴에서 프로퍼티로 토글
     private bool dialogBlock = false;
     private bool escBlock = false;
     private bool invenBlock = false;
+    private bool treasureBlock = false;
 
     public bool DialogBlock { get => dialogBlock; set => dialogBlock = value; }
     public bool EscBlock { get => escBlock; set => escBlock = value; }
     public bool InvenBlock { get => invenBlock; set => invenBlock = value; }
+    public bool TreasureBlock{ get => treasureBlock; set => treasureBlock = value; }
+
 
     public void OnUpdate()
     {
         if (Input.anyKey == false) return;
 
-        if (cardAction != null && !escBlock && !dialogBlock && !invenBlock) cardAction.Invoke();
-        if (dialogAction != null && !escBlock && !invenBlock) dialogAction.Invoke();
-        if (escAction != null && !dialogBlock && !invenBlock) escAction.Invoke();
-        if (invenAction != null && !dialogBlock && !escBlock) invenAction.Invoke();
-        
+        if (cardAction != null && !escBlock && !dialogBlock && !invenBlock && !treasureBlock) cardAction.Invoke();
+        if (dialogAction != null && !escBlock && !invenBlock && !treasureBlock) dialogAction.Invoke();
+        if (escAction != null && !dialogBlock && !invenBlock && !treasureBlock) escAction.Invoke();
+        if (invenAction != null && !dialogBlock && !escBlock && !treasureBlock) invenAction.Invoke();
+        if (treasureAction != null && !dialogBlock && !escBlock && !invenBlock) treasureAction.Invoke();
+
     }
 
 }
