@@ -44,7 +44,7 @@ namespace EnemyAI.BehaviorTree
     {
         private float originSpd;
         private float originAtk;
-        private float originHp;
+        private float maxHp;
         private float originDf;
         private float originCT;
 
@@ -57,6 +57,7 @@ namespace EnemyAI.BehaviorTree
         private float[] values = new float[System.Enum.GetValues(typeof(Define.BuffType)).Length];
         private List<Buff> buffs = new List<Buff>();
 
+        public float MaxHp { get => maxHp; set => hp = value; }
         public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
         public float Hp { get => hp; set => hp = value; }
         public float Attack { get => attack; set => attack = value; }
@@ -68,7 +69,7 @@ namespace EnemyAI.BehaviorTree
         {
             this.originSpd = this.moveSpeed=  moveSpeed;
             this.originAtk = this.attack =  attack;
-            this.originHp = this.hp = hp;
+            this.maxHp = this.hp = hp;
             this.originCT = this.attackCooltime = attackCooltime;
             this.originDf = this.defense = defense;
         }
@@ -181,7 +182,7 @@ namespace EnemyAI.BehaviorTree
         {
             if (enemyStat.Hp > 0)
             {
-                enemyStat.Hp += damage;
+                enemyStat.Hp = Mathf.Clamp(enemyStat.Hp + damage, 0, enemyStat.MaxHp);
             }
         }
 

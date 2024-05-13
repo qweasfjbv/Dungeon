@@ -796,7 +796,7 @@ public class MapGenerator: MonoBehaviour
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
-                PlaceBlackTile(j, i);
+                //PlaceBlackTile(j, i);
                 PlaceProps(j, i);
             }
         }
@@ -883,7 +883,7 @@ public class MapGenerator: MonoBehaviour
     {
 
         Vector3Int pos = new Vector3Int(x, y, 0);
-        if (wallTilemap.GetTile(pos) != null) return;
+        if (wallTilemap.GetTile(pos) != null || wallTopTilemap.GetTile(pos) != null) return;
 
         int pattern = CalculateShadowPattern(x, y);
         Tile shTile = null;
@@ -901,13 +901,13 @@ public class MapGenerator: MonoBehaviour
     {
         Vector3Int tilePos = new Vector3Int(x, y, 0);
 
-        Tile wallTile = wallTilemap.GetTile<Tile>(tilePos);
+        Tile wallTile = wallTopTilemap.GetTile<Tile>(tilePos);
 
         if (wallTile == wall_Center_Left || wallTile == wall_Center_Right || wallTile == wall_Center)
         {
-            if ((wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null || wallTopTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null) && floorTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null)
+            if ((wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null && wallTopTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null) && floorTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 1, 0)) == null)
                 cliffTilemap.SetTile(tilePos - new Vector3Int(0, 1, 0), cliff_0);
-            if ((wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null || wallTopTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null)  && floorTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null)
+            if ((wallTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null && wallTopTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null)  && floorTilemap.GetTile<Tile>(tilePos - new Vector3Int(0, 2, 0)) == null)
                 cliffTilemap.SetTile(tilePos - new Vector3Int(0, 2, 0), cliff_1);
         }
 
@@ -1064,7 +1064,7 @@ public class MapGenerator: MonoBehaviour
             // 맵 범위 내에서 검사
             if (checkX >= 0 && checkX < map.GetLength(1) && checkY >= 0 && checkY < map.GetLength(0))
             {
-                if (wallTilemap.GetTile(new Vector3Int(checkX, checkY, 0)) != null)
+                if ( wallTopTilemap.GetTile(new Vector3Int(checkX, checkY, 0)) != null || wallTilemap.GetTile(new Vector3Int(checkX, checkY, 0)) != null)
                 {
                     pattern |= (1 << bitIndex);
                 }

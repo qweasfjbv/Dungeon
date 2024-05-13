@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class PotionEffect : MonoBehaviour
 {
     protected TextMeshPro textMesh;
-    protected List<EnemyBT> enemies = new List<EnemyBT>();
+    protected List<BTree> enemies = new List<BTree>();
 
     public virtual void OnEnable()
     {

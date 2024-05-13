@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8803400679682837966}
   - component: {fileID: 1117874129786294737}
   - component: {fileID: 693832158947116621}
-  - component: {fileID: 5983333266507907998}
   - component: {fileID: 3501730243428158249}
+  - component: {fileID: 1946234797188904794}
   m_Layer: 8
   m_Name: 20_GoblinWarrior
   m_TagString: Monster
@@ -119,20 +119,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5983333266507907998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5720277353491606258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 550fec2686734ee419342211a291c2ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  searchRange: 5
-  attackRange: 1
 --- !u!212 &3501730243428158249
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -186,3 +172,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1946234797188904794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5720277353491606258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550fec2686734ee419342211a291c2ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  searchRange: 5
+  attackRange: 1

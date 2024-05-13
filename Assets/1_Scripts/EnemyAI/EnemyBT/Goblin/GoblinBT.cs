@@ -41,7 +41,6 @@ namespace EnemyAI.BehaviorTree
 
     }
 
-
     public class LinearTrack : Node
     {
         private Transform transform;

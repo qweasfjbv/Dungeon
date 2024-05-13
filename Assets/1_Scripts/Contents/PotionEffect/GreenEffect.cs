@@ -15,16 +15,16 @@ public class GreenEffect : PotionEffect
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<EnemyBT>() != null)
+        if (collision.GetComponent<BTree>() != null)
         {
-            enemies.Add(collision.GetComponent<EnemyBT>());
+            enemies.Add(collision.GetComponent<BTree>());
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.GetComponent<EnemyBT>() != null)
-            enemies.Remove(collision.GetComponent<EnemyBT>());
+        if (collision.GetComponent<BTree>() != null)
+            enemies.Remove(collision.GetComponent<BTree>());
     }
 
     public IEnumerator TimerCoroutine(float duringTime)
@@ -44,10 +44,10 @@ public class GreenEffect : PotionEffect
                 // 데미지를 줌
                 elapsedTickTime += tickTime;
 
-                foreach (EnemyBT enemy in enemies)
+                foreach (BTree enemy in enemies)
                 {
-                    // TODO : 몬스터 구현하고 몬스터Recover로 변경
-                    enemy.OnRecover(2);
+                    if (enemy.CompareTag(Constants.TAG_MONSTER))
+                        enemy.OnRecover(2);
                 }
             }
             textMesh.text = (duringTime - elapsedTime).ToString("0.0");
