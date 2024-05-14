@@ -168,7 +168,6 @@ namespace EnemyAI.BehaviorTree
             SoundManager.Instance.PlayEffectSound(Define.EffectSoundType.Hit);
             enemyStat.Hp -= damage;
 
-            Debug.Log(enemyStat.Hp);
             if (enemyStat.Hp > 0)
             {
                 var animator = transform.GetComponent<Animator>();

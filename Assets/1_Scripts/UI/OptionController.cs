@@ -17,6 +17,7 @@ public class OptionController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            
             if (optionUI.Toggle()) // ON
             {
                 SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ClickButton);
@@ -27,6 +28,9 @@ public class OptionController : MonoBehaviour
                 SoundManager.Instance.PlayButtonSound(Define.ButtonSoundType.ShowButton);
                 GetComponent<BlockPanelController>().OffBlock();
             }
+
+            
+            
         }
     }
 

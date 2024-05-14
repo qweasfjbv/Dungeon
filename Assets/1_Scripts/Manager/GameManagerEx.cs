@@ -14,6 +14,7 @@ public class GameManagerEx
     private EventDelegate<int> dialogDelegate;
 
     private List<BTree> goblins = new List<BTree>();
+    private List<TreasureLIstItem> treasureItems = new List<TreasureLIstItem>();
 
     public Action OnEventStartAction { get => onEventStart; set => onEventStart = value; }
     public Action OnEventEndAction { get=>onEventEnd; set => onEventEnd = value; }
@@ -74,5 +75,6 @@ public class GameManagerEx
 
         goblins.Clear();
     }
+
 
 }
