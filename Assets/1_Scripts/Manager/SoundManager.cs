@@ -223,6 +223,9 @@ public class SoundManager : MonoBehaviour
             case Define.EffectSoundType.Fire:
                 idx = 1;
                 break;
+            case Define.EffectSoundType.Coin:
+                idx = 2;
+                break;
 
             default:
                 idx = -1;
@@ -243,6 +246,9 @@ public class SoundManager : MonoBehaviour
         {
             case Define.NpcSoundType.Goblin: idx = 0; break;
             case Define.NpcSoundType.Witch: idx = 1; break;
+            case Define.NpcSoundType.Subordinate: idx = 2; break;
+            case Define.NpcSoundType.Boss: idx = 3; break;
+            case Define.NpcSoundType.Merchant: idx = 4;break;
         }
 
         npcPlayer.clip = npcClips[idx];

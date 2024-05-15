@@ -2,6 +2,7 @@ using EnemyAI.BehaviorTree;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class EventManager : MonoBehaviour
@@ -10,28 +11,49 @@ public class EventManager : MonoBehaviour
     static EventManager s_instance;
     public static EventManager Instance { get { return s_instance; } }
 
-    
+    private const int MAX_QUOTA = 20;
+    private int passedEnemyCount = 0;
+
     private Dictionary<(int eventId, int choice), Action> eventActions;
 
-
+    [SerializeField] private TreasureController tController;
+    [SerializeField] private TextMeshProUGUI quotaText;
+    [SerializeField] private CardMerchant merchant;
 
     private void Awake()
     {
         s_instance = gameObject.GetComponent<EventManager>();
     }
 
+    public void EnemyPassed()
+    {
+        passedEnemyCount++;
+    }
 
     void Start()
     {
+        merchant.gameObject.SetActive(false);
+        quotaText.text = "0 / " + MAX_QUOTA.ToString();
+
+        Managers.Game.OnEventStartAction -= (InitEvent);
+
         // 이벤트 함수 매핑 초기화
         eventActions = new Dictionary<(int, int), Action>
         {
             { (0, 0), F_0_0 },
             { (0, 1), F_0_1 },
-            { (0, 2), F_0_2 },
             { (1, 0), F_1_0 },
-            { (1, 1), F_1_1 }
+            { (1, 1), F_1_1 },
+            { (2, 0), F_2_0 },
+            { (2, 1), F_2_1 },
+            { (3, 0), F_3_0 },
+            { (3, 1), F_3_1 }
         };
+    }
+
+    private void InitEvent()
+    {
+        passedEnemyCount = 0;
     }
 
     public void EventSelectTrigger(int id, int select)
@@ -39,34 +61,59 @@ public class EventManager : MonoBehaviour
         eventActions[(id, select)].Invoke();
     }
 
+    // 황금 고블린
     private void F_0_0()
     {
-        Debug.Log("GG_S0");
-        StartCoroutine(EnemyAppearEvent(3));
+        // TODO : 보물 상점 구현
+        SoundManager.Instance.PlayEffectSound(Define.EffectSoundType.Coin);
+        tController.AddItemList(0);
+        Managers.Game.OnEventEnd();
     }
 
     private void F_0_1()
     {
-        Debug.Log("GG_S1");
-        Managers.Inven.AddRandomCard();
         Managers.Game.OnEventEnd();
     }
-    private void F_0_2()
-    {
-        Debug.Log("GG_S1");
 
-        Managers.Game.OnEventEnd();
-    }
+    // 마녀
     private void F_1_0()
     {
-
+        merchant.SetMerchant(Define.CardType.Magic);
         Managers.Game.OnEventEnd();
     }
     private void F_1_1()
     {
-
+        // 
         Managers.Game.OnEventEnd();
     }
+
+    // 상인_긍정
+    private void F_2_0()
+    {
+        merchant.SetMerchant(Define.CardType.Summon);
+    }
+
+    // 상인_부정
+    private void F_2_1()
+    {
+        Managers.Game.OnEventEnd();
+    }
+
+
+    // 후임 - 긍정
+    private void F_3_0()
+    {
+        StartCoroutine(EnemyAppearEvent(3));
+    }
+
+    // 후임 - 부정
+    private void F_3_1()
+    {
+        // TODO : 후임 체력 깎기
+        Managers.Game.OnEventEnd();
+    }
+
+
 
     private IEnumerator EnemyAppearEvent(int cnt)
     {
@@ -86,7 +133,7 @@ public class EventManager : MonoBehaviour
             once = false;
             for (int i = 0; i < cnt; i++)
             {
-                if (enemyBTs[i] != null) once = true;
+                if (enemyBTs[i].gameObject.activeSelf == true) once = true;
             }
 
             yield return new WaitForSeconds(1.0f);
@@ -97,5 +144,11 @@ public class EventManager : MonoBehaviour
 
         Managers.Game.OnEventEnd();
         enemyBTs.Clear();
+
+        if (passedEnemyCount > 0)
+        {
+            // TODO : 매직넘버
+            Managers.Game.SelectEvent(4);
+        }
     }
 }

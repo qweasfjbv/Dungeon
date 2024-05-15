@@ -1,6 +1,5 @@
 using EnemyAI.BehaviorTree;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,12 +32,23 @@ public class GameManagerEx
         isInEvent = true;
 
 
-        int eventIdx = 0;
-
         // TODO : 이벤트 선택지 선택하는 로직 필요
+        int eventIdx = UnityEngine.Random.Range(0, 4);
+
+
         onEventStart.Invoke();
 
         DialogDelegate(eventIdx);
+    }
+
+    public void SelectEvent(int id)
+    {
+        if (isInEvent) return;
+        isInEvent = true;
+
+        onEventStart.Invoke();
+
+        DialogDelegate(id);
     }
 
     // Event끝나면 호출

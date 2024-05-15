@@ -18,10 +18,6 @@ MonoBehaviour:
   m_Metadata:
     m_Items: []
   m_TableData:
-  - m_Id: 49234382848
-    m_Localized: GoldenGoblin
-    m_Metadata:
-      m_Items: []
   - m_Id: 5433416290304
     m_Localized: 'Nice to meet you.
 
@@ -43,42 +39,70 @@ MonoBehaviour:
     m_Localized: NO
     m_Metadata:
       m_Items: []
-  - m_Id: 15724950654976
-    m_Localized: TEST
-    m_Metadata:
-      m_Items: []
   - m_Id: 15762573561856
-    m_Localized: 'TEST DIALOG 0
-
-      TESETESTESTETST
-
-      GOODGOODGOODGOOD'
+    m_Localized: Hello, I'm a witch who sells potion
     m_Metadata:
       m_Items: []
   - m_Id: 15764179980288
-    m_Localized: 'TEST DIALOG 0
-
-      TESETESTESTETSTTESTSET'
+    m_Localized: There are a lot of good potions.
     m_Metadata:
       m_Items: []
   - m_Id: 15765006258176
-    m_Localized: 'TEST DIALOG 0
-
-      GOODGOODGOODGOOD
-
-      GOGOOGO'
+    m_Localized: Would you like to take a look?
     m_Metadata:
       m_Items: []
   - m_Id: 16064932548608
-    m_Localized: TEST SELECTOR 0
+    m_Localized: I need it!
     m_Metadata:
       m_Items: []
   - m_Id: 16065943375872
-    m_Localized: TEST SELECTOR 1
+    m_Localized: No thanks.
     m_Metadata:
       m_Items: []
   - m_Id: 280085686456320
     m_Localized: Don't know
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274498
+    m_Localized: Good products have been introduced this time. Few people sell them
+      as cheap as I do.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274499
+    m_Localized: You must have prepared enough money, right?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274500
+    m_Localized: Sure
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274501
+    m_Localized: "No\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274503
+    m_Localized: The "barbaric warrior party" is coming up.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274504
+    m_Localized: What should I do?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274505
+    m_Localized: Send them up.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274506
+    m_Localized: You handle it
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14795755174301700
+    m_Localized: Did you doze off during office hours? How can enemies come up to
+      me?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14795755174301701
+    m_Localized: Get some fresh air and wake up.
     m_Metadata:
       m_Items: []
   references:

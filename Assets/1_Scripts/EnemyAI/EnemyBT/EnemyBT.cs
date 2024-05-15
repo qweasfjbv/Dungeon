@@ -186,7 +186,8 @@ namespace EnemyAI.BehaviorTree
             {
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName(Constants.DIE_ANIM_NAME) && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
                 {
-                    GameObject.Destroy(transform.gameObject);
+                    SliderController.Instance.RestoreBlood(1f);
+                    transform.gameObject.SetActive(false);
                 }
             }
             return NodeState.Success;
@@ -306,6 +307,7 @@ namespace EnemyAI.BehaviorTree
 
                 if (currentPointIndex >= path.Count)
                 {
+                    EventManager.Instance.EnemyPassed();
                     transform.gameObject.SetActive(false);
                 }
             }

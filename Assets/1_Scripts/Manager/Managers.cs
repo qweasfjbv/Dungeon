@@ -1,7 +1,4 @@
-using UnityEditor.EditorTools;
-using UnityEngine.SceneManagement;
 using UnityEngine;
-using UnityEditor;
 
 public class Managers : MonoBehaviour
 {

@@ -195,6 +195,12 @@ public class DialogManager : MonoBehaviour
     private void MakeSelection()
     {
 
+        if (eventInfo.eventSelectCnt == 0)
+        {
+            UnsetEvent();
+            Managers.Game.OnEventEnd();
+            return;
+        }
         selectinProgress = true;
         selectorImage.SetActive(true);
         selectorImage.GetComponent<RectTransform>().anchoredPosition = new Vector2(-10f, 0);

@@ -13,7 +13,7 @@ public class SliderController : MonoBehaviour
     public static SliderController Instance { get { return s_instance; } }
 
     public readonly float MaxMana = 10;
-    public readonly float MaxBlood = 10;
+    public readonly float MaxBlood = 5;
     private float currentMana;
     private float currentBlood;
 

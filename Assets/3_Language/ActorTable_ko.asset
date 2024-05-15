@@ -26,6 +26,30 @@ MonoBehaviour:
     m_Localized: "\uD0D1\uC758 \uB9C8\uB140"
     m_Metadata:
       m_Items: []
+  - m_Id: 14053983628365824
+    m_Localized: "\uBD80\uD558"
+    m_Metadata:
+      m_Items:
+      - rid: 3598645824737509378
+  - m_Id: 14053983670308864
+    m_Localized: ???
+    m_Metadata:
+      m_Items:
+      - rid: 3598645824737509379
+  - m_Id: 14053983670308865
+    m_Localized: "\uC0C1\uC778"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3598645824737509378
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: "\uD6C4\uC784 \uC774\uB984\uC785\uB2C8\uB2E4. \uC218\uC815
+          \uD544\uC694\uD569\uB2C8\uB2E4."
+    - rid: 3598645824737509379
+      type: {class: Comment, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_CommentText: "\uC0C1\uC0AC \uC774\uB984\uC785\uB2C8\uB2E4. \uC218\uC815
+          \uD544\uC694\uD569\uB2C8\uB2E4."

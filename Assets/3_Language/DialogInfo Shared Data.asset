@@ -15,8 +15,8 @@ MonoBehaviour:
   m_TableCollectionName: DialogInfo
   m_TableCollectionNameGuidString: bab9137bb25711641bbe5cb8cc8cc06b
   m_Entries:
-  - m_Id: 49234382848
-    m_Key: 1000
+  - m_Id: 14796399264206848
+    m_Key: New Entry 4
     m_Metadata:
       m_Items: []
   - m_Id: 5433416290304
@@ -39,8 +39,8 @@ MonoBehaviour:
     m_Key: 1022
     m_Metadata:
       m_Items: []
-  - m_Id: 15724950654976
-    m_Key: 1100
+  - m_Id: 14796399297761280
+    m_Key: New Entry 5
     m_Metadata:
       m_Items: []
   - m_Id: 15762573561856
@@ -61,6 +61,58 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 16065943375872
     m_Key: 1121
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14796399297761281
+    m_Key: New Entry 6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274498
+    m_Key: 1210
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274499
+    m_Key: 1211
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274500
+    m_Key: 1220
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274501
+    m_Key: 1221
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14796399297761282
+    m_Key: New Entry 7
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274503
+    m_Key: 1310
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274504
+    m_Key: 1311
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274505
+    m_Key: 1320
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697870919274506
+    m_Key: 1321
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14796399297761283
+    m_Key: New Entry 9
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14795755174301700
+    m_Key: 1410
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14795755174301701
+    m_Key: 1411
     m_Metadata:
       m_Items: []
   m_Metadata:

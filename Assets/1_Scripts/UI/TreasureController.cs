@@ -53,8 +53,7 @@ public class TreasureController : MonoBehaviour
         {
             Toggle();
         }
-        // TODO : For Debug
-        else if (Input.GetKeyDown(KeyCode.J)) AddItemList(0);
+
     }
 
 

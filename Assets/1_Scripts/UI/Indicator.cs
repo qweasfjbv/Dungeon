@@ -22,8 +22,14 @@ public class Indicator : MonoBehaviour
         indicator = indi;
     }
 
+    private void OnDisable()
+    {
+        indicator.gameObject.SetActive(false);
+    }
+
     void Update()
     {
+
         Vector3 screenPoint = mainCamera.WorldToViewportPoint(target.position);
         bool isOffScreen = screenPoint.x <= 0 || screenPoint.x >= 1 || screenPoint.y <= 0 || screenPoint.y >= 1;
 

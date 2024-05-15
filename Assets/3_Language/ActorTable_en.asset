@@ -26,6 +26,18 @@ MonoBehaviour:
     m_Localized: Golden Goblin
     m_Metadata:
       m_Items: []
+  - m_Id: 14053983628365824
+    m_Localized: Subordinate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14053983670308864
+    m_Localized: ???
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14053983670308865
+    m_Localized: Merchant
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

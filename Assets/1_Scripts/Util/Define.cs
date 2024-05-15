@@ -21,7 +21,8 @@ public class Define
         Unknown = 0,
         GoldenGoblin,
         Witch,
-
+        Subordinate,
+        Boss
     }
 
     public enum BuffType
@@ -66,13 +67,16 @@ public class Define
     {
         Hit,
         Fire,
-
+        Coin
     }
 
     public enum NpcSoundType
     {
         Goblin = 0,
-        Witch
+        Witch,
+        Subordinate,
+        Boss,
+        Merchant
     }
 
     public enum AtkType
