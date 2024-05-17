@@ -139,7 +139,7 @@ namespace EnemyAI.BehaviorTree
             enemyStat.OnUpdate();
             if (root != null) root.Evaluate();
         }
-
+        
 
         public abstract Node SetupRoot();
 
@@ -183,6 +183,11 @@ namespace EnemyAI.BehaviorTree
             {
                 enemyStat.Hp = Mathf.Clamp(enemyStat.Hp + damage, 0, enemyStat.MaxHp);
             }
+        }
+
+        public float GetHpRatio()
+        {
+            return ((enemyStat.Hp< 0) ? 0 : enemyStat.Hp)/(float)enemyStat.MaxHp;
         }
 
         // TODO : 수정해야합니다.

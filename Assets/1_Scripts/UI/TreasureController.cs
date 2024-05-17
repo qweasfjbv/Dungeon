@@ -26,7 +26,7 @@ public class TreasureController : MonoBehaviour
 
 
 
-    private List<TreasureLIstItem> treasureItems = new List<TreasureLIstItem>();
+    private List<TreasureListItem> treasureItems = new List<TreasureListItem>();
     private Vector2 mainButtonPos;
     private bool isExtended;
 
@@ -91,7 +91,7 @@ public class TreasureController : MonoBehaviour
         
         // resourceManager에서 스프라이트/툴팁정보 받고 설정
 
-        treasureItems.Add(itemGo.GetComponent<TreasureLIstItem>());
+        treasureItems.Add(itemGo.GetComponent<TreasureListItem>());
         Toggle(); Toggle();
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TreasureLIstItem : MonoBehaviour
+public class TreasureListItem : MonoBehaviour
 {
     [HideInInspector] public RectTransform rect;
     [HideInInspector] public Image image;
