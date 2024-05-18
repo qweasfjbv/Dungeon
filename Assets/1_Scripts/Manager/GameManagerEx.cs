@@ -9,6 +9,7 @@ public class GameManagerEx
 
     private bool isInEvent = false;
     private Action onEventStart = null;
+    private Action onPosEventEnd = null;
     private Action onEventEnd = null;
     private EventDelegate<int> dialogDelegate;
 
@@ -17,6 +18,7 @@ public class GameManagerEx
 
     public Action OnEventStartAction { get => onEventStart; set => onEventStart = value; }
     public Action OnEventEndAction { get=>onEventEnd; set => onEventEnd = value; }
+    public Action OnPositiveEventEndAction { get => onPosEventEnd; set => onPosEventEnd = value; }
     public EventDelegate<int> DialogDelegate {get=> dialogDelegate; set=>dialogDelegate = value; }
 
 
@@ -41,6 +43,8 @@ public class GameManagerEx
         DialogDelegate(eventIdx);
     }
 
+
+
     public void SelectEvent(int id)
     {
         if (isInEvent) return;
@@ -55,6 +59,15 @@ public class GameManagerEx
     public void OnEventEnd()
     {
         onEventEnd.Invoke();
+        isInEvent = false;
+        SoundManager.Instance.ChangeBGM(Define.BgmType.Main);
+        RemoveAllGoblin();
+    }
+
+    public void OnPositiveEventEnd()
+    {
+        onEventEnd.Invoke();
+        onPosEventEnd.Invoke();
         isInEvent = false;
         SoundManager.Instance.ChangeBGM(Define.BgmType.Main);
         RemoveAllGoblin();

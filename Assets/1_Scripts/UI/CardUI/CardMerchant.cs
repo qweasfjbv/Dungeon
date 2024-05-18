@@ -49,7 +49,7 @@ public class CardMerchant : MonoBehaviour
             if(card != null) Destroy(card); 
         }
         cardList.Clear();
-        Managers.Game.OnEventEnd();
+        Managers.Game.OnPositiveEventEnd();
         gameObject.SetActive(false);
     }
 

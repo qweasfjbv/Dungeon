@@ -12,6 +12,7 @@ public class EventManager : MonoBehaviour
     public static EventManager Instance { get { return s_instance; } }
 
     private const int MAX_QUOTA = 20;
+    private int curQuota = 0;
     private int passedEnemyCount = 0;
 
     private Dictionary<(int eventId, int choice), Action> eventActions;
@@ -29,13 +30,27 @@ public class EventManager : MonoBehaviour
     {
         passedEnemyCount++;
     }
+    public void QuotaProgressed()
+    {
+        curQuota++; UpdateQuotaText();
+
+        if (curQuota >= MAX_QUOTA)
+        {
+            // TODO : 할당량 채움. 다음 이벤트 진행 ex. boss
+        }
+    }
 
     void Start()
     {
         merchant.gameObject.SetActive(false);
-        quotaText.text = "0 / " + MAX_QUOTA.ToString();
+        curQuota = 0;
+        UpdateQuotaText();
 
         Managers.Game.OnEventStartAction -= (InitEvent);
+        Managers.Game.OnEventStartAction += (InitEvent);
+
+        Managers.Game.OnPositiveEventEndAction -= (QuotaProgressed);
+        Managers.Game.OnPositiveEventEndAction += (QuotaProgressed);
 
         // 이벤트 함수 매핑 초기화
         eventActions = new Dictionary<(int, int), Action>
@@ -51,6 +66,11 @@ public class EventManager : MonoBehaviour
         };
     }
 
+    private void UpdateQuotaText()
+    {
+        quotaText.text = curQuota + " / " + MAX_QUOTA.ToString();
+    }
+
     private void InitEvent()
     {
         passedEnemyCount = 0;
@@ -64,10 +84,9 @@ public class EventManager : MonoBehaviour
     // 황금 고블린
     private void F_0_0()
     {
-        // TODO : 보물 상점 구현
         SoundManager.Instance.PlayEffectSound(Define.EffectSoundType.Coin);
         tController.AddItemList(0);
-        Managers.Game.OnEventEnd();
+        Managers.Game.OnPositiveEventEnd();
     }
 
     private void F_0_1()
@@ -142,7 +161,7 @@ public class EventManager : MonoBehaviour
         }
 
 
-        Managers.Game.OnEventEnd();
+        Managers.Game.OnPositiveEventEnd();
         enemyBTs.Clear();
 
         if (passedEnemyCount > 0)
