@@ -227,6 +227,32 @@ namespace EnemyAI.BehaviorTree
         }
 
 
+        public static GameObject SearchHealable(Transform transform, Collider2D[] cols, string tagName)
+        {
+            // 주변에 아무것도 없는 경우
+            if (cols.Length == 0) return null;
+
+            GameObject ret = null;
+            float minDis = -1;
+
+
+            // 주변에 뭔가 있으면 tagName으로 가장 가까운 적을 찾습니다.            
+            foreach (Collider2D col in cols)
+            {
+                if (!col.CompareTag(tagName)) continue;
+                if (ret == null) { ret = col.gameObject; minDis = UtilFunctions.VectorDistanceSq(ret.transform.position, transform.position); continue; }
+                if (col.GetComponent<BTree>().GetHpRatio() >= 1 - float.Epsilon) continue;
+
+                var tmpDis = UtilFunctions.VectorDistanceSq(col.gameObject.transform.position, transform.position);
+
+                if (minDis > tmpDis)
+                {
+                    minDis = tmpDis;
+                    ret = col.gameObject;
+                }
+            }
+            return ret;
+        }
 
     }
 
