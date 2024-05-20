@@ -17,7 +17,6 @@ public class MagicCard : CardBase
         effect.transform.position = pos;
     }
 
-
     public override void PreviewEffect(Vector3 pos)
     {
         pos.z = 0;
