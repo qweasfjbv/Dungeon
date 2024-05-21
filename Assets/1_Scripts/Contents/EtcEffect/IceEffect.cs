@@ -20,7 +20,7 @@ public class IceEffect : BaseMagicEffect
             }
         }
     }
-
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag(tagName))
