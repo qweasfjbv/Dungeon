@@ -1,7 +1,55 @@
 fileFormatVersion: 2
-guid: 480144379cc9c7d47a8e19f58b0e6ee3
+guid: 92eaf681e6995444da8127d12d7bd536
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 3750445756357391431
+    second: HumanBaseWalk_0
+  - first:
+      213: 7623067749143862023
+    second: HumanBaseWalk_1
+  - first:
+      213: -1050204587564385693
+    second: HumanBaseWalk_2
+  - first:
+      213: -5025434943947313069
+    second: HumanBaseWalk_3
+  - first:
+      213: 2075280910685719026
+    second: HumanBaseWalk_4
+  - first:
+      213: -3870907011009635682
+    second: HumanBaseWalk_5
+  - first:
+      213: 6332971975109947639
+    second: HumanBaseWalk_6
+  - first:
+      213: 2138505267778344673
+    second: HumanBaseWalk_7
+  - first:
+      213: 7298903167323142095
+    second: HumanBaseWalk_8
+  - first:
+      213: -4311340294224399340
+    second: HumanBaseWalk_9
+  - first:
+      213: -3184792920018915136
+    second: HumanBaseWalk_10
+  - first:
+      213: -644189117072829471
+    second: HumanBaseWalk_11
+  - first:
+      213: 6550241856275766504
+    second: HumanBaseWalk_12
+  - first:
+      213: -2181917829056002689
+    second: HumanBaseWalk_13
+  - first:
+      213: -7734677932745572677
+    second: HumanBaseWalk_14
+  - first:
+      213: 841415138018549078
+    second: HumanBaseWalk_15
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -43,7 +91,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -63,7 +111,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   swizzle: 50462976
   cookieLightType: 1
   platformSettings:
@@ -85,7 +133,20 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -98,7 +159,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -110,11 +171,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TextBTN_Cancel_0
+      name: HumanBaseWalk_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 82
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -124,18 +185,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7d834e9c34e08ab40800000000000000
-      internalID: 5451623033244760279
+      spriteID: 744bd017b824c0430800000000000000
+      internalID: 3750445756357391431
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_1
+      name: HumanBaseWalk_1
       rect:
         serializedVersion: 2
         x: 32
-        y: 82
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -145,18 +206,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a8bb39aa452c01620800000000000000
-      internalID: 2742905841963481994
+      spriteID: 70bd476aab39ac960800000000000000
+      internalID: 7623067749143862023
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_2
+      name: HumanBaseWalk_2
       rect:
         serializedVersion: 2
         x: 64
-        y: 82
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -166,18 +227,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1e25f2d32fb04cd40800000000000000
-      internalID: 5603616971392242401
+      spriteID: 36a3db8ed7cec61f0800000000000000
+      internalID: -1050204587564385693
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_3
+      name: HumanBaseWalk_3
       rect:
         serializedVersion: 2
         x: 96
-        y: 82
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -187,81 +248,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 583e8849e27feabe0800000000000000
-      internalID: -1463961049416277115
+      spriteID: 3507f2c5b81124ab0800000000000000
+      internalID: -5025434943947313069
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_4
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 82
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5ed74c6d85dbb7c30800000000000000
-      internalID: 4358285253669060069
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_5
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 82
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5621396b9275397b0800000000000000
-      internalID: -5218731706523905435
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_6
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 82
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c335883031825d360800000000000000
-      internalID: 7193700041922990908
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_7
+      name: HumanBaseWalk_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 50
+        y: 64
         width: 32
         height: 32
       alignment: 0
@@ -271,18 +269,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 35b56e3159e5fa040800000000000000
-      internalID: 4661048133728754515
+      spriteID: 2f942923ef0eccc10800000000000000
+      internalID: 2075280910685719026
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_8
+      name: HumanBaseWalk_5
       rect:
         serializedVersion: 2
         x: 32
-        y: 50
+        y: 64
         width: 32
         height: 32
       alignment: 0
@@ -292,18 +290,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f6202e0e718860ef0800000000000000
-      internalID: -142276702077058449
+      spriteID: e9a933a1596c74ac0800000000000000
+      internalID: -3870907011009635682
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_9
+      name: HumanBaseWalk_6
       rect:
         serializedVersion: 2
         x: 64
-        y: 50
+        y: 64
         width: 32
         height: 32
       alignment: 0
@@ -313,18 +311,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 035e41e0419d0f3d0800000000000000
-      internalID: -3174799057137375952
+      spriteID: 7f0bee4357c33e750800000000000000
+      internalID: 6332971975109947639
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_10
+      name: HumanBaseWalk_7
       rect:
         serializedVersion: 2
         x: 96
-        y: 50
+        y: 64
         width: 32
         height: 32
       alignment: 0
@@ -334,81 +332,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 83cbc6d65a2fad3d0800000000000000
-      internalID: -3180963394464465864
+      spriteID: 1e6da34f53f7dad10800000000000000
+      internalID: 2138505267778344673
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_11
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 50
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 865f22dc8342e6fe0800000000000000
-      internalID: -1193977024828213912
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_12
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 50
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5eecb7858ab1b8690800000000000000
-      internalID: -7598949536404615451
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_13
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 50
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c8a13d011f5365740800000000000000
-      internalID: 5140355334175660684
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_14
+      name: HumanBaseWalk_8
       rect:
         serializedVersion: 2
         x: 0
-        y: 18
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -418,18 +353,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6025971d9f77dc730800000000000000
-      internalID: 4021001957156672006
+      spriteID: fc7f44a62c9ea4560800000000000000
+      internalID: 7298903167323142095
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_15
+      name: HumanBaseWalk_9
       rect:
         serializedVersion: 2
         x: 32
-        y: 18
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -439,18 +374,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3a165bc8780e1bed0800000000000000
-      internalID: -2399890253625859677
+      spriteID: 4143de848da0b24c0800000000000000
+      internalID: -4311340294224399340
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_16
+      name: HumanBaseWalk_10
       rect:
         serializedVersion: 2
         x: 64
-        y: 18
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -460,18 +395,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b06f56142e0b33fa0800000000000000
-      internalID: -5822115407453620725
+      spriteID: 0c0f71786b75dc3d0800000000000000
+      internalID: -3184792920018915136
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_17
+      name: HumanBaseWalk_11
       rect:
         serializedVersion: 2
         x: 96
-        y: 18
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -481,18 +416,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4c3dde0e175831360800000000000000
-      internalID: 7139196558463849412
+      spriteID: 1e393bc39616f07f0800000000000000
+      internalID: -644189117072829471
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_18
+      name: HumanBaseWalk_12
       rect:
         serializedVersion: 2
-        x: 128
-        y: 18
+        x: 0
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -502,18 +437,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 938f33d440d8103b0800000000000000
-      internalID: -5547998216329103303
+      spriteID: 8ec563c734227ea50800000000000000
+      internalID: 6550241856275766504
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_19
+      name: HumanBaseWalk_13
       rect:
         serializedVersion: 2
-        x: 160
-        y: 18
+        x: 32
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -523,18 +458,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c5b4d296c43b19db0800000000000000
-      internalID: -4786847788154664100
+      spriteID: f7586067b4548b1e0800000000000000
+      internalID: -2181917829056002689
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_20
+      name: HumanBaseWalk_14
       rect:
         serializedVersion: 2
-        x: 192
-        y: 18
+        x: 64
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -544,8 +479,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 58bff56ad640c2c30800000000000000
-      internalID: 4335845410240199557
+      spriteID: bbeb5a67667e8a490800000000000000
+      internalID: -7734677932745572677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HumanBaseWalk_15
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65d5b3a2c9e4dab00800000000000000
+      internalID: 841415138018549078
       vertices: []
       indices: 
       edges: []
@@ -561,27 +517,22 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      TextBTN_Cancel_0: 5451623033244760279
-      TextBTN_Cancel_1: 2742905841963481994
-      TextBTN_Cancel_10: -3180963394464465864
-      TextBTN_Cancel_11: -1193977024828213912
-      TextBTN_Cancel_12: -7598949536404615451
-      TextBTN_Cancel_13: 5140355334175660684
-      TextBTN_Cancel_14: 4021001957156672006
-      TextBTN_Cancel_15: -2399890253625859677
-      TextBTN_Cancel_16: -5822115407453620725
-      TextBTN_Cancel_17: 7139196558463849412
-      TextBTN_Cancel_18: -5547998216329103303
-      TextBTN_Cancel_19: -4786847788154664100
-      TextBTN_Cancel_2: 5603616971392242401
-      TextBTN_Cancel_20: 4335845410240199557
-      TextBTN_Cancel_3: -1463961049416277115
-      TextBTN_Cancel_4: 4358285253669060069
-      TextBTN_Cancel_5: -5218731706523905435
-      TextBTN_Cancel_6: 7193700041922990908
-      TextBTN_Cancel_7: 4661048133728754515
-      TextBTN_Cancel_8: -142276702077058449
-      TextBTN_Cancel_9: -3174799057137375952
+      HumanBaseWalk_0: 3750445756357391431
+      HumanBaseWalk_1: 7623067749143862023
+      HumanBaseWalk_10: -3184792920018915136
+      HumanBaseWalk_11: -644189117072829471
+      HumanBaseWalk_12: 6550241856275766504
+      HumanBaseWalk_13: -2181917829056002689
+      HumanBaseWalk_14: -7734677932745572677
+      HumanBaseWalk_15: 841415138018549078
+      HumanBaseWalk_2: -1050204587564385693
+      HumanBaseWalk_3: -5025434943947313069
+      HumanBaseWalk_4: 2075280910685719026
+      HumanBaseWalk_5: -3870907011009635682
+      HumanBaseWalk_6: 6332971975109947639
+      HumanBaseWalk_7: 2138505267778344673
+      HumanBaseWalk_8: 7298903167323142095
+      HumanBaseWalk_9: -4311340294224399340
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

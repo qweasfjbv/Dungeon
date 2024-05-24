@@ -1,7 +1,55 @@
 fileFormatVersion: 2
-guid: 480144379cc9c7d47a8e19f58b0e6ee3
+guid: c481d1436a9b91940982adb6f7014a6f
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -2467311155589663537
+    second: HumanBaseDmg_0
+  - first:
+      213: 3209665342951282142
+    second: HumanBaseDmg_1
+  - first:
+      213: 4624178483609783714
+    second: HumanBaseDmg_2
+  - first:
+      213: 2825375157320072206
+    second: HumanBaseDmg_3
+  - first:
+      213: 7685606824014862474
+    second: HumanBaseDmg_4
+  - first:
+      213: 5751450934210418781
+    second: HumanBaseDmg_5
+  - first:
+      213: -3607474616292432186
+    second: HumanBaseDmg_6
+  - first:
+      213: -4441087682600662059
+    second: HumanBaseDmg_7
+  - first:
+      213: -6385725216653705890
+    second: HumanBaseDmg_8
+  - first:
+      213: 1315391268975234708
+    second: HumanBaseDmg_9
+  - first:
+      213: 6168402299695526918
+    second: HumanBaseDmg_10
+  - first:
+      213: 5585488617957045860
+    second: HumanBaseDmg_11
+  - first:
+      213: 7790205636492388659
+    second: HumanBaseDmg_12
+  - first:
+      213: -4571956637497956997
+    second: HumanBaseDmg_13
+  - first:
+      213: -2796145001562570848
+    second: HumanBaseDmg_14
+  - first:
+      213: 5325527756544905958
+    second: HumanBaseDmg_15
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
@@ -43,7 +91,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -63,7 +111,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   swizzle: 50462976
   cookieLightType: 1
   platformSettings:
@@ -85,7 +133,20 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -98,7 +159,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -110,11 +171,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TextBTN_Cancel_0
+      name: HumanBaseDmg_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 82
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -124,18 +185,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7d834e9c34e08ab40800000000000000
-      internalID: 5451623033244760279
+      spriteID: fc438bc839952cdd0800000000000000
+      internalID: -2467311155589663537
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_1
+      name: HumanBaseDmg_1
       rect:
         serializedVersion: 2
         x: 32
-        y: 82
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -145,18 +206,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a8bb39aa452c01620800000000000000
-      internalID: 2742905841963481994
+      spriteID: ed55e76bf950b8c20800000000000000
+      internalID: 3209665342951282142
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_2
+      name: HumanBaseDmg_2
       rect:
         serializedVersion: 2
         x: 64
-        y: 82
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -166,18 +227,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1e25f2d32fb04cd40800000000000000
-      internalID: 5603616971392242401
+      spriteID: 2adc095b4d16c2040800000000000000
+      internalID: 4624178483609783714
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_3
+      name: HumanBaseDmg_3
       rect:
         serializedVersion: 2
         x: 96
-        y: 82
+        y: 96
         width: 32
         height: 32
       alignment: 0
@@ -187,81 +248,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 583e8849e27feabe0800000000000000
-      internalID: -1463961049416277115
+      spriteID: e0cb6417cbfb53720800000000000000
+      internalID: 2825375157320072206
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_4
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 82
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5ed74c6d85dbb7c30800000000000000
-      internalID: 4358285253669060069
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_5
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 82
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5621396b9275397b0800000000000000
-      internalID: -5218731706523905435
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_6
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 82
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c335883031825d360800000000000000
-      internalID: 7193700041922990908
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_7
+      name: HumanBaseDmg_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 50
+        y: 64
         width: 32
         height: 32
       alignment: 0
@@ -271,18 +269,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 35b56e3159e5fa040800000000000000
-      internalID: 4661048133728754515
+      spriteID: a8859b4bfa2c8aa60800000000000000
+      internalID: 7685606824014862474
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_8
+      name: HumanBaseDmg_5
       rect:
         serializedVersion: 2
         x: 32
-        y: 50
+        y: 64
         width: 32
         height: 32
       alignment: 0
@@ -292,18 +290,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f6202e0e718860ef0800000000000000
-      internalID: -142276702077058449
+      spriteID: d5853b4f62241df40800000000000000
+      internalID: 5751450934210418781
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_9
+      name: HumanBaseDmg_6
       rect:
         serializedVersion: 2
         x: 64
-        y: 50
+        y: 64
         width: 32
         height: 32
       alignment: 0
@@ -313,18 +311,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 035e41e0419d0f3d0800000000000000
-      internalID: -3174799057137375952
+      spriteID: 6c6a6af13fcafedc0800000000000000
+      internalID: -3607474616292432186
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_10
+      name: HumanBaseDmg_7
       rect:
         serializedVersion: 2
         x: 96
-        y: 50
+        y: 64
         width: 32
         height: 32
       alignment: 0
@@ -334,81 +332,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 83cbc6d65a2fad3d0800000000000000
-      internalID: -3180963394464465864
+      spriteID: 5db893658461e52c0800000000000000
+      internalID: -4441087682600662059
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_11
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 50
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 865f22dc8342e6fe0800000000000000
-      internalID: -1193977024828213912
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_12
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 50
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5eecb7858ab1b8690800000000000000
-      internalID: -7598949536404615451
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_13
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 50
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.4}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c8a13d011f5365740800000000000000
-      internalID: 5140355334175660684
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TextBTN_Cancel_14
+      name: HumanBaseDmg_8
       rect:
         serializedVersion: 2
         x: 0
-        y: 18
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -418,18 +353,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6025971d9f77dc730800000000000000
-      internalID: 4021001957156672006
+      spriteID: e5df91c9fb85167a0800000000000000
+      internalID: -6385725216653705890
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_15
+      name: HumanBaseDmg_9
       rect:
         serializedVersion: 2
         x: 32
-        y: 18
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -439,18 +374,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3a165bc8780e1bed0800000000000000
-      internalID: -2399890253625859677
+      spriteID: 49e4befc365314210800000000000000
+      internalID: 1315391268975234708
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_16
+      name: HumanBaseDmg_10
       rect:
         serializedVersion: 2
         x: 64
-        y: 18
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -460,18 +395,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b06f56142e0b33fa0800000000000000
-      internalID: -5822115407453620725
+      spriteID: 604fd01c5319a9550800000000000000
+      internalID: 6168402299695526918
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_17
+      name: HumanBaseDmg_11
       rect:
         serializedVersion: 2
         x: 96
-        y: 18
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -481,18 +416,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4c3dde0e175831360800000000000000
-      internalID: 7139196558463849412
+      spriteID: 466315a0e44a38d40800000000000000
+      internalID: 5585488617957045860
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_18
+      name: HumanBaseDmg_12
       rect:
         serializedVersion: 2
-        x: 128
-        y: 18
+        x: 0
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -502,18 +437,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 938f33d440d8103b0800000000000000
-      internalID: -5547998216329103303
+      spriteID: 339ef5a80ce5c1c60800000000000000
+      internalID: 7790205636492388659
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_19
+      name: HumanBaseDmg_13
       rect:
         serializedVersion: 2
-        x: 160
-        y: 18
+        x: 32
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -523,18 +458,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c5b4d296c43b19db0800000000000000
-      internalID: -4786847788154664100
+      spriteID: b75e17559a52d80c0800000000000000
+      internalID: -4571956637497956997
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TextBTN_Cancel_20
+      name: HumanBaseDmg_14
       rect:
         serializedVersion: 2
-        x: 192
-        y: 18
+        x: 64
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -544,8 +479,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 58bff56ad640c2c30800000000000000
-      internalID: 4335845410240199557
+      spriteID: 0aff0698fe81239d0800000000000000
+      internalID: -2796145001562570848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HumanBaseDmg_15
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e2975a574318e940800000000000000
+      internalID: 5325527756544905958
       vertices: []
       indices: 
       edges: []
@@ -561,27 +517,22 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      TextBTN_Cancel_0: 5451623033244760279
-      TextBTN_Cancel_1: 2742905841963481994
-      TextBTN_Cancel_10: -3180963394464465864
-      TextBTN_Cancel_11: -1193977024828213912
-      TextBTN_Cancel_12: -7598949536404615451
-      TextBTN_Cancel_13: 5140355334175660684
-      TextBTN_Cancel_14: 4021001957156672006
-      TextBTN_Cancel_15: -2399890253625859677
-      TextBTN_Cancel_16: -5822115407453620725
-      TextBTN_Cancel_17: 7139196558463849412
-      TextBTN_Cancel_18: -5547998216329103303
-      TextBTN_Cancel_19: -4786847788154664100
-      TextBTN_Cancel_2: 5603616971392242401
-      TextBTN_Cancel_20: 4335845410240199557
-      TextBTN_Cancel_3: -1463961049416277115
-      TextBTN_Cancel_4: 4358285253669060069
-      TextBTN_Cancel_5: -5218731706523905435
-      TextBTN_Cancel_6: 7193700041922990908
-      TextBTN_Cancel_7: 4661048133728754515
-      TextBTN_Cancel_8: -142276702077058449
-      TextBTN_Cancel_9: -3174799057137375952
+      HumanBaseDmg_0: -2467311155589663537
+      HumanBaseDmg_1: 3209665342951282142
+      HumanBaseDmg_10: 6168402299695526918
+      HumanBaseDmg_11: 5585488617957045860
+      HumanBaseDmg_12: 7790205636492388659
+      HumanBaseDmg_13: -4571956637497956997
+      HumanBaseDmg_14: -2796145001562570848
+      HumanBaseDmg_15: 5325527756544905958
+      HumanBaseDmg_2: 4624178483609783714
+      HumanBaseDmg_3: 2825375157320072206
+      HumanBaseDmg_4: 7685606824014862474
+      HumanBaseDmg_5: 5751450934210418781
+      HumanBaseDmg_6: -3607474616292432186
+      HumanBaseDmg_7: -4441087682600662059
+      HumanBaseDmg_8: -6385725216653705890
+      HumanBaseDmg_9: 1315391268975234708
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
