@@ -84,7 +84,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 8
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -166,7 +166,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -187,7 +187,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -208,7 +208,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -229,7 +229,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -250,7 +250,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -271,7 +271,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -292,7 +292,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -313,7 +313,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -334,7 +334,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -355,7 +355,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -376,7 +376,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -397,7 +397,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -422,17 +422,29 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       HumanBaseSpinDie_0: -9123045988654663704
+      HumanBaseSpinDie_0_: 0
       HumanBaseSpinDie_1: 2264957443381591308
       HumanBaseSpinDie_10: 639567803849488912
+      HumanBaseSpinDie_10_: 0
       HumanBaseSpinDie_11: 8704715779118974026
+      HumanBaseSpinDie_11_: 0
+      HumanBaseSpinDie_1_: 0
       HumanBaseSpinDie_2: 3304459083662050357
+      HumanBaseSpinDie_2_: 0
       HumanBaseSpinDie_3: 3536524729851286482
+      HumanBaseSpinDie_3_: 0
       HumanBaseSpinDie_4: 4209020810932609902
+      HumanBaseSpinDie_4_: 0
       HumanBaseSpinDie_5: -7698133230386193858
+      HumanBaseSpinDie_5_: 0
       HumanBaseSpinDie_6: -4606763988200290081
+      HumanBaseSpinDie_6_: 0
       HumanBaseSpinDie_7: 5650159241510613029
+      HumanBaseSpinDie_7_: 0
       HumanBaseSpinDie_8: 4460017540616150817
+      HumanBaseSpinDie_8_: 0
       HumanBaseSpinDie_9: -2575360243832399752
+      HumanBaseSpinDie_9_: 0
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,14 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.Animations;
 using System;
 using UnityEditorInternal;
-using System.Data.SqlClient;
-using Unity.VisualScripting;
-using System.Runtime.CompilerServices;
-using System.Linq;
-using NUnit.Framework.Constraints;
+using Codice.Client.Common.Tree;
+using System.Configuration;
 
 // NE, NW, SE, SW
 // Attack 
@@ -44,8 +40,6 @@ public class SpriteAnimatorEditor : EditorWindow
     private Texture2D[] spriteSheets = new Texture2D[5];
     private AnimationClip[,] animationClips = new AnimationClip[5, 4];
 
-    private int columns = 4;
-    private int rows = 4;
     private int widthPx = 32;
     private int heightPx = 32;
     private AnimatorOverrideController overrideController;
@@ -76,6 +70,7 @@ public class SpriteAnimatorEditor : EditorWindow
             storePath = EditorUtility.OpenFolderPanel("Store path", "", "");
             storePath = storePath.Substring(storePath.IndexOf('A'));
         }
+
         GUILayout.Label("Store Path : " + storePath);
         GUILayout.Space(20);
 
@@ -127,6 +122,7 @@ public class SpriteAnimatorEditor : EditorWindow
                 {
 
                     clipOverrides["Human_" + Enum.GetName(typeof(AnimName), i) + "_" + Enum.GetName(typeof(AnimDir), j)] = animationClips[i, j];
+                    Debug.Log(animationClips[i, j].name);
                 }
             }
         }
@@ -156,7 +152,7 @@ public class SpriteAnimatorEditor : EditorWindow
         ti.isReadable = true;
         ti.textureType = TextureImporterType.Sprite;
         ti.spriteImportMode = SpriteImportMode.Multiple;
-        ti.spritePixelsPerUnit = widthPx;
+        ti.spritePixelsPerUnit = 8;
         ti.filterMode = FilterMode.Point;
         ti.textureCompression = TextureImporterCompression.Uncompressed;
 
@@ -165,8 +161,8 @@ public class SpriteAnimatorEditor : EditorWindow
         {
             SpriteMetaData smd = new SpriteMetaData();
             smd.rect = rects[i];
+            smd.alignment = (int)SpriteAlignment.Custom;
             smd.pivot = new Vector2(0.5f, 0.4f);
-            smd.alignment = (int)SpriteAlignment.Center;
             smd.name = texture.name + "_" + i;
             mData.Add(smd);
         }
@@ -178,26 +174,43 @@ public class SpriteAnimatorEditor : EditorWindow
         AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
         UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
 
+        Array.Sort(assets, (a, b)=>
+        {
+            var tmp1 = a.name.Split('_');
+            var tmp2 = b.name.Split('_');
+
+            int part1, part2;
+            bool check1 = int.TryParse(System.IO.Path.GetFileNameWithoutExtension(tmp1[tmp1.Length - 1]), out part1);
+            bool check2 = int.TryParse(System.IO.Path.GetFileNameWithoutExtension(tmp2[tmp2.Length - 1]), out part2);
+
+            if (!check1) part1 = -1;
+            if (!check2) part2 = -1;
+
+            if (part1 == part2) return 0;
+            else if (part1 < part2) return -1;
+            else return 1;
+        });
+
 
         List<Sprite> sprites = new List<Sprite>();
+
         // column 개수. 애니메이션 당 들어가야 할 이미지 개수를 셉니다.
         int animFrameCount = texture.width / widthPx;
 
         int dir = 0;
         int cnt = 0;
-        for (int i = 0; i < assets.Length; i++)
+        for (int i = 1; i < assets.Length; i++)
         {
-            if ((cnt + 1)% animFrameCount == 0)
-            {
-                CreateAnimationClip(sprites, sheetIdx, dir++);
-                sprites.Clear();
-            }
-
             if (assets[i] is Sprite)
             {
-                Debug.Log(assets[i].name);
                 sprites.Add(assets[i] as Sprite);
                 cnt++;
+
+                if (cnt % animFrameCount == 0)
+                {
+                    CreateAnimationClip(sprites, sheetIdx, dir++);
+                    sprites.Clear();
+                }
             }
         }
 
@@ -208,7 +221,6 @@ public class SpriteAnimatorEditor : EditorWindow
 
     private void CreateAnimationClip(List<Sprite> sprites, int sheetIdx, int dir)
     {
-        dir = (dir + 2) % 4;
         AnimationClip clip = new AnimationClip();
         string clipName = "";
         clipName = characterName + "_" + Enum.GetName(typeof(AnimName), sheetIdx) + "_" + (sheetIdx != 1 ? Enum.GetName(typeof(AnimDir), dir) : "");
@@ -218,18 +230,28 @@ public class SpriteAnimatorEditor : EditorWindow
         curveBinding.path = "";
         curveBinding.propertyName = "m_Sprite";
 
-        ObjectReferenceKeyframe[] keyFrames = new ObjectReferenceKeyframe[sprites.Count];
+        ObjectReferenceKeyframe[] keyFrames = new ObjectReferenceKeyframe[sprites.Count+1];
 
         for (int i = 0; i < sprites.Count; i++)
         {
             keyFrames[i] = new ObjectReferenceKeyframe();
-            keyFrames[i].time = i / 10f;
+            keyFrames[i].time = i / 6f;
             keyFrames[i].value = sprites[i];
+
         }
+        keyFrames[keyFrames.Length-1] = new ObjectReferenceKeyframe();
+        keyFrames[keyFrames.Length - 1].time = (keyFrames.Length - 1) / 6f;
+        keyFrames[keyFrames.Length - 1].value = sprites[0];
+
 
         AnimationUtility.SetObjectReferenceCurve(clip, curveBinding, keyFrames);
 
-        
+        if (sheetIdx == (int)AnimName.Idle || sheetIdx == (int)AnimName.Walk)
+        {
+            AnimationClipSettings setting = AnimationUtility.GetAnimationClipSettings(clip);
+            setting.loopTime = true;
+            AnimationUtility.SetAnimationClipSettings(clip, setting);
+        }
         animationClips[sheetIdx, (sheetIdx == (int)AnimName.DieSoul) ? 0 : dir] = clip;
 
         // 에셋으로 생성 후 저장

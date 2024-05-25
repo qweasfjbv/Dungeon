@@ -96,7 +96,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 8
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -178,7 +178,7 @@ TextureImporter:
         y: 96
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -199,7 +199,7 @@ TextureImporter:
         y: 96
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -220,7 +220,7 @@ TextureImporter:
         y: 96
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -241,7 +241,7 @@ TextureImporter:
         y: 96
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -262,7 +262,7 @@ TextureImporter:
         y: 64
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -283,7 +283,7 @@ TextureImporter:
         y: 64
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -304,7 +304,7 @@ TextureImporter:
         y: 64
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -325,7 +325,7 @@ TextureImporter:
         y: 64
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -346,7 +346,7 @@ TextureImporter:
         y: 32
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -367,7 +367,7 @@ TextureImporter:
         y: 32
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -388,7 +388,7 @@ TextureImporter:
         y: 32
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -409,7 +409,7 @@ TextureImporter:
         y: 32
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -430,7 +430,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -451,7 +451,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -472,7 +472,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -493,7 +493,7 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -518,21 +518,37 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       HumanBaseAttack_0: 1173335314239885238
+      HumanBaseAttack_0_: 0
       HumanBaseAttack_1: -7729339473455529383
       HumanBaseAttack_10: 6347960991075037636
+      HumanBaseAttack_10_: 0
       HumanBaseAttack_11: -6675882384025459674
+      HumanBaseAttack_11_: 0
       HumanBaseAttack_12: 1463068540150947005
+      HumanBaseAttack_12_: 0
       HumanBaseAttack_13: 2308080642909634873
+      HumanBaseAttack_13_: 0
       HumanBaseAttack_14: 5137893261841647601
+      HumanBaseAttack_14_: 0
       HumanBaseAttack_15: 1433798380598326525
+      HumanBaseAttack_15_: 0
+      HumanBaseAttack_1_: 0
       HumanBaseAttack_2: 266891876565821341
+      HumanBaseAttack_2_: 0
       HumanBaseAttack_3: 7001301442144917385
+      HumanBaseAttack_3_: 0
       HumanBaseAttack_4: 7666727062179746331
+      HumanBaseAttack_4_: 0
       HumanBaseAttack_5: -7836297259064635787
+      HumanBaseAttack_5_: 0
       HumanBaseAttack_6: 2426955389951385321
+      HumanBaseAttack_6_: 0
       HumanBaseAttack_7: 265265029054533519
+      HumanBaseAttack_7_: 0
       HumanBaseAttack_8: 4592651278508023558
+      HumanBaseAttack_8_: 0
       HumanBaseAttack_9: -7569454566117194022
+      HumanBaseAttack_9_: 0
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

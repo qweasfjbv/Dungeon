@@ -162,7 +162,6 @@ namespace EnemyAI.BehaviorTree
 
         public bool OnDamaged(float damage, Define.AtkType type)
         {
-            Debug.Log("Damaged");
 
             // TODO : 타입에 따른 처리 필요
             SoundManager.Instance.PlayEffectSound(Define.EffectSoundType.Hit);
