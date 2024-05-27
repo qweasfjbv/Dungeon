@@ -170,8 +170,8 @@ public class SpriteAnimatorEditor : EditorWindow
 
 
         ti.spritesheet = mData.ToArray();
-
         AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+
         UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
 
         Array.Sort(assets, (a, b)=>
